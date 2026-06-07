@@ -2,10 +2,13 @@ package com.dmm.recetario.data.service
 
 import android.util.Log
 import com.dmm.recetario.core.utils.extension.isNotNull
-import com.dmm.recetario.domain.exceptions.APIException
+import com.dmm.recetario.domain.exception.APIException
 import com.dmm.recetario.core.utils.mapper.toDomain
 import com.dmm.recetario.core.utils.mapper.toEntity
-import com.dmm.recetario.data.local.database.dao.UserDao
+import com.dmm.recetario.domain.dao.UserDao
+import com.dmm.recetario.domain.entity.RecipeEntity
+import com.dmm.recetario.domain.entity.TokenUserRef
+import com.dmm.recetario.domain.entity.UserEntity
 import com.dmm.recetario.domain.model.AnonymousUser
 import com.dmm.recetario.domain.model.User
 import com.dmm.recetario.domain.repository.UserRepository
@@ -15,11 +18,11 @@ import com.dmm.recetario.domain.use_cases.user.UpdateUserUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class UserServiceImp (
+class UserServiceImpl (
     private val updateUserUseCase: UpdateUserUseCase,
     private val deleteUserUseCase: DeleteUserUseCase,
     private val userRepository: UserRepository,
-    private val dao: UserDao
+    private val dao: UserDao<UserEntity, TokenUserRef, RecipeEntity>
 ): UserService {
     override fun getAllUsers(): Flow<List<User>> {
         return dao.getUsers().map { users ->

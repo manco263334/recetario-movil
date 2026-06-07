@@ -1,6 +1,6 @@
 package com.dmm.recetario.data.remote.interceptor
 
-import com.dmm.recetario.data.local.TokenManager
+import com.dmm.recetario.domain.manager.TokenManager
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking

@@ -4,9 +4,14 @@ import android.content.Context
 import androidx.room.Room
 import com.dmm.recetario.data.local.database.AppDatabase
 import com.dmm.recetario.data.local.database.Converters
-import com.dmm.recetario.data.local.database.dao.CategoryDao
-import com.dmm.recetario.data.local.database.dao.RecipeDao
-import com.dmm.recetario.data.local.database.dao.UserDao
+import com.dmm.recetario.data.local.database.entity.CategoryEntityImpl
+import com.dmm.recetario.data.local.database.entity.RecipeCategoryCrossRefImpl
+import com.dmm.recetario.data.local.database.entity.RecipeEntityImpl
+import com.dmm.recetario.data.local.database.entity.TokenUserRefImpl
+import com.dmm.recetario.data.local.database.entity.UserEntityImpl
+import com.dmm.recetario.domain.dao.CategoryDao
+import com.dmm.recetario.domain.dao.RecipeDao
+import com.dmm.recetario.domain.dao.UserDao
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
@@ -31,19 +36,22 @@ object RoomModule {
 
     @Provides
     @Singleton
-    fun provideUserDao(db: AppDatabase): UserDao {
+    fun provideUserDao(db: AppDatabase): UserDao<UserEntityImpl, TokenUserRefImpl,
+            RecipeEntityImpl> {
         return db.userDao()
     }
 
     @Provides
     @Singleton
-    fun provideCategoryDao(db: AppDatabase): CategoryDao {
+    fun provideCategoryDao(db: AppDatabase): CategoryDao<CategoryEntityImpl,
+            RecipeCategoryCrossRefImpl, RecipeEntityImpl> {
         return db.categoryDao()
     }
 
     @Provides
     @Singleton
-    fun provideRecipeDao(db: AppDatabase): RecipeDao {
+    fun provideRecipeDao(db: AppDatabase): RecipeDao<RecipeEntityImpl, RecipeCategoryCrossRefImpl,
+            UserEntityImpl, CategoryEntityImpl> {
         return db.recipeDao()
     }
 

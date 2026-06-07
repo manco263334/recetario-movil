@@ -1,7 +1,8 @@
 package com.dmm.recetario.core.utils.mapper
 
-import com.dmm.recetario.data.local.database.entity.RecipeEntity
+import com.dmm.recetario.data.local.database.entity.RecipeEntityImpl
 import com.dmm.recetario.data.model.dto.RecipeDTO
+import com.dmm.recetario.domain.entity.RecipeEntity
 import com.dmm.recetario.domain.model.Recipe
 
 fun RecipeDTO.toDomain(): Recipe {
@@ -46,7 +47,7 @@ fun RecipeEntity.toDomain(): Recipe {
 }
 
 fun Recipe.toEntity(): RecipeEntity {
-    return RecipeEntity (
+    return RecipeEntityImpl (
         id = this.id,
         name = this.name,
         persons = this.persons,
@@ -58,6 +59,6 @@ fun Recipe.toEntity(): RecipeEntity {
         stars = this.stars,
         icon = this.icon,
 
-        userId = ""
+        user_id = ""
     )
 }

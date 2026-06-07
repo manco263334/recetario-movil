@@ -3,32 +3,32 @@ package com.dmm.recetario.data.local
 import android.content.Context
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.dmm.recetario.domain.manager.TokenManager
 import dagger.hilt.android.qualifiers.ApplicationContext
-import jakarta.inject.Inject
 import jakarta.inject.Singleton
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 @Singleton
-class TokenManager @Inject constructor (
+class TokenManagerImpl (
     @param:ApplicationContext
     private val context: Context
-) {
+): TokenManager {
     companion object {
         private val TOKEN_KEY = stringPreferencesKey("jwt_token")
     }
 
-    suspend fun saveToken(token: String) {
+    override suspend fun saveToken(token: String) {
         context.dataStore.edit { preferences ->
             preferences[TOKEN_KEY] = token
         }
     }
 
-    val token: Flow<String?> = context.dataStore.data.map { preferences ->
+    override val token: Flow<String?> = context.dataStore.data.map { preferences ->
         preferences[TOKEN_KEY]
     }
 
-    suspend fun clearToken() {
+    override suspend fun clearToken() {
         context.dataStore.edit { it.clear() }
     }
 }

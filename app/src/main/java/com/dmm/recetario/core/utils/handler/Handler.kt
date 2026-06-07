@@ -1,6 +1,6 @@
 package com.dmm.recetario.core.utils.handler
 
-import com.dmm.recetario.domain.exceptions.APIException
+import com.dmm.recetario.domain.exception.APIException
 import retrofit2.Response
 
 suspend fun <T> handleApiCall(call: suspend () -> Response<T>): T? {

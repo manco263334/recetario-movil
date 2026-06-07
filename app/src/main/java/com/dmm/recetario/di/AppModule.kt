@@ -1,20 +1,25 @@
 package com.dmm.recetario.di
 
-import com.dmm.recetario.data.local.database.dao.CategoryDao
-import com.dmm.recetario.data.local.database.dao.RecipeDao
-import com.dmm.recetario.data.local.database.dao.UserDao
 import com.dmm.recetario.data.remote.retrofit.AuthRemote
 import com.dmm.recetario.data.remote.retrofit.CategoryRemote
 import com.dmm.recetario.data.remote.retrofit.RecipeRemote
 import com.dmm.recetario.data.remote.retrofit.UserRemote
-import com.dmm.recetario.data.repository.AuthRepositoryImp
-import com.dmm.recetario.data.repository.CategoryRepositoryImp
-import com.dmm.recetario.data.repository.RecipeRepositoryImp
-import com.dmm.recetario.data.repository.UserRepositoryImp
-import com.dmm.recetario.data.service.AuthServiceImp
-import com.dmm.recetario.data.service.CategoryServiceImp
-import com.dmm.recetario.data.service.RecipeServiceImp
-import com.dmm.recetario.data.service.UserServiceImp
+import com.dmm.recetario.data.repository.AuthRepositoryImpl
+import com.dmm.recetario.data.repository.CategoryRepositoryImpl
+import com.dmm.recetario.data.repository.RecipeRepositoryImpl
+import com.dmm.recetario.data.repository.UserRepositoryImpl
+import com.dmm.recetario.data.service.AuthServiceImpl
+import com.dmm.recetario.data.service.CategoryServiceImpl
+import com.dmm.recetario.data.service.RecipeServiceImpl
+import com.dmm.recetario.data.service.UserServiceImpl
+import com.dmm.recetario.domain.dao.CategoryDao
+import com.dmm.recetario.domain.dao.RecipeDao
+import com.dmm.recetario.domain.dao.UserDao
+import com.dmm.recetario.domain.entity.CategoryEntity
+import com.dmm.recetario.domain.entity.RecipeCategoryCrossRef
+import com.dmm.recetario.domain.entity.RecipeEntity
+import com.dmm.recetario.domain.entity.TokenUserRef
+import com.dmm.recetario.domain.entity.UserEntity
 import com.dmm.recetario.domain.repository.AuthRepository
 import com.dmm.recetario.domain.repository.CategoryRepository
 import com.dmm.recetario.domain.repository.RecipeRepository
@@ -43,19 +48,19 @@ object AppModule {
     @Provides
     @Singleton
     fun provideAuthRepository(remote: AuthRemote): AuthRepository {
-        return AuthRepositoryImp(remote)
+        return AuthRepositoryImpl(remote)
     }
 
     @Provides
     @Singleton
     fun provideAuthService(repository: AuthRepository): AuthService {
-        return AuthServiceImp(repository)
+        return AuthServiceImpl(repository)
     }
 
     @Provides
     @Singleton
     fun provideRecipeRepository(remote: RecipeRemote): RecipeRepository {
-        return RecipeRepositoryImp(remote)
+        return RecipeRepositoryImpl(remote)
     }
 
     @Provides
@@ -65,9 +70,9 @@ object AppModule {
         updateRecipeUSECase: UpdateRecipeUseCase,
         deleteRecipeUseCase: DeleteRecipeUseCase,
         repository: RecipeRepository,
-        dao: RecipeDao
+        dao: RecipeDao<RecipeEntity, RecipeCategoryCrossRef, UserEntity, CategoryEntity>
     ): RecipeService {
-        return RecipeServiceImp (
+        return RecipeServiceImpl(
             createRecipeUseCase,
             updateRecipeUSECase,
             deleteRecipeUseCase,
@@ -79,7 +84,7 @@ object AppModule {
     @Provides
     @Singleton
     fun provideCategoryRepository(remote: CategoryRemote): CategoryRepository {
-        return CategoryRepositoryImp(remote)
+        return CategoryRepositoryImpl(remote)
     }
 
     @Provides
@@ -89,9 +94,9 @@ object AppModule {
         updateCategoryUseCase: UpdateCategoryUseCase,
         deleteCategoryService: DeleteCategoryUseCase,
         repository: CategoryRepository,
-        dao: CategoryDao
+        dao: CategoryDao<CategoryEntity, RecipeCategoryCrossRef, RecipeEntity>
     ): CategoryService {
-        return CategoryServiceImp (
+        return CategoryServiceImpl(
             createCategoryUseCase,
             updateCategoryUseCase,
             deleteCategoryService,
@@ -103,7 +108,7 @@ object AppModule {
     @Provides
     @Singleton
     fun provideUserRepository(remote: UserRemote): UserRepository {
-        return UserRepositoryImp(remote)
+        return UserRepositoryImpl(remote)
     }
 
     @Provides
@@ -112,9 +117,9 @@ object AppModule {
         updateUserUseCase: UpdateUserUseCase,
         deleteUserUseCase: DeleteUserUseCase,
         repository: UserRepository,
-        dao: UserDao
+        dao: UserDao<UserEntity, TokenUserRef, RecipeEntity>
     ): UserService {
-        return UserServiceImp (
+        return UserServiceImpl(
             updateUserUseCase,
             deleteUserUseCase,
             repository,

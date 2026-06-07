@@ -16,7 +16,7 @@ class FABViewModel @Inject constructor (
         .getAllCategories(1, 10, false)
         .stateIn (
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
+            started = SharingStarted.Eagerly,
             initialValue = emptyList()
         )
 }

@@ -8,9 +8,8 @@ import com.dmm.recetario.domain.repository.LoginData
 import com.dmm.recetario.domain.repository.LoginResponse
 import com.dmm.recetario.domain.repository.MeResponse
 import com.dmm.recetario.domain.repository.RegisterData
-import jakarta.inject.Inject
 
-class AuthRepositoryImp (
+class AuthRepositoryImpl (
     private val remote: AuthRemote
 ): AuthRepository {
     override suspend fun login(data: LoginData): LoginResponse {

@@ -4,38 +4,46 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Upsert
-import com.dmm.recetario.data.local.database.entity.CategoryEntity
-import com.dmm.recetario.data.local.database.entity.RecipeCategoryCrossRef
-import com.dmm.recetario.data.local.database.entity.RecipeEntity
-import com.dmm.recetario.data.local.database.entity.UserEntity
+import com.dmm.recetario.data.local.database.entity.CategoryEntityImpl
+import com.dmm.recetario.data.local.database.entity.RecipeCategoryCrossRefImpl
+import com.dmm.recetario.data.local.database.entity.RecipeEntityImpl
+import com.dmm.recetario.data.local.database.entity.UserEntityImpl
+import com.dmm.recetario.domain.dao.RecipeDao
+import com.dmm.recetario.domain.entity.RecipeCategoryCrossRef
+import com.dmm.recetario.domain.entity.RecipeEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface RecipeDao {
+interface RecipeDaoImpl : RecipeDao <
+    RecipeEntityImpl,
+    RecipeCategoryCrossRefImpl,
+    UserEntityImpl,
+    CategoryEntityImpl
+> {
     @Transaction
     @Query("SELECT * FROM recipes")
-    fun getRecipes(): Flow<List<RecipeEntity>>
+    override fun getRecipes(): Flow<List<RecipeEntityImpl>>
 
     @Query("SELECT * FROM recipes WHERE id = :id LIMIT 1")
-    fun getRecipe(id: String): Flow<RecipeEntity?>
+    override fun getRecipe(id: String): Flow<RecipeEntityImpl?>
 
     @Upsert
-    suspend fun saveRecipes(recipes: List<RecipeEntity>)
+    override suspend fun saveRecipes(recipes: List<RecipeEntityImpl>)
 
     @Upsert
-    suspend fun saveRecipe(recipe: RecipeEntity)
+    override suspend fun saveRecipe(recipe: RecipeEntityImpl)
 
     @Upsert
-    suspend fun insertReferences(refs: List<RecipeCategoryCrossRef>)
+    override suspend fun insertReferences(refs: List<RecipeCategoryCrossRefImpl>)
 
     @Upsert
-    suspend fun insertReference(ref: RecipeCategoryCrossRef)
+    override suspend fun insertReference(ref: RecipeCategoryCrossRefImpl)
 
     @Query("DELETE FROM recipes")
-    suspend fun clear()
+    override suspend fun clear()
 
     @Query("DELETE FROM recipes WHERE id = :id")
-    suspend fun deleteRecipe(id: String)
+    override suspend fun deleteRecipe(id: String)
 
     @Transaction
     @Query ("""
@@ -44,7 +52,7 @@ interface RecipeDao {
         WHERE r.id = :recipeId
         LIMIT 1
     """)
-    fun getUser(recipeId: String): Flow<UserEntity?>
+    override fun getUser(recipeId: String): Flow<UserEntityImpl?>
 
     @Transaction
     @Query ("""
@@ -52,5 +60,5 @@ interface RecipeDao {
         INNER JOIN categories AS c on c.id = category_id
         WHERE recipe_id = :recipeId
     """)
-    fun getCategories(recipeId: String): Flow<List<CategoryEntity>>
+    override fun getCategories(recipeId: String): Flow<List<CategoryEntityImpl>>
 }

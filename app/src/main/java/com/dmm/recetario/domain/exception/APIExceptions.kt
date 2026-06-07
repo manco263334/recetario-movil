@@ -1,4 +1,4 @@
-package com.dmm.recetario.domain.exceptions
+package com.dmm.recetario.domain.exception
 
 sealed class APIException(message: String) : RuntimeException(message) {
     class BadRequestException(message: String) : APIException(message)

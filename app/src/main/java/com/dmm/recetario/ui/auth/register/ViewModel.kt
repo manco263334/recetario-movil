@@ -5,10 +5,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dmm.recetario.data.local.TokenManager
-import com.dmm.recetario.data.local.UserManager
-import com.dmm.recetario.data.local.database.dao.UserDao
-import com.dmm.recetario.data.local.database.entity.TokenUserRef
+import com.dmm.recetario.data.local.database.entity.TokenUserRefImpl
+import com.dmm.recetario.domain.dao.UserDao
+import com.dmm.recetario.domain.entity.RecipeEntity
+import com.dmm.recetario.domain.entity.TokenUserRef
+import com.dmm.recetario.domain.entity.UserEntity
+import com.dmm.recetario.domain.manager.TokenManager
+import com.dmm.recetario.domain.manager.UserManager
 import com.dmm.recetario.domain.repository.RegisterData
 import com.dmm.recetario.domain.service.AuthService
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,7 +25,7 @@ class RegisterViewModel @Inject constructor (
     private val service: AuthService,
     private val tokenManager: TokenManager,
     private val userManager: UserManager,
-    private val dao: UserDao
+    private val dao: UserDao<UserEntity, TokenUserRef, RecipeEntity>
 ): ViewModel() {
     var uiState by mutableStateOf<RegisterUiState>(RegisterUiState.Idle)
         private set
@@ -65,7 +68,7 @@ class RegisterViewModel @Inject constructor (
     }
 
     private suspend fun insertTokenReference(token: String, email: String) {
-        dao.insertTokenRefs(listOf(TokenUserRef(token, email)))
+        dao.insertTokenRefs(listOf(TokenUserRefImpl(token, email)))
     }
 
     fun resetToIdle () {

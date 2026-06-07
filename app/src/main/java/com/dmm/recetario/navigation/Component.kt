@@ -4,18 +4,19 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
+import androidx.compose.material3.DrawerState
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.navigation3.ListDetailSceneStrategy
 import androidx.compose.material3.adaptive.navigation3.rememberListDetailSceneStrategy
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
-import androidx.navigation3.runtime.metadata
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
-import androidx.navigation3.scene.SinglePaneSceneStrategy
 import androidx.navigation3.ui.NavDisplay
 import com.dmm.recetario.core.utils.extension.back
 import com.dmm.recetario.core.utils.extension.backTo
@@ -32,12 +33,15 @@ import com.dmm.recetario.ui.recipe.RecipeScreen
 fun AppNavigation (
     backStack: NavBackStack<NavKey>,
     user: User?,
+    snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
 ) {
     NavDisplay (
         backStack = backStack,
         modifier = modifier,
-        onBack = backStack::back,
+        onBack = {
+            backStack.back()
+        },
         entryDecorators = listOf (
             rememberSaveableStateHolderNavEntryDecorator(),
             rememberViewModelStoreNavEntryDecorator()
@@ -74,6 +78,8 @@ fun AppNavigation (
                 metadata = ListDetailSceneStrategy.listPane()
             ) {
                 HomeScreen (
+                    user = user,
+                    snackbarHostState = snackbarHostState,
                     onCategoryClick = {
                         backStack.navigateTo(Routes.Category(it.id))
                     },
@@ -86,8 +92,7 @@ fun AppNavigation (
                     },
                     onCompleteForm = {
                         backStack.backTo(Routes.Home)
-                    },
-                    user = user
+                    }
                 )
             }
 
@@ -97,6 +102,7 @@ fun AppNavigation (
                 CategoryScreen (
                     categoryId = it.id,
                     user = user,
+                    snackbarHostState = snackbarHostState,
                     onRecipeClick = {
                         backStack.navigateTo(Routes.Recipe(it.id))
                     },
@@ -122,6 +128,7 @@ fun AppNavigation (
                 RecipeScreen (
                     recipeId = it.id,
                     user = user,
+                    snackbarHostState = snackbarHostState,
                     onSettingsClick = {
                         backStack.navigateTo(Routes.Settings)
                     },

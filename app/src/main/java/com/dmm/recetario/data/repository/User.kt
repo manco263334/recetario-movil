@@ -6,9 +6,8 @@ import com.dmm.recetario.core.utils.mapper.toDomain
 import com.dmm.recetario.data.remote.retrofit.UserRemote
 import com.dmm.recetario.domain.model.User
 import com.dmm.recetario.domain.repository.UserRepository
-import jakarta.inject.Inject
 
-class UserRepositoryImp (
+class UserRepositoryImpl (
     private val remote: UserRemote
 ): UserRepository {
     override suspend fun getAllUsers (

@@ -3,33 +3,35 @@ package com.dmm.recetario.data.local.database.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.dmm.recetario.domain.entity.RecipeCategoryCrossRef
+import com.dmm.recetario.domain.entity.RecipeEntity
 
 @Entity(tableName = "recipes")
-data class RecipeEntity (
+data class RecipeEntityImpl (
     @PrimaryKey
-    val id: String,
-    val name: String,
-    val persons: Int,
-    val ingredients: List<Map<String, String>>,
-    val steps: List<String>,
-    val totalTimeInMinutes: Int,
-    val cookingTimeInMinutes: Int,
-    val preparationTimeInMinutes: Int,
-    val stars: Int,
-    val icon: String?,
+    override val id: String,
+    override val name: String,
+    override val persons: Int,
+    override val ingredients: List<Map<String, String>>,
+    override val steps: List<String>,
+    override val totalTimeInMinutes: Int,
+    override val cookingTimeInMinutes: Int,
+    override val preparationTimeInMinutes: Int,
+    override val stars: Int,
+    override val icon: String?,
 
-    @ColumnInfo(name = "user_id")
-    val userId: String
-)
+    override val user_id: String
+): RecipeEntity(id, name, persons, ingredients, steps, totalTimeInMinutes, cookingTimeInMinutes,
+    preparationTimeInMinutes, stars, icon, user_id)
 
 @Entity (
     tableName = "categories_recipes",
     primaryKeys = ["recipe_id", "category_id"]
 )
-data class RecipeCategoryCrossRef (
+data class RecipeCategoryCrossRefImpl (
     @ColumnInfo(name = "recipe_id")
-    val recipeId: String,
+    override val recipe_id: String,
 
     @ColumnInfo(name = "category_id")
-    val categoryId: String
-)
+    override val category_id: String
+) : RecipeCategoryCrossRef(recipe_id, category_id)

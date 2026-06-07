@@ -18,7 +18,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -39,24 +38,25 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen (
+    user: User?,
+    snackbarHostState: SnackbarHostState,
     onCategoryClick: (Category) -> Unit,
     onSettingsClick: (User?) -> Unit,
     onLogOutSuccess: () -> Unit,
     onCompleteForm: () -> Unit,
-    user: User?,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
-    val snackbarHostState = remember { SnackbarHostState() }
-    val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
     val categories by viewModel.categories.collectAsStateWithLifecycle()
 
     ModalNavigationDrawer (
         drawerState = drawerState,
         drawerContent = {
             DrawerContent (
-                scaffoldState = drawerState,
+                drawerState = drawerState,
                 user = user,
+                snackbarHostState = snackbarHostState,
                 onSettingsClick = onSettingsClick,
                 onLogOutSuccess = onLogOutSuccess,
                 onHomeClick = {
@@ -70,7 +70,7 @@ fun HomeScreen (
         Scaffold (
             topBar = {
                 Toolbar (
-                    scaffoldState = drawerState
+                    drawerState = drawerState
                 ) {
                     WelcomeHeader(user)
                 }
@@ -119,7 +119,8 @@ private fun HomeContent (
         ) {
             item(span = { GridItemSpan(2) }) {
                 Text (
-                    text = if (categories.isNotEmpty()) "Categorías disponibles" else "No hay categorías",
+                    text = if (categories.isNotEmpty()) "Categorías disponibles"
+                        else "No hay categorías",
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxWidth(),
                     fontWeight = FontWeight.Bold

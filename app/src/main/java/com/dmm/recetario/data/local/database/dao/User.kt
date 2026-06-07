@@ -4,24 +4,29 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Upsert
-import com.dmm.recetario.data.local.database.entity.RecipeEntity
-import com.dmm.recetario.data.local.database.entity.TokenUserRef
-import com.dmm.recetario.data.local.database.entity.UserEntity
+import com.dmm.recetario.data.local.database.entity.RecipeEntityImpl
+import com.dmm.recetario.data.local.database.entity.TokenUserRefImpl
+import com.dmm.recetario.data.local.database.entity.UserEntityImpl
+import com.dmm.recetario.domain.dao.UserDao
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface UserDao {
+interface UserDaoImpl: UserDao <
+    UserEntityImpl,
+    TokenUserRefImpl,
+    RecipeEntityImpl
+> {
     @Query("SELECT * FROM users")
-    fun getUsers(): Flow<List<UserEntity>>
+    override fun getUsers(): Flow<List<UserEntityImpl>>
 
     @Query("SELECT * FROM users WHERE id = :id LIMIT 1")
-    fun getUser(id: String): Flow<UserEntity?>
+    override fun getUser(id: String): Flow<UserEntityImpl?>
 
     @Query("SELECT * FROM users WHERE email = :email LIMIT 1")
-    fun getUserByEmail(email: String): Flow<UserEntity?>
+    override fun getUserByEmail(email: String): Flow<UserEntityImpl?>
 
     @Query("SELECT * FROM users WHERE username = :username LIMIT 1")
-    fun getUserByUsername(username: String): Flow<UserEntity?>
+    override fun getUserByUsername(username: String): Flow<UserEntityImpl?>
 
     @Query ("""
         SELECT u.* FROM tokens_users AS t_u
@@ -29,33 +34,33 @@ interface UserDao {
         WHERE token = :token
         LIMIT 1
     """)
-    fun getUserByToken(token: String): Flow<UserEntity?>
+    override fun getUserByToken(token: String): Flow<UserEntityImpl?>
 
     @Upsert
-    suspend fun insertTokenRefs(refs: List<TokenUserRef>)
+    override suspend fun insertTokenRefs(refs: List<TokenUserRefImpl>)
 
     @Upsert
-    suspend fun insertTokenRef(ref: TokenUserRef)
+    override suspend fun insertTokenRef(ref: TokenUserRefImpl)
 
     @Upsert
-    suspend fun saveUsers(users: List<UserEntity>)
+    override suspend fun saveUsers(users: List<UserEntityImpl>)
 
     @Upsert
-    suspend fun saveUser(user: UserEntity)
+    override suspend fun saveUser(user: UserEntityImpl)
 
     @Query("DELETE FROM users")
-    suspend fun clear()
+    override suspend fun clear()
 
     @Query("DELETE FROM tokens_users")
-    suspend fun clearTokenRefs()
+    override suspend fun clearTokenRefs()
 
     @Query("DELETE FROM users WHERE id = :id")
-    suspend fun deleteUser(id: String)
+    override suspend fun deleteUser(id: String)
 
     @Transaction
     @Query ("""
         SELECT * FROM recipes
         WHERE user_id = :userId
     """)
-    fun getRecipes(userId: String): Flow<List<RecipeEntity>>
+    override fun getRecipes(userId: String): Flow<List<RecipeEntityImpl>>
 }

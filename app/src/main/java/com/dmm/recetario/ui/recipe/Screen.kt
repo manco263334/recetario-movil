@@ -22,7 +22,6 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -42,6 +41,7 @@ import com.dmm.recetario.ui.components.refresher.PullToRefresh
 fun RecipeScreen (
     recipeId: String,
     user: User?,
+    snackbarHostState: SnackbarHostState,
     onSettingsClick: (user: User?) -> Unit,
     onLogOutSuccess: () -> Unit,
     onHomeClick: () -> Unit,
@@ -52,7 +52,6 @@ fun RecipeScreen (
         viewModel.loadRecipe(recipeId)
     }
 
-    val snackbarHostState = remember { SnackbarHostState() }
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val recipe by viewModel.recipe.collectAsStateWithLifecycle()
 
@@ -61,7 +60,7 @@ fun RecipeScreen (
         gesturesEnabled = true,
         drawerContent = {
             DrawerContent (
-                scaffoldState = drawerState,
+                drawerState = drawerState,
                 user = user,
                 onSettingsClick = onSettingsClick,
                 onLogOutSuccess = onLogOutSuccess,
@@ -72,7 +71,7 @@ fun RecipeScreen (
         Scaffold (
             topBar = {
                 Toolbar (
-                    scaffoldState = drawerState
+                    drawerState = drawerState
                 ) {
                     WelcomeHeader(user)
                 }

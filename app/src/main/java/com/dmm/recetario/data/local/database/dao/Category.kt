@@ -4,36 +4,41 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Upsert
-import com.dmm.recetario.data.local.database.entity.CategoryEntity
-import com.dmm.recetario.data.local.database.entity.RecipeCategoryCrossRef
-import com.dmm.recetario.data.local.database.entity.RecipeEntity
+import com.dmm.recetario.data.local.database.entity.CategoryEntityImpl
+import com.dmm.recetario.data.local.database.entity.RecipeCategoryCrossRefImpl
+import com.dmm.recetario.data.local.database.entity.RecipeEntityImpl
+import com.dmm.recetario.domain.dao.CategoryDao
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface CategoryDao {
+interface CategoryDaoImpl : CategoryDao <
+    CategoryEntityImpl,
+    RecipeCategoryCrossRefImpl,
+    RecipeEntityImpl
+> {
     @Query("SELECT * FROM categories")
-    fun getCategories(): Flow<List<CategoryEntity>>
+    override fun getCategories(): Flow<List<CategoryEntityImpl>>
 
     @Query("SELECT * FROM categories WHERE id = :id LIMIT 1")
-    fun getCategory(id: String): Flow<CategoryEntity?>
+    override fun getCategory(id: String): Flow<CategoryEntityImpl?>
 
     @Upsert
-    suspend fun saveCategories(categories: List<CategoryEntity>)
+    override suspend fun saveCategories(categories: List<CategoryEntityImpl>)
 
     @Upsert
-    suspend fun saveCategory(category: CategoryEntity)
+    override suspend fun saveCategory(category: CategoryEntityImpl)
 
     @Upsert
-    suspend fun insertReferences(refs: List<RecipeCategoryCrossRef>)
+    override suspend fun insertReferences(refs: List<RecipeCategoryCrossRefImpl>)
 
     @Upsert
-    suspend fun insertReference(ref: RecipeCategoryCrossRef)
+    override suspend fun insertReference(ref: RecipeCategoryCrossRefImpl)
 
     @Query("DELETE FROM categories")
-    suspend fun clear()
+    override suspend fun clear()
 
     @Query("DELETE FROM categories WHERE id = :id")
-    suspend fun deleteCategory(id: String)
+    override suspend fun deleteCategory(id: String)
 
     @Transaction
     @Query ("""
@@ -41,5 +46,5 @@ interface CategoryDao {
         INNER JOIN recipes AS r ON r.id = recipe_id
         WHERE category_id = :categoryId
     """)
-    fun getRecipes(categoryId: String): Flow<List<RecipeEntity>>
+    override fun getRecipes(categoryId: String): Flow<List<RecipeEntityImpl>>
 }

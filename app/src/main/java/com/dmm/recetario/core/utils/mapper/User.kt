@@ -1,7 +1,8 @@
 package com.dmm.recetario.core.utils.mapper
 
-import com.dmm.recetario.data.local.database.entity.UserEntity
+import com.dmm.recetario.data.local.database.entity.UserEntityImpl
 import com.dmm.recetario.data.model.dto.UserDTO
+import com.dmm.recetario.domain.entity.UserEntity
 import com.dmm.recetario.domain.model.User
 
 fun UserDTO.toDomain(): User {
@@ -37,7 +38,7 @@ fun UserEntity.toDomain(): User {
 }
 
 fun User.toEntity(): UserEntity {
-    return UserEntity (
+    return UserEntityImpl (
         id = this.id,
         name = this.name,
         email = this.email,

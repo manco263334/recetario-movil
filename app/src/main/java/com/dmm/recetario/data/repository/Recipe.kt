@@ -7,7 +7,7 @@ import com.dmm.recetario.data.remote.retrofit.RecipeRemote
 import com.dmm.recetario.domain.model.Recipe
 import com.dmm.recetario.domain.repository.RecipeRepository
 
-class RecipeRepositoryImp (
+class RecipeRepositoryImpl (
     private val remote: RecipeRemote
 ): RecipeRepository {
     override suspend fun createRecipe (data: Recipe): Recipe {
