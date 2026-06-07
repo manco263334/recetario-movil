@@ -7,7 +7,7 @@ import com.dmm.recetario.domain.repository.MeResponse
 import com.dmm.recetario.domain.repository.RegisterData
 import com.dmm.recetario.domain.service.AuthService
 
-class AuthServiceImp (
+class AuthServiceImpl (
     private val repository: AuthRepository
 ): AuthService {
     override suspend fun login(data: LoginData): LoginResponse {

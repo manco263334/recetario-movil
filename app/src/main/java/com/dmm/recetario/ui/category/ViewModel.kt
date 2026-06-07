@@ -35,7 +35,7 @@ class CategoryViewModel @Inject constructor (
         }
         .stateIn (
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
+            started = SharingStarted.Eagerly,
             initialValue = emptyList()
         )
 
@@ -58,17 +58,19 @@ class CategoryViewModel @Inject constructor (
                 withCategories = true,
                 withCreator = false
             )
-            categoryService.syncCategories(page, size, withRecipes = true)
+            categoryService.syncCategories(page, size, true)
         }
     }
 
     suspend fun refresh() {
-        val results = recipes.value.map { recipe ->
-            recipeService.syncRecipe(recipe.id, false, false)
+        val result = _selectedCategoryId.value?.let {
+            categoryService.syncCategory(it, true)
         }
 
-        if (results.any { !it }) {
+        if (result == false) {
             throw Exception("Error sincronizando las recetas")
+        } else if (result == null) {
+            throw Exception("Categoría no seleccionada")
         }
     }
 }

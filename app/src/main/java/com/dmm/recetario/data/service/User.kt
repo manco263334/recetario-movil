@@ -5,7 +5,7 @@ import com.dmm.recetario.core.utils.extension.isNotNull
 import com.dmm.recetario.domain.exceptions.APIException
 import com.dmm.recetario.core.utils.mapper.toDomain
 import com.dmm.recetario.core.utils.mapper.toEntity
-import com.dmm.recetario.data.local.database.dao.UserDao
+import com.dmm.recetario.domain.dao.UserDao
 import com.dmm.recetario.domain.model.AnonymousUser
 import com.dmm.recetario.domain.model.User
 import com.dmm.recetario.domain.repository.UserRepository
@@ -15,7 +15,7 @@ import com.dmm.recetario.domain.use_cases.user.UpdateUserUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class UserServiceImp (
+class UserServiceImpl (
     private val updateUserUseCase: UpdateUserUseCase,
     private val deleteUserUseCase: DeleteUserUseCase,
     private val userRepository: UserRepository,

@@ -1,7 +1,7 @@
 package com.dmm.recetario.domain.use_cases.category
 
 import android.util.Log
-import com.dmm.recetario.data.local.database.dao.CategoryDao
+import com.dmm.recetario.domain.dao.CategoryDao
 import com.dmm.recetario.domain.exceptions.APIException
 import com.dmm.recetario.domain.repository.CategoryRepository
 import jakarta.inject.Inject

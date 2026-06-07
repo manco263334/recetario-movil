@@ -7,11 +7,15 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dmm.recetario.data.local.TokenManager
-import com.dmm.recetario.data.local.database.dao.UserDao
+import com.dmm.recetario.domain.dao.UserDao
 import com.dmm.recetario.domain.service.AuthService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.seconds
 
 @HiltViewModel
 class DrawerViewModel @Inject constructor (
@@ -19,21 +23,31 @@ class DrawerViewModel @Inject constructor (
     private val authService: AuthService,
     private val userDAO: UserDao
 ): ViewModel() {
-    var logOutSuccessful by mutableStateOf<Boolean?>(null)
+    var logOutState by mutableStateOf<LogOutUiState>(LogOutUiState.Idle)
         private set
 
     fun logout() {
+        if (logOutState is LogOutUiState.Loading) return
+
         viewModelScope.launch {
+            logOutState = LogOutUiState.Loading
+
             try {
                 authService.logout()
-                tokenManager.clearToken()
-                userDAO.clear()
-                userDAO.clearTokenRefs()
 
-                logOutSuccessful = true
+                awaitAll (
+                    async { tokenManager.clearToken() },
+                    async { userDAO.clear() },
+                    async { userDAO.clearTokenRefs() },
+                )
+
+                logOutState = LogOutUiState.Success("Sesión cerrada con éxito")
             } catch (e: Exception) {
                 Log.w("DrawerViewModel", "Error al cerrar sesión: ${e.message}")
-                logOutSuccessful = false
+                logOutState = LogOutUiState.Error("Error al cerrar sesión: ${e.message}")
+            } finally {
+                delay(3.seconds)
+                logOutState = LogOutUiState.Idle
             }
         }
     }

@@ -8,7 +8,11 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -29,6 +33,7 @@ class MainActivity: ComponentActivity() {
         setContent {
             val startDestination by viewModel.startDestination.collectAsStateWithLifecycle()
             val user by viewModel.user.collectAsStateWithLifecycle()
+            val snackbarHostState = remember { SnackbarHostState() }
 
             RecetarioTheme {
                 if (startDestination != null) {
@@ -36,7 +41,8 @@ class MainActivity: ComponentActivity() {
 
                     AppNavigation (
                         backStack = backStack,
-                        user = user
+                        user = user,
+                        snackbarHostState = snackbarHostState,
                     )
                 } else {
                     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {

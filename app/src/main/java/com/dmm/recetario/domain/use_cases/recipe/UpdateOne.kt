@@ -4,7 +4,7 @@ import android.util.Log
 import com.dmm.recetario.core.utils.extension.isNotNull
 import com.dmm.recetario.domain.exceptions.APIException
 import com.dmm.recetario.core.utils.mapper.toEntity
-import com.dmm.recetario.data.local.database.dao.RecipeDao
+import com.dmm.recetario.domain.dao.RecipeDao
 import com.dmm.recetario.domain.model.Recipe
 import com.dmm.recetario.domain.repository.RecipeRepository
 import jakarta.inject.Inject

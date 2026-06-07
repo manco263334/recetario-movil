@@ -24,6 +24,8 @@ interface CategoryService {
         withRecipes: Boolean?
     ): Boolean
 
+    suspend fun syncCategory(id: String, withRecipes: Boolean?): Boolean
+
     suspend fun updateCategory (
         id: String,
         data: Category

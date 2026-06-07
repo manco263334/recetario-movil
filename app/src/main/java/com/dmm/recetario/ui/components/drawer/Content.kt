@@ -18,11 +18,13 @@ import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -41,19 +43,27 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun DrawerContent (
-    scaffoldState: DrawerState,
+    drawerState: DrawerState,
     user: User?,
+    snackbarHostState: SnackbarHostState? = null,
     onSettingsClick: (user: User?) -> Unit,
     onLogOutSuccess: () -> Unit,
     onHomeClick: () -> Unit,
     viewModel: DrawerViewModel = hiltViewModel()
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val logOutSuccessful = viewModel.logOutSuccessful
+    val logOutState = viewModel.logOutState
 
-    LaunchedEffect (logOutSuccessful) {
-        if (logOutSuccessful == true) {
+    LaunchedEffect(Unit) {
+        drawerState.close()
+    }
+
+    LaunchedEffect (logOutState) {
+        if (logOutState is LogOutUiState.Success) {
             onLogOutSuccess()
+            snackbarHostState?.showSnackbar(logOutState.message)
+        } else if (logOutState is LogOutUiState.Error) {
+            snackbarHostState?.showSnackbar(logOutState.message)
         }
     }
 
@@ -72,7 +82,7 @@ fun DrawerContent (
             IconButton (
                 onClick = {
                     coroutineScope.launch {
-                        scaffoldState.close()
+                        drawerState.close()
                     }
                 }
             ) {
@@ -168,5 +178,9 @@ fun DrawerContent (
             },
             shape = RoundedCornerShape(16.dp)
         )
+
+        if (logOutState is LogOutUiState.Loading) {
+            CircularProgressIndicator()
+        }
     }
 }

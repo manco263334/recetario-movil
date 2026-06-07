@@ -19,7 +19,6 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -39,19 +38,19 @@ import com.dmm.recetario.ui.components.refresher.PullToRefresh
 @Composable
 fun CategoryScreen (
     categoryId: String,
+    user: User?,
+    snackbarHostState: SnackbarHostState,
     onRecipeClick: (Recipe) -> Unit,
     onSettingsClick: (user: User?) -> Unit,
     onLogOutSuccess: () -> Unit,
     onHomeClick: () -> Unit,
     onCompleteForm: () -> Unit,
-    user: User?,
     viewModel: CategoryViewModel = hiltViewModel(),
 ) {
     LaunchedEffect(categoryId) {
         viewModel.loadRecipes(categoryId)
     }
 
-    val snackbarHostState = remember { SnackbarHostState() }
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val recipes by viewModel.recipes.collectAsStateWithLifecycle()
 
@@ -60,7 +59,7 @@ fun CategoryScreen (
         gesturesEnabled = true,
         drawerContent = {
             DrawerContent (
-                scaffoldState = drawerState,
+                drawerState = drawerState,
                 user = user,
                 onSettingsClick = onSettingsClick,
                 onLogOutSuccess = onLogOutSuccess,
@@ -71,7 +70,7 @@ fun CategoryScreen (
         Scaffold (
             topBar = {
                 Toolbar (
-                    scaffoldState = drawerState
+                    drawerState = drawerState
                 ) {
                     WelcomeHeader(user)
                 }
@@ -121,7 +120,7 @@ private fun CategoryContent (
         ) {
             item(span = { GridItemSpan(2) }) {
                 Text (
-                    text = if (recipes.isNotEmpty()) "Retecas disponibles" else "No hay recetas",
+                    text = if (recipes.isNotEmpty()) "Recetas disponibles" else "No hay recetas",
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxWidth(),
                     fontWeight = FontWeight.Bold

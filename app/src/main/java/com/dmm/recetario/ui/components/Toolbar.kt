@@ -20,14 +20,16 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Toolbar (
-    scaffoldState: DrawerState,
+    drawerState: DrawerState,
     modifier: Modifier = Modifier,
     title: @Composable () -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
-        scaffoldState.close()
+        if (!drawerState.isClosed) {
+            drawerState.close()
+        }
     }
 
     TopAppBar (
@@ -39,7 +41,7 @@ fun Toolbar (
             IconButton (
                 onClick = {
                     coroutineScope.launch {
-                        scaffoldState.open()
+                        drawerState.open()
                     }
                 }
             ) {

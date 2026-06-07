@@ -31,7 +31,7 @@ class RecipeViewModel @Inject constructor (
         }
         .stateIn (
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
+            started = SharingStarted.Eagerly,
             initialValue = null
         )
 
@@ -40,10 +40,14 @@ class RecipeViewModel @Inject constructor (
     }
 
     suspend fun refresh() {
-        val result = recipe.value?.id?.let { recipeService.syncRecipe(it, false, false) }
+        val result = _selectedRecipeId.value?.let {
+            recipeService.syncRecipe(it, false, false)
+        }
 
         if (result == false) {
             throw Exception("Error sincronizando la receta")
+        } else if (result == null) {
+            throw Exception("Receta no seleccionada")
         }
     }
 }

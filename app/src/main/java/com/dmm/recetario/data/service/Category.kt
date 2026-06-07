@@ -5,8 +5,8 @@ import com.dmm.recetario.core.utils.extension.isNotNull
 import com.dmm.recetario.domain.exceptions.APIException
 import com.dmm.recetario.core.utils.mapper.toDomain
 import com.dmm.recetario.core.utils.mapper.toEntity
-import com.dmm.recetario.data.local.database.dao.CategoryDao
 import com.dmm.recetario.data.local.database.entity.RecipeCategoryCrossRef
+import com.dmm.recetario.domain.dao.CategoryDao
 import com.dmm.recetario.domain.model.Category
 import com.dmm.recetario.domain.model.Recipe
 import com.dmm.recetario.domain.repository.CategoryRepository
@@ -17,7 +17,7 @@ import com.dmm.recetario.domain.use_cases.category.UpdateCategoryUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class CategoryServiceImp (
+class CategoryServiceImpl (
     private val createCategoryUseCase: CreateCategoryUseCase,
     private val updateCategoryUseCase: UpdateCategoryUseCase,
     private val deleteCategoryUseCase: DeleteCategoryUseCase,
@@ -77,6 +77,25 @@ class CategoryServiceImp (
             true
         } catch (e: APIException) {
             Log.e("CategoryService", "Error syncing categories: ${e.message}", e)
+            false
+        }
+    }
+
+    override suspend fun syncCategory(id: String, withRecipes: Boolean?): Boolean {
+        return try {
+            val category = repository.getCategory(id, withRecipes)
+
+            dao.saveCategory(category.toEntity())
+
+            if (withRecipes == true) {
+                dao.insertReferences(category.recipes?.map {
+                    RecipeCategoryCrossRef(it, category.id)
+                } ?: emptyList())
+            }
+
+            true
+        } catch (e: APIException) {
+            Log.e("CategoryService", "Error syncing category: ${e.message}", e)
             false
         }
     }

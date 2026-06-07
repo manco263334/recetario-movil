@@ -6,9 +6,8 @@ import com.dmm.recetario.core.utils.mapper.toDomain
 import com.dmm.recetario.data.remote.retrofit.CategoryRemote
 import com.dmm.recetario.domain.model.Category
 import com.dmm.recetario.domain.repository.CategoryRepository
-import jakarta.inject.Inject
 
-class CategoryRepositoryImp (
+class CategoryRepositoryImpl (
     private val remote: CategoryRemote
 ): CategoryRepository {
     override suspend fun createCategory(data: Category): Category {

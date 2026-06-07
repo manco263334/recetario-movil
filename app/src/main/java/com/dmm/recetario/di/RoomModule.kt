@@ -4,9 +4,9 @@ import android.content.Context
 import androidx.room.Room
 import com.dmm.recetario.data.local.database.AppDatabase
 import com.dmm.recetario.data.local.database.Converters
-import com.dmm.recetario.data.local.database.dao.CategoryDao
-import com.dmm.recetario.data.local.database.dao.RecipeDao
-import com.dmm.recetario.data.local.database.dao.UserDao
+import com.dmm.recetario.domain.dao.CategoryDao
+import com.dmm.recetario.domain.dao.RecipeDao
+import com.dmm.recetario.domain.dao.UserDao
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides

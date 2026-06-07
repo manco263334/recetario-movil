@@ -1,7 +1,7 @@
 package com.dmm.recetario.domain.use_cases.user
 
 import android.util.Log
-import com.dmm.recetario.data.local.database.dao.UserDao
+import com.dmm.recetario.domain.dao.UserDao
 import com.dmm.recetario.domain.exceptions.APIException
 import com.dmm.recetario.domain.repository.UserRepository
 import jakarta.inject.Inject

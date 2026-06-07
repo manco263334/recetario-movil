@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dmm.recetario.data.local.TokenManager
 import com.dmm.recetario.data.local.UserManager
-import com.dmm.recetario.domain.model.AnonymousUser
 import com.dmm.recetario.domain.model.User
 import com.dmm.recetario.domain.service.CategoryService
 import com.dmm.recetario.domain.service.RecipeService
@@ -35,13 +34,7 @@ class MainViewModel @Inject constructor (
     @OptIn(ExperimentalCoroutinesApi::class)
     val user: StateFlow<User?> = _token
         .flatMapLatest { token ->
-            if (token == null) {
-                flowOf(null)
-            } else if (token.isBlank()) {
-                flowOf(AnonymousUser())
-            } else {
-                userService.getUserByTokenOrAnonymous(token)
-            }
+            userManager.getUserLocal(token)
         }
         .stateIn (
             scope = viewModelScope,
