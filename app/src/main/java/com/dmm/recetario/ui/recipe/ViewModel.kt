@@ -1,5 +1,8 @@
 package com.dmm.recetario.ui.recipe
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dmm.recetario.domain.model.Recipe
@@ -18,6 +21,9 @@ import kotlinx.coroutines.flow.stateIn
 class RecipeViewModel @Inject constructor (
     private val recipeService: RecipeService
 ) : ViewModel() {
+    var uiState: RecipeUiState by mutableStateOf(RecipeUiState.Loading)
+        private set
+
     private val _selectedRecipeId = MutableStateFlow<String?>(null)
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -34,20 +40,34 @@ class RecipeViewModel @Inject constructor (
             started = SharingStarted.Eagerly,
             initialValue = null
         )
+        .also { uiState = RecipeUiState.Success }
 
     fun loadRecipe(recipeId: String) {
         _selectedRecipeId.value = recipeId
     }
 
     suspend fun refresh() {
+        if (uiState is RecipeUiState.Loading) return
+
+        uiState = RecipeUiState.Loading
         val result = _selectedRecipeId.value?.let {
             recipeService.syncRecipe(it, false, false)
         }
 
-        if (result == false) {
-            throw Exception("Error sincronizando la receta")
-        } else if (result == null) {
-            throw Exception("Receta no seleccionada")
+        when (result) {
+            false -> {
+                val message = "Error sincronizando la receta"
+                uiState = RecipeUiState.Error(message)
+                throw Exception(message)
+            }
+            null -> {
+                val message = "Receta no encontrada"
+                uiState = RecipeUiState.Error(message)
+                throw Exception(message)
+            }
+            else -> {
+                uiState = RecipeUiState.Success
+            }
         }
     }
 }

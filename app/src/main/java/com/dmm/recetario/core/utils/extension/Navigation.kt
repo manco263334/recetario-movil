@@ -23,7 +23,7 @@ fun <T : NavKey> NavBackStack<T>.backTo(targetScreen: T) {
     }
 }
 
-fun <T : NavKey, K : T> NavBackStack<T>.dropTargetByKey(targetKey: K): NavBackStack<T> {
+fun <T : NavKey, K : T> NavBackStack<T>.dropScreensByKey(targetKey: K): NavBackStack<T> {
     if (targetKey !in this) return this
 
     val screens = NavBackStack<T>()
@@ -39,7 +39,7 @@ fun <T : NavKey, K : T> NavBackStack<T>.dropTargetByKey(targetKey: K): NavBackSt
     return screens.also { it.reverse() }
 }
 
-fun <T : NavKey, K : T> NavBackStack<T>.dropTargetByKeys(vararg targetKeys: K): NavBackStack<T> {
+fun <T : NavKey, K : T> NavBackStack<T>.dropScreensByKeys(vararg targetKeys: K): NavBackStack<T> {
     if (!targetKeys.any { it in this }) return this
 
     val screens = NavBackStack<T>()

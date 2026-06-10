@@ -1,5 +1,8 @@
 package com.dmm.recetario.ui.home
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dmm.recetario.domain.service.CategoryService
@@ -13,6 +16,9 @@ import kotlinx.coroutines.launch
 class HomeViewModel @Inject constructor (
     private val categoryService: CategoryService
 ) : ViewModel() {
+    var uiState: HomeUiState by mutableStateOf(HomeUiState.Loading)
+        private set
+
     val categories = categoryService
         .getAllCategories(1, 10, false)
         .stateIn (
@@ -20,6 +26,7 @@ class HomeViewModel @Inject constructor (
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = emptyList()
         )
+        .also { uiState = HomeUiState.Success }
 
     init {
         sync()
@@ -39,10 +46,17 @@ class HomeViewModel @Inject constructor (
     }
 
     suspend fun refresh () {
+        if (uiState is HomeUiState.Loading) return
+
+        uiState = HomeUiState.Loading
         val result = categoryService.syncCategories(1, 10, withRecipes = true)
 
         if (!result) {
-            throw Exception("Error sincronizando las categorías")
+            val message = "Error sincronizando las categorías"
+            uiState = HomeUiState.Error(message)
+            throw Exception(message)
+        } else {
+            uiState = HomeUiState.Success
         }
     }
 }

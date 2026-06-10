@@ -1,5 +1,8 @@
 package com.dmm.recetario.ui.category
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dmm.recetario.domain.model.Recipe
@@ -22,6 +25,9 @@ class CategoryViewModel @Inject constructor (
     private val categoryService: CategoryService,
     private val recipeService: RecipeService
 ) : ViewModel() {
+    var uiState: CategoryUiState by mutableStateOf(CategoryUiState.Loading)
+        private set
+
     private val _selectedCategoryId = MutableStateFlow<String?>(null)
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -38,6 +44,7 @@ class CategoryViewModel @Inject constructor (
             started = SharingStarted.Eagerly,
             initialValue = emptyList()
         )
+        .also { uiState = CategoryUiState.Success }
 
     init {
         sync()
@@ -63,14 +70,27 @@ class CategoryViewModel @Inject constructor (
     }
 
     suspend fun refresh() {
+        if (uiState is CategoryUiState.Loading) return
+
+        uiState = CategoryUiState.Loading
         val result = _selectedCategoryId.value?.let {
             categoryService.syncCategory(it, true)
         }
 
-        if (result == false) {
-            throw Exception("Error sincronizando las recetas")
-        } else if (result == null) {
-            throw Exception("Categoría no seleccionada")
+        when (result) {
+            false -> {
+                val message = "Error sincronizando la categoría"
+                uiState = CategoryUiState.Error(message)
+                throw Exception(message)
+            }
+            null -> {
+                val message = "Categoría no encontrada"
+                uiState = CategoryUiState.Error(message)
+                throw Exception(message)
+            }
+            else -> {
+                uiState = CategoryUiState.Success
+            }
         }
     }
 }

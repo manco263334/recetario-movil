@@ -11,14 +11,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalNavigationDrawer
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -28,13 +23,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.dmm.recetario.core.utils.extension.isNeitherNullNorAnonymous
 import com.dmm.recetario.domain.model.Recipe
 import com.dmm.recetario.domain.model.User
-import com.dmm.recetario.ui.components.Toolbar
-import com.dmm.recetario.ui.components.WelcomeHeader
-import com.dmm.recetario.ui.components.drawer.DrawerContent
-import com.dmm.recetario.ui.components.fab.FAB
+import com.dmm.recetario.ui.components.BaseLayout
 import com.dmm.recetario.ui.components.refresher.PullToRefresh
 
 @Composable
@@ -52,40 +43,19 @@ fun RecipeScreen (
         viewModel.loadRecipe(recipeId)
     }
 
-    val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val uiState = viewModel.uiState
     val recipe by viewModel.recipe.collectAsStateWithLifecycle()
 
-    ModalNavigationDrawer (
-        drawerState = drawerState,
-        gesturesEnabled = true,
-        drawerContent = {
-            DrawerContent (
-                drawerState = drawerState,
-                user = user,
-                onSettingsClick = onSettingsClick,
-                onLogOutSuccess = onLogOutSuccess,
-                onHomeClick =  onHomeClick
-            )
-        }
-    ) {
-        Scaffold (
-            topBar = {
-                Toolbar (
-                    drawerState = drawerState
-                ) {
-                    WelcomeHeader(user)
-                }
-            },
-            floatingActionButton = {
-                if (user.isNeitherNullNorAnonymous()) {
-                    FAB(onCompleteForm = onCompleteForm)
-                }
-            },
-            snackbarHost = {
-                SnackbarHost(hostState = snackbarHostState)
-            }
-        ) { paddingValues ->
-            RecipeContent (
+    BaseLayout (
+        user = user,
+        onSettingsClick = onSettingsClick,
+        onLogOutSuccess = onLogOutSuccess,
+        onCompleteForm = onCompleteForm,
+        onHomeClick = onHomeClick
+    ) { paddingValues ->
+        when(uiState) {
+            is RecipeUiState.Loading -> RecipeContentSkeleton(paddingValues)
+            else -> RecipeContent (
                 paddingValues = paddingValues,
                 recipe = recipe,
                 onRefresh = viewModel::refresh,
@@ -202,4 +172,9 @@ private fun RecipeContent (
             }
         }
     }
+}
+
+@Composable
+private fun RecipeContentSkeleton(paddingValues: PaddingValues) {
+
 }
