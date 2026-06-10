@@ -23,7 +23,7 @@ class UserServiceImpl (
     private val deleteUserUseCase: DeleteUserUseCase,
     private val userRepository: UserRepository,
     private val dao: UserDao<UserEntity, TokenUserRef, RecipeEntity>
-): UserService {
+) : UserService {
     override fun getAllUsers(): Flow<List<User>> {
         return dao.getUsers().map { users ->
             users.map { user ->

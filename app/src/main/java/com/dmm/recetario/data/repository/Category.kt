@@ -9,7 +9,7 @@ import com.dmm.recetario.domain.repository.CategoryRepository
 
 class CategoryRepositoryImpl (
     private val remote: CategoryRemote
-): CategoryRepository {
+) : CategoryRepository {
     override suspend fun createCategory(data: Category): Category {
         val category = handleApiCall { remote.createCategory(data) }
 

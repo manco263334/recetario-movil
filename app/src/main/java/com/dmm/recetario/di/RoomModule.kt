@@ -4,14 +4,14 @@ import android.content.Context
 import androidx.room.Room
 import com.dmm.recetario.data.local.database.AppDatabase
 import com.dmm.recetario.data.local.database.Converters
-import com.dmm.recetario.data.local.database.entity.CategoryEntityImpl
-import com.dmm.recetario.data.local.database.entity.RecipeCategoryCrossRefImpl
-import com.dmm.recetario.data.local.database.entity.RecipeEntityImpl
-import com.dmm.recetario.data.local.database.entity.TokenUserRefImpl
-import com.dmm.recetario.data.local.database.entity.UserEntityImpl
 import com.dmm.recetario.domain.dao.CategoryDao
 import com.dmm.recetario.domain.dao.RecipeDao
 import com.dmm.recetario.domain.dao.UserDao
+import com.dmm.recetario.domain.entity.CategoryEntity
+import com.dmm.recetario.domain.entity.RecipeCategoryCrossRef
+import com.dmm.recetario.domain.entity.RecipeEntity
+import com.dmm.recetario.domain.entity.TokenUserRef
+import com.dmm.recetario.domain.entity.UserEntity
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
@@ -36,23 +36,29 @@ object RoomModule {
 
     @Provides
     @Singleton
-    fun provideUserDao(db: AppDatabase): UserDao<UserEntityImpl, TokenUserRefImpl,
-            RecipeEntityImpl> {
-        return db.userDao()
+    @Suppress("unchecked_cast")
+    fun provideUserDao(db: AppDatabase): UserDao<UserEntity, TokenUserRef,
+            RecipeEntity> {
+        return db.userDao() as UserDao<UserEntity, TokenUserRef,
+                RecipeEntity>
     }
 
     @Provides
     @Singleton
-    fun provideCategoryDao(db: AppDatabase): CategoryDao<CategoryEntityImpl,
-            RecipeCategoryCrossRefImpl, RecipeEntityImpl> {
-        return db.categoryDao()
+    @Suppress("unchecked_cast")
+    fun provideCategoryDao(db: AppDatabase): CategoryDao<CategoryEntity,
+            RecipeCategoryCrossRef, RecipeEntity> {
+        return db.categoryDao() as CategoryDao<CategoryEntity,
+                RecipeCategoryCrossRef, RecipeEntity>
     }
 
     @Provides
     @Singleton
-    fun provideRecipeDao(db: AppDatabase): RecipeDao<RecipeEntityImpl, RecipeCategoryCrossRefImpl,
-            UserEntityImpl, CategoryEntityImpl> {
-        return db.recipeDao()
+    @Suppress("unchecked_cast")
+    fun provideRecipeDao(db: AppDatabase): RecipeDao<RecipeEntity, RecipeCategoryCrossRef,
+            UserEntity, CategoryEntity> {
+        return db.recipeDao() as RecipeDao<RecipeEntity, RecipeCategoryCrossRef,
+                UserEntity, CategoryEntity>
     }
 
     @Singleton

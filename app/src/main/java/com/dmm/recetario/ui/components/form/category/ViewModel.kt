@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class CategoryFormViewModel @Inject constructor (
     private val categoryService: CategoryService
-): ViewModel() {
+) : ViewModel() {
     fun createCategory(name: String, icon: String?) {
         viewModelScope.launch {
             val data = Category (

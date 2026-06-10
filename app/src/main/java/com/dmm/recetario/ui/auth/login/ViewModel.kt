@@ -12,7 +12,7 @@ import com.dmm.recetario.domain.entity.TokenUserRef
 import com.dmm.recetario.domain.entity.UserEntity
 import com.dmm.recetario.domain.manager.TokenManager
 import com.dmm.recetario.domain.manager.UserManager
-import com.dmm.recetario.domain.repository.LoginData
+import com.dmm.recetario.domain.model.LoginData
 import com.dmm.recetario.domain.service.AuthService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
@@ -26,7 +26,7 @@ class LoginViewModel @Inject constructor (
     private val tokenManager: TokenManager,
     private val userManager: UserManager,
     private val dao: UserDao<UserEntity, TokenUserRef, RecipeEntity>
-): ViewModel() {
+) : ViewModel() {
     var uiState by mutableStateOf<LoginUiState>(LoginUiState.Idle)
         private set
 

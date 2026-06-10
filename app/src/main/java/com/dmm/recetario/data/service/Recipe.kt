@@ -26,7 +26,7 @@ class RecipeServiceImpl (
     private val deleteRecipeUseCase: DeleteRecipeUseCase,
     private val repository: RecipeRepository,
     private val dao: RecipeDao<RecipeEntity, RecipeCategoryCrossRef, UserEntity, CategoryEntity>
-): RecipeService {
+) : RecipeService {
     override suspend fun createRecipe(data: Recipe): Recipe {
         val recipe = createRecipeUseCase(data)
 

@@ -9,7 +9,7 @@ import okhttp3.Response
 
 class AuthInterceptor @Inject constructor (
     private val tokenManager: TokenManager
-): Interceptor {
+) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val token = runBlocking {
             tokenManager.token.firstOrNull()

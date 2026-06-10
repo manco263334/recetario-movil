@@ -13,3 +13,14 @@ open class User (
 ) {
     override fun toString(): String = "User(id=$id, name=$name, email=$email, role=$role, phone=$phone, username=$username, icon=$icon, recipes=$recipes)"
 }
+
+class AnonymousUser : User (
+    id = "No ID",
+    name = "Anónimo",
+    email = "No email",
+    role = "No role",
+    phone = null,
+    username = null,
+    icon = null,
+    recipes = null
+)

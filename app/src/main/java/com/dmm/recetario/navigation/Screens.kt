@@ -3,26 +3,26 @@ package com.dmm.recetario.navigation
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 
-sealed interface Routes: NavKey {
+sealed interface Routes : NavKey {
     @Serializable
-    data object Login: Routes
+    data object Login : Routes
 
     @Serializable
-    data object Register: Routes
+    data object Register : Routes
 
     @Serializable
-    data object Home: Routes
+    data object Home : Routes
 
     @Serializable
-    data object Settings: Routes
+    data object Settings : Routes
 
     @Serializable
     data class Category (
         val id: String
-    ): Routes
+    ) : Routes
 
     @Serializable
     data class Recipe (
         val id: String
-    ): Routes
+    ) : Routes
 }

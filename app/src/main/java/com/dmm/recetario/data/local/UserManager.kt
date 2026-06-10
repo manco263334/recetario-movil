@@ -27,7 +27,7 @@ class UserManagerImpl (
     private val userRepository: UserRepository,
     private val userDao: UserDao<UserEntity, TokenUserRef, RecipeEntity>,
     private val userService: UserService
-): UserManager {
+) : UserManager {
     private suspend fun getUserByAPI(): User {
         val me = authService.me()
         val user = userRepository.getUser(me.id, false)

@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.map
 class TokenManagerImpl (
     @param:ApplicationContext
     private val context: Context
-): TokenManager {
+) : TokenManager {
     companion object {
         private val TOKEN_KEY = stringPreferencesKey("jwt_token")
     }

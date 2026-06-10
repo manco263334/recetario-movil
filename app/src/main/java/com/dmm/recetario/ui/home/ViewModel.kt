@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class HomeViewModel @Inject constructor (
     private val categoryService: CategoryService
-): ViewModel() {
+) : ViewModel() {
     val categories = categoryService
         .getAllCategories(1, 10, false)
         .stateIn (

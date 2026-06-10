@@ -1,9 +1,9 @@
 package com.dmm.recetario.data.remote.retrofit
 
-import com.dmm.recetario.domain.repository.LoginData
-import com.dmm.recetario.domain.repository.LoginResponse
-import com.dmm.recetario.domain.repository.MeResponse
-import com.dmm.recetario.domain.repository.RegisterData
+import com.dmm.recetario.domain.model.LoginData
+import com.dmm.recetario.domain.model.LoginResponse
+import com.dmm.recetario.domain.model.MeResponse
+import com.dmm.recetario.domain.model.RegisterData
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET

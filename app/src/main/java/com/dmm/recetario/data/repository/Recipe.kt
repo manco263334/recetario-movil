@@ -9,7 +9,7 @@ import com.dmm.recetario.domain.repository.RecipeRepository
 
 class RecipeRepositoryImpl (
     private val remote: RecipeRemote
-): RecipeRepository {
+) : RecipeRepository {
     override suspend fun createRecipe (data: Recipe): Recipe {
         val recipe = handleApiCall { remote.createRecipe(data) }
 

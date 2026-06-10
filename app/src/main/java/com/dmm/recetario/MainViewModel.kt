@@ -28,7 +28,7 @@ class MainViewModel @Inject constructor (
     private val recipeService: RecipeService,
     private val categoryService: CategoryService,
     private val userManager: UserManager
-): ViewModel() {
+) : ViewModel() {
     private val _token = tokenManager.token
 
     @OptIn(ExperimentalCoroutinesApi::class)

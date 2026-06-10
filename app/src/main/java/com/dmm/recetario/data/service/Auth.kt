@@ -1,15 +1,15 @@
 package com.dmm.recetario.data.service
 
+import com.dmm.recetario.domain.model.LoginData
+import com.dmm.recetario.domain.model.LoginResponse
+import com.dmm.recetario.domain.model.MeResponse
+import com.dmm.recetario.domain.model.RegisterData
 import com.dmm.recetario.domain.repository.AuthRepository
-import com.dmm.recetario.domain.repository.LoginData
-import com.dmm.recetario.domain.repository.LoginResponse
-import com.dmm.recetario.domain.repository.MeResponse
-import com.dmm.recetario.domain.repository.RegisterData
 import com.dmm.recetario.domain.service.AuthService
 
 class AuthServiceImpl (
     private val repository: AuthRepository
-): AuthService {
+) : AuthService {
     override suspend fun login(data: LoginData): LoginResponse {
         return repository.login(data)
     }

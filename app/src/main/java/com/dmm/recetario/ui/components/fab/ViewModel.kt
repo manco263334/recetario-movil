@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.stateIn
 @HiltViewModel
 class FABViewModel @Inject constructor (
     private val categoryService: CategoryService
-): ViewModel() {
+) : ViewModel() {
     val categories = categoryService
         .getAllCategories(1, 10, false)
         .stateIn (

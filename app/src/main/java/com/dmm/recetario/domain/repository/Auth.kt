@@ -1,30 +1,9 @@
 package com.dmm.recetario.domain.repository
 
-data class LoginData (
-    val email: String,
-    val password: String
-)
-
-data class LoginResponse (
-    val token: String,
-    val name: String,
-    val username: String?
-)
-
-data class RegisterData (
-    val name: String,
-    val email: String,
-    val password: String,
-    val phone: String?,
-    val username: String?,
-)
-
-data class MeResponse (
-    val id: String,
-    val email: String,
-    val name: String,
-    val username: String?
-)
+import com.dmm.recetario.domain.model.LoginData
+import com.dmm.recetario.domain.model.LoginResponse
+import com.dmm.recetario.domain.model.MeResponse
+import com.dmm.recetario.domain.model.RegisterData
 
 interface AuthRepository {
     suspend fun login(data: LoginData): LoginResponse

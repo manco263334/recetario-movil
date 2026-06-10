@@ -21,7 +21,7 @@ data class RecipeEntityImpl (
     override val icon: String?,
 
     override val user_id: String
-): RecipeEntity(id, name, persons, ingredients, steps, totalTimeInMinutes, cookingTimeInMinutes,
+) : RecipeEntity(id, name, persons, ingredients, steps, totalTimeInMinutes, cookingTimeInMinutes,
     preparationTimeInMinutes, stars, icon, user_id)
 
 @Entity (

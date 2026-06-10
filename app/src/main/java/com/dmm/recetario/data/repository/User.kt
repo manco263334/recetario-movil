@@ -9,7 +9,7 @@ import com.dmm.recetario.domain.repository.UserRepository
 
 class UserRepositoryImpl (
     private val remote: UserRemote
-): UserRepository {
+) : UserRepository {
     override suspend fun getAllUsers (
         page: Int,
         size: Int,

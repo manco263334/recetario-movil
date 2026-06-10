@@ -25,7 +25,7 @@ class DrawerViewModel @Inject constructor (
     private val tokenManager: TokenManager,
     private val authService: AuthService,
     private val userDAO: UserDao<UserEntity, TokenUserRef, RecipeEntity>
-): ViewModel() {
+) : ViewModel() {
     var logOutState by mutableStateOf<LogOutUiState>(LogOutUiState.Idle)
         private set
 

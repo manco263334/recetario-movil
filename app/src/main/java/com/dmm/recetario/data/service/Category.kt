@@ -26,7 +26,7 @@ class CategoryServiceImpl (
     private val deleteCategoryUseCase: DeleteCategoryUseCase,
     private val repository: CategoryRepository,
     private val dao: CategoryDao<CategoryEntity, RecipeCategoryCrossRef, RecipeEntity>
-): CategoryService {
+) : CategoryService {
     override suspend fun createCategory(data: Category): Category {
         val category = createCategoryUseCase(data)
 

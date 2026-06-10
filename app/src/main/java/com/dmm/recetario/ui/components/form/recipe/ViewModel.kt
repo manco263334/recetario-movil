@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 class RecipeFormViewModel @Inject constructor (
     private val categoryService: CategoryService,
     private val recipeService: RecipeService
-): ViewModel() {
+) : ViewModel() {
     val categories = categoryService
         .getAllCategories(1, 10 ,false)
         .stateIn (

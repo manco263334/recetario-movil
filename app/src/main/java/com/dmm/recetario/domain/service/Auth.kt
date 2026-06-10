@@ -1,9 +1,9 @@
 package com.dmm.recetario.domain.service
 
-import com.dmm.recetario.domain.repository.LoginData
-import com.dmm.recetario.domain.repository.LoginResponse
-import com.dmm.recetario.domain.repository.MeResponse
-import com.dmm.recetario.domain.repository.RegisterData
+import com.dmm.recetario.domain.model.LoginData
+import com.dmm.recetario.domain.model.LoginResponse
+import com.dmm.recetario.domain.model.MeResponse
+import com.dmm.recetario.domain.model.RegisterData
 
 interface AuthService {
     suspend fun login(data: LoginData): LoginResponse

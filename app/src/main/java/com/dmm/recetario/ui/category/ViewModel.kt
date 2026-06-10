@@ -21,7 +21,7 @@ import kotlin.collections.emptyList
 class CategoryViewModel @Inject constructor (
     private val categoryService: CategoryService,
     private val recipeService: RecipeService
-): ViewModel() {
+) : ViewModel() {
     private val _selectedCategoryId = MutableStateFlow<String?>(null)
 
     @OptIn(ExperimentalCoroutinesApi::class)

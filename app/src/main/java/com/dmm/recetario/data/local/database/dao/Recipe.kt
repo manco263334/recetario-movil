@@ -9,8 +9,6 @@ import com.dmm.recetario.data.local.database.entity.RecipeCategoryCrossRefImpl
 import com.dmm.recetario.data.local.database.entity.RecipeEntityImpl
 import com.dmm.recetario.data.local.database.entity.UserEntityImpl
 import com.dmm.recetario.domain.dao.RecipeDao
-import com.dmm.recetario.domain.entity.RecipeCategoryCrossRef
-import com.dmm.recetario.domain.entity.RecipeEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

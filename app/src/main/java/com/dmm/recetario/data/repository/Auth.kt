@@ -3,15 +3,15 @@ package com.dmm.recetario.data.repository
 import com.dmm.recetario.core.utils.extension.isNotNull
 import com.dmm.recetario.core.utils.handler.handleApiCall
 import com.dmm.recetario.data.remote.retrofit.AuthRemote
+import com.dmm.recetario.domain.model.LoginData
+import com.dmm.recetario.domain.model.LoginResponse
+import com.dmm.recetario.domain.model.MeResponse
+import com.dmm.recetario.domain.model.RegisterData
 import com.dmm.recetario.domain.repository.AuthRepository
-import com.dmm.recetario.domain.repository.LoginData
-import com.dmm.recetario.domain.repository.LoginResponse
-import com.dmm.recetario.domain.repository.MeResponse
-import com.dmm.recetario.domain.repository.RegisterData
 
 class AuthRepositoryImpl (
     private val remote: AuthRemote
-): AuthRepository {
+) : AuthRepository {
     override suspend fun login(data: LoginData): LoginResponse {
         val response = handleApiCall { remote.login(data) }
 
@@ -30,7 +30,7 @@ class AuthRepositoryImpl (
         handleApiCall { remote.logout() }
     }
 
-    override suspend fun me(): MeResponse  {
+    override suspend fun me(): MeResponse {
         val response = handleApiCall { remote.me() }
 
         return response!!

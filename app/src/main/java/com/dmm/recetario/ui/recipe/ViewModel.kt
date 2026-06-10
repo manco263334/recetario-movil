@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.stateIn
 @HiltViewModel
 class RecipeViewModel @Inject constructor (
     private val recipeService: RecipeService
-): ViewModel() {
+) : ViewModel() {
     private val _selectedRecipeId = MutableStateFlow<String?>(null)
 
     @OptIn(ExperimentalCoroutinesApi::class)
