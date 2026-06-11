@@ -1,5 +1,6 @@
 package com.dmm.recetario.ui.home
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,6 +27,7 @@ import com.dmm.recetario.domain.model.Category
 import com.dmm.recetario.domain.model.User
 import com.dmm.recetario.ui.components.BaseLayout
 import com.dmm.recetario.ui.components.WellnessCard
+import com.dmm.recetario.ui.components.WellnessCardSkeleton
 import com.dmm.recetario.ui.components.refresher.PullToRefresh
 import kotlinx.coroutines.launch
 
@@ -56,15 +58,24 @@ fun HomeScreen (
             }
         }
     ) { paddingValues ->
-        when(uiState) {
-            is HomeUiState.Loading -> HomeContentSkeleton(paddingValues)
-            else -> HomeContent (
-                paddingValues = paddingValues,
-                categories = categories,
-                onCategoryClick = onCategoryClick,
-                onRefresh = viewModel::refresh,
-                snackbarHostState = snackbarHostState
-            )
+        Crossfade (
+            targetState = uiState,
+            label = "home_crossfade"
+        ) { state ->
+            if (state is HomeUiState.Loading) {
+                HomeContentSkeleton (
+                    paddingValues,
+                    state.message
+                )
+            } else {
+                HomeContent (
+                    paddingValues = paddingValues,
+                    categories = categories,
+                    onCategoryClick = onCategoryClick,
+                    onRefresh = viewModel::refresh,
+                    snackbarHostState = snackbarHostState
+                )
+            }
         }
     }
 }
@@ -104,6 +115,7 @@ private fun HomeContent (
             items(categories) { category ->
                 WellnessCard (
                     title = category.name,
+                    image = category.icon,
                     onClick = { onCategoryClick(category) }
                 )
             }
@@ -112,6 +124,30 @@ private fun HomeContent (
 }
 
 @Composable
-private fun HomeContentSkeleton(paddingValues: PaddingValues) {
+private fun HomeContentSkeleton (
+    paddingValues: PaddingValues,
+    loadingMessage: String
+) {
+    LazyVerticalGrid (
+        columns = GridCells.Fixed(2),
+        modifier = Modifier
+            .padding(paddingValues)
+            .fillMaxSize(),
+        contentPadding = PaddingValues(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        item(span = { GridItemSpan(2) }) {
+            Text (
+                text = loadingMessage,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth(),
+                fontWeight = FontWeight.Bold
+            )
+        }
 
+        items(10) {
+            WellnessCardSkeleton()
+        }
+    }
 }

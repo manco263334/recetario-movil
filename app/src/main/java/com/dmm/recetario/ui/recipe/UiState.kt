@@ -1,7 +1,7 @@
 package com.dmm.recetario.ui.recipe
 
 sealed interface RecipeUiState {
-    object Loading : RecipeUiState
+    data class Loading(val message: String) : RecipeUiState
     object Success : RecipeUiState
     data class Error(val message: String) : RecipeUiState
 }

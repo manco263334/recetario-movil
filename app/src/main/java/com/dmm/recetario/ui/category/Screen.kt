@@ -1,5 +1,6 @@
 package com.dmm.recetario.ui.category
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,6 +25,7 @@ import com.dmm.recetario.domain.model.Recipe
 import com.dmm.recetario.domain.model.User
 import com.dmm.recetario.ui.components.BaseLayout
 import com.dmm.recetario.ui.components.WellnessCard
+import com.dmm.recetario.ui.components.WellnessCardSkeleton
 import com.dmm.recetario.ui.components.refresher.PullToRefresh
 
 @Composable
@@ -52,15 +54,24 @@ fun CategoryScreen (
         onCompleteForm = onCompleteForm,
         onHomeClick = onHomeClick
     ) { paddingValues ->
-        when(uiState) {
-            is CategoryUiState.Loading -> CategoryContentSkeleton(paddingValues)
-            else -> CategoryContent (
-                paddingValues = paddingValues,
-                recipes = recipes,
-                onRecipeClick = onRecipeClick,
-                onRefresh = viewModel::refresh,
-                snackbarHostState = snackbarHostState
-            )
+        Crossfade (
+            targetState = uiState,
+            label = "category_crossfade"
+        ) { state ->
+            if (state is CategoryUiState.Loading) {
+                CategoryContentSkeleton (
+                    paddingValues,
+                    state.message
+                )
+            } else {
+                CategoryContent (
+                    paddingValues = paddingValues,
+                    recipes = recipes,
+                    onRecipeClick = onRecipeClick,
+                    onRefresh = viewModel::refresh,
+                    snackbarHostState = snackbarHostState
+                )
+            }
         }
     }
 }
@@ -90,7 +101,8 @@ private fun CategoryContent (
         ) {
             item(span = { GridItemSpan(2) }) {
                 Text (
-                    text = if (recipes.isNotEmpty()) "Recetas disponibles" else "No hay recetas",
+                    text = if (recipes.isNotEmpty()) "Recetas disponibles"
+                        else "No hay recetas",
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxWidth(),
                     fontWeight = FontWeight.Bold
@@ -100,6 +112,7 @@ private fun CategoryContent (
             items(recipes) { recipe ->
                 WellnessCard (
                     title = recipe.name,
+                    image = recipe.icon,
                     onClick = {
                         recipe.let(onRecipeClick)
                     }
@@ -110,6 +123,30 @@ private fun CategoryContent (
 }
 
 @Composable
-private fun CategoryContentSkeleton(paddingValues: PaddingValues) {
+private fun CategoryContentSkeleton (
+    paddingValues: PaddingValues,
+    loadingMessage: String
+) {
+    LazyVerticalGrid (
+        columns = GridCells.Fixed(2),
+        modifier = Modifier
+            .padding(paddingValues)
+            .fillMaxSize(),
+        contentPadding = PaddingValues(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        item(span = { GridItemSpan(2) }) {
+            Text (
+                text = loadingMessage,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth(),
+                fontWeight = FontWeight.Bold
+            )
+        }
 
+        items(10) {
+            WellnessCardSkeleton()
+        }
+    }
 }

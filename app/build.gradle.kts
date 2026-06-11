@@ -69,7 +69,6 @@ dependencies {
     implementation(libs.androidx.navigation3.ui)
     implementation(libs.androidx.lifecycle.viewmodel.navigation3)
     implementation(libs.androidx.material3.adaptive)
-    implementation(libs.androidx.material3.adaptive.navigation3)
 
     implementation(libs.kotlinx.serialization.json)
 
@@ -80,6 +79,7 @@ dependencies {
     implementation(libs.androidx.compose.animation)
     implementation(libs.androidx.compose.adaptive.navigation3)
     implementation(libs.androidx.navigation.runtime.ktx)
+    implementation(libs.compose.material3)
 
     ksp(libs.androidx.room.compiler)
     annotationProcessor(libs.androidx.room.compiler)

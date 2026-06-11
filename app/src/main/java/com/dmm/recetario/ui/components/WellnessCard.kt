@@ -7,13 +7,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -35,6 +33,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.wear.compose.material3.placeholder
+import androidx.wear.compose.material3.rememberPlaceholderState
 import coil.compose.AsyncImage
 
 @Composable
@@ -46,7 +46,6 @@ fun WellnessCard (
     image: String? = null,
     imageDescription: String? = null,
     backgroundColor: Color = MaterialTheme.colorScheme.surface,
-    imagePosition: ImagePosition = ImagePosition.TOP,
     onClick: () -> Unit = {}
 ) {
     var isPressed by remember { mutableStateOf(false) }
@@ -70,109 +69,125 @@ fun WellnessCard (
         ),
         colors = CardDefaults.cardColors(containerColor = backgroundColor)
     ) {
-        if (imagePosition == ImagePosition.TOP) {
-            Column (
-                modifier = Modifier.padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                if (!image.isNullOrEmpty()) {
-                    Box {
-                        AsyncImage (
-                            model = image,
-                            contentDescription = imageDescription,
-                            modifier = Modifier
-                                .size(80.dp)
-                                .clip(RoundedCornerShape(8.dp)),
-                            contentScale = ContentScale.Crop
-                        )
+        Column (
+            modifier = Modifier.padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            if (!image.isNullOrEmpty()) {
+                Box {
+                    AsyncImage (
+                        model = image,
+                        contentDescription = imageDescription,
+                        modifier = Modifier
+                            .size(80.dp)
+                            .clip(RoundedCornerShape(8.dp)),
+                        contentScale = ContentScale.Crop
+                    )
 
-                        Box (
-                            modifier = Modifier
-                                .matchParentSize()
-                                .background (
-                                    Brush.verticalGradient (
-                                        colors = listOf (
-                                            Color.Transparent,
-                                            Color.Black.copy(alpha = 0.7f)
-                                        )
+                    Box (
+                        modifier = Modifier
+                            .matchParentSize()
+                            .background (
+                                Brush.verticalGradient (
+                                    colors = listOf (
+                                        Color.Transparent,
+                                        Color.Black.copy(alpha = 0.7f)
                                     )
                                 )
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(12.dp))
+                            )
+                    )
                 }
+
+                Spacer(modifier = Modifier.height(12.dp))
+            }
+
+            Text (
+                text = title,
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+                textAlign = TextAlign.Center,
+                color = titleColor
+            )
+
+            if (!description.isNullOrEmpty()) {
+                Spacer(modifier = Modifier.height(8.dp))
                 Text (
-                    text = title,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp,
-                    textAlign = TextAlign.Center,
+                    text = description,
+                    fontSize = 16.sp,
+                    textAlign = TextAlign.Justify,
                     color = titleColor
                 )
-                if (!description.isNullOrEmpty()) {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text (
-                        text = description,
-                        fontSize = 16.sp,
-                        textAlign = TextAlign.Justify,
-                        color = titleColor
-                    )
-                }
-            }
-        } else {
-            Row (
-                modifier = Modifier.padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                if (!image.isNullOrEmpty()) {
-                    Box {
-                        AsyncImage (
-                            model = image,
-                            contentDescription = imageDescription,
-                            modifier = Modifier
-                                .size(48.dp)
-                                .clip(RoundedCornerShape(8.dp)),
-                            contentScale = ContentScale.Crop
-                        )
-
-                        Box (
-                            modifier = Modifier
-                                .matchParentSize()
-                                .background (
-                                    Brush.verticalGradient (
-                                        colors = listOf (
-                                            Color.Transparent,
-                                            Color.Black.copy(alpha = 0.7f)
-                                        )
-                                    )
-                                )
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.width(12.dp))
-                }
-                Column {
-                    Text (
-                        text = title,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp,
-                        textAlign = TextAlign.Start
-                    )
-                    if (!description.isNullOrEmpty()) {
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text (
-                            text = description,
-                            fontSize = 16.sp,
-                            textAlign = TextAlign.Justify
-                        )
-                    }
-                }
             }
         }
     }
 }
 
-enum class ImagePosition {
-    TOP, SIDE
+@Composable
+fun WellnessCardSkeleton (
+    modifier: Modifier = Modifier,
+    showImage: Boolean = true,
+    showDescription: Boolean = true
+) {
+    val placeholderState = rememberPlaceholderState(true)
+
+    Card (
+        modifier = modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(24.dp),
+        elevation = CardDefaults.cardElevation (
+            defaultElevation = 10.dp
+        )
+    ) {
+        Column (
+            modifier = Modifier.padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            if (showImage) {
+                Box (
+                    modifier = Modifier
+                        .size(80.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .placeholder (
+                            placeholderState = placeholderState
+                        )
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+            }
+
+            Box (
+                modifier = Modifier
+                    .fillMaxWidth(0.7f)
+                    .height(24.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .placeholder (
+                        placeholderState = placeholderState
+                    )
+            )
+
+            if (showDescription) {
+                Spacer(modifier = Modifier.height(12.dp))
+
+                repeat(3) { index ->
+                    Box (
+                        modifier = Modifier
+                            .fillMaxWidth (
+                                when (index) {
+                                    2 -> 0.75f
+                                    else -> 1f
+                                }
+                            )
+                            .height(16.dp)
+                            .clip(RoundedCornerShape(6.dp))
+                            .placeholder (
+                                placeholderState = placeholderState
+                            )
+                    )
+
+                    Spacer(modifier = Modifier.height(6.dp))
+                }
+            }
+        }
+    }
 }

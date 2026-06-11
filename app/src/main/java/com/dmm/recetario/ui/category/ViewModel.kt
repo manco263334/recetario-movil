@@ -25,7 +25,7 @@ class CategoryViewModel @Inject constructor (
     private val categoryService: CategoryService,
     private val recipeService: RecipeService
 ) : ViewModel() {
-    var uiState: CategoryUiState by mutableStateOf(CategoryUiState.Loading)
+    var uiState: CategoryUiState by mutableStateOf(CategoryUiState.Loading("Cargando recetas..."))
         private set
 
     private val _selectedCategoryId = MutableStateFlow<String?>(null)
@@ -72,7 +72,7 @@ class CategoryViewModel @Inject constructor (
     suspend fun refresh() {
         if (uiState is CategoryUiState.Loading) return
 
-        uiState = CategoryUiState.Loading
+        uiState = CategoryUiState.Loading("Actualizando y cargando nuevas recetas...")
         val result = _selectedCategoryId.value?.let {
             categoryService.syncCategory(it, true)
         }

@@ -1,5 +1,6 @@
 package com.dmm.recetario.ui.recipe
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -53,14 +54,23 @@ fun RecipeScreen (
         onCompleteForm = onCompleteForm,
         onHomeClick = onHomeClick
     ) { paddingValues ->
-        when(uiState) {
-            is RecipeUiState.Loading -> RecipeContentSkeleton(paddingValues)
-            else -> RecipeContent (
-                paddingValues = paddingValues,
-                recipe = recipe,
-                onRefresh = viewModel::refresh,
-                snackbarHostState = snackbarHostState
-            )
+        Crossfade (
+            targetState = uiState,
+            label = "recipe_crossfade"
+        ) { state ->
+            if (state is RecipeUiState.Loading) {
+                RecipeContentSkeleton (
+                    paddingValues,
+                    state.message
+                )
+            } else {
+                RecipeContent (
+                    paddingValues = paddingValues,
+                    recipe = recipe,
+                    onRefresh = viewModel::refresh,
+                    snackbarHostState = snackbarHostState
+                )
+            }
         }
     }
 }
@@ -175,6 +185,9 @@ private fun RecipeContent (
 }
 
 @Composable
-private fun RecipeContentSkeleton(paddingValues: PaddingValues) {
+private fun RecipeContentSkeleton (
+    paddingValues: PaddingValues,
+    loadingMessage: String
+) {
 
 }

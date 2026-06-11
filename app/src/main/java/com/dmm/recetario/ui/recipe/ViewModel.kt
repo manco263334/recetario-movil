@@ -21,7 +21,7 @@ import kotlinx.coroutines.flow.stateIn
 class RecipeViewModel @Inject constructor (
     private val recipeService: RecipeService
 ) : ViewModel() {
-    var uiState: RecipeUiState by mutableStateOf(RecipeUiState.Loading)
+    var uiState: RecipeUiState by mutableStateOf(RecipeUiState.Loading("Cargando receta..."))
         private set
 
     private val _selectedRecipeId = MutableStateFlow<String?>(null)
@@ -49,7 +49,7 @@ class RecipeViewModel @Inject constructor (
     suspend fun refresh() {
         if (uiState is RecipeUiState.Loading) return
 
-        uiState = RecipeUiState.Loading
+        uiState = RecipeUiState.Loading("Actualizando y cargando la receta...")
         val result = _selectedRecipeId.value?.let {
             recipeService.syncRecipe(it, false, false)
         }

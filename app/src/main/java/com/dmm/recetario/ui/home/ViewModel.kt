@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 class HomeViewModel @Inject constructor (
     private val categoryService: CategoryService
 ) : ViewModel() {
-    var uiState: HomeUiState by mutableStateOf(HomeUiState.Loading)
+    var uiState: HomeUiState by mutableStateOf(HomeUiState.Loading("Cargando categorías..."))
         private set
 
     val categories = categoryService
@@ -48,7 +48,7 @@ class HomeViewModel @Inject constructor (
     suspend fun refresh () {
         if (uiState is HomeUiState.Loading) return
 
-        uiState = HomeUiState.Loading
+        uiState = HomeUiState.Loading("Actualizando y cargando nuevas categorías...")
         val result = categoryService.syncCategories(1, 10, withRecipes = true)
 
         if (!result) {
