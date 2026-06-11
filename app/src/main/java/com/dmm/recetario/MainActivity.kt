@@ -33,7 +33,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             val startDestination by viewModel.startDestination.collectAsStateWithLifecycle()
             val user by viewModel.user.collectAsStateWithLifecycle()
-            val snackbarHostState = remember { SnackbarHostState() }
 
             RecetarioTheme {
                 if (startDestination != null) {
@@ -42,7 +41,6 @@ class MainActivity : ComponentActivity() {
                     AppNavigation (
                         backStack = backStack,
                         user = user,
-                        snackbarHostState = snackbarHostState,
                     )
                 } else {
                     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {

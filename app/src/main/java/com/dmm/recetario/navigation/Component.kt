@@ -31,7 +31,6 @@ import com.dmm.recetario.ui.recipe.RecipeScreen
 fun AppNavigation (
     backStack: NavBackStack<NavKey>,
     user: User?,
-    snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
 ) {
     NavDisplay (
@@ -77,7 +76,6 @@ fun AppNavigation (
             ) {
                 HomeScreen (
                     user = user,
-                    snackbarHostState = snackbarHostState,
                     onCategoryClick = {
                         backStack.navigateTo(Routes.Category(it.id))
                     },
@@ -100,7 +98,6 @@ fun AppNavigation (
                 CategoryScreen (
                     categoryId = it.id,
                     user = user,
-                    snackbarHostState = snackbarHostState,
                     onRecipeClick = {
                         backStack.navigateTo(Routes.Recipe(it.id))
                     },
@@ -126,7 +123,6 @@ fun AppNavigation (
                 RecipeScreen (
                     recipeId = it.id,
                     user = user,
-                    snackbarHostState = snackbarHostState,
                     onSettingsClick = {
                         backStack.navigateTo(Routes.Settings)
                     },
