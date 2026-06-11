@@ -5,13 +5,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
@@ -25,16 +23,14 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dmm.recetario.domain.model.Category
 import com.dmm.recetario.domain.model.User
-import com.dmm.recetario.ui.components.BaseLayout
+import com.dmm.recetario.ui.components.BaseLayoutWithRefresh
 import com.dmm.recetario.ui.components.WellnessCard
 import com.dmm.recetario.ui.components.WellnessCardSkeleton
-import com.dmm.recetario.ui.components.refresher.PullToRefresh
 import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen (
     user: User?,
-    snackbarHostState: SnackbarHostState,
     onCategoryClick: (Category) -> Unit,
     onSettingsClick: (User?) -> Unit,
     onLogOutSuccess: () -> Unit,
@@ -46,34 +42,29 @@ fun HomeScreen (
     val uiState = viewModel.uiState
     val categories by viewModel.categories.collectAsStateWithLifecycle()
 
-    BaseLayout (
+    BaseLayoutWithRefresh (
         user = user,
         drawerState = drawerState,
         onSettingsClick = onSettingsClick,
         onLogOutSuccess = onLogOutSuccess,
         onCompleteForm = onCompleteForm,
+        onRefresh = viewModel::refresh,
         onHomeClick = {
             scope.launch {
                 drawerState.close()
             }
         }
-    ) { paddingValues ->
+    ) {
         Crossfade (
             targetState = uiState,
             label = "home_crossfade"
         ) { state ->
             if (state is HomeUiState.Loading) {
-                HomeContentSkeleton (
-                    paddingValues,
-                    state.message
-                )
+                HomeContentSkeleton(state.message)
             } else {
                 HomeContent (
-                    paddingValues = paddingValues,
                     categories = categories,
                     onCategoryClick = onCategoryClick,
-                    onRefresh = viewModel::refresh,
-                    snackbarHostState = snackbarHostState
                 )
             }
         }
@@ -82,57 +73,43 @@ fun HomeScreen (
 
 @Composable
 private fun HomeContent (
-    paddingValues: PaddingValues,
     categories: List<Category>,
-    snackbarHostState: SnackbarHostState,
     onCategoryClick: (Category) -> Unit,
-    onRefresh: suspend () -> Unit
 ) {
-    PullToRefresh (
-        onRefresh = onRefresh,
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(paddingValues),
-        snackbarHostState = snackbarHostState
+    LazyVerticalGrid (
+        columns = GridCells.Fixed(2),
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        LazyVerticalGrid (
-            columns = GridCells.Fixed(2),
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            item(span = { GridItemSpan(2) }) {
-                Text (
-                    text = if (categories.isNotEmpty()) "Categorías disponibles"
-                        else "No hay categorías",
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth(),
-                    fontWeight = FontWeight.Bold
-                )
-            }
+        item(span = { GridItemSpan(2) }) {
+            Text (
+                text = if (categories.isNotEmpty()) "Categorías disponibles"
+                    else "No hay categorías",
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth(),
+                fontWeight = FontWeight.Bold
+            )
+        }
 
-            items(categories) { category ->
-                WellnessCard (
-                    title = category.name,
-                    image = category.icon,
-                    onClick = { onCategoryClick(category) }
-                )
-            }
+        items(categories) { category ->
+            WellnessCard (
+                title = category.name,
+                image = category.icon,
+                onClick = {
+                    onCategoryClick(category)
+                }
+            )
         }
     }
 }
 
 @Composable
-private fun HomeContentSkeleton (
-    paddingValues: PaddingValues,
-    loadingMessage: String
-) {
+private fun HomeContentSkeleton(loadingMessage: String) {
     LazyVerticalGrid (
         columns = GridCells.Fixed(2),
-        modifier = Modifier
-            .padding(paddingValues)
-            .fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(16.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)

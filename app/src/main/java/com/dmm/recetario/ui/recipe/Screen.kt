@@ -2,7 +2,6 @@ package com.dmm.recetario.ui.recipe
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,7 +12,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,14 +24,12 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dmm.recetario.domain.model.Recipe
 import com.dmm.recetario.domain.model.User
-import com.dmm.recetario.ui.components.BaseLayout
-import com.dmm.recetario.ui.components.refresher.PullToRefresh
+import com.dmm.recetario.ui.components.BaseLayoutWithRefresh
 
 @Composable
 fun RecipeScreen (
     recipeId: String,
     user: User?,
-    snackbarHostState: SnackbarHostState,
     onSettingsClick: (user: User?) -> Unit,
     onLogOutSuccess: () -> Unit,
     onHomeClick: () -> Unit,
@@ -47,137 +43,117 @@ fun RecipeScreen (
     val uiState = viewModel.uiState
     val recipe by viewModel.recipe.collectAsStateWithLifecycle()
 
-    BaseLayout (
+    BaseLayoutWithRefresh (
         user = user,
         onSettingsClick = onSettingsClick,
         onLogOutSuccess = onLogOutSuccess,
         onCompleteForm = onCompleteForm,
-        onHomeClick = onHomeClick
-    ) { paddingValues ->
+        onHomeClick = onHomeClick,
+        onRefresh = viewModel::refresh
+    ) {
         Crossfade (
             targetState = uiState,
             label = "recipe_crossfade"
         ) { state ->
             if (state is RecipeUiState.Loading) {
-                RecipeContentSkeleton (
-                    paddingValues,
-                    state.message
-                )
+                RecipeContentSkeleton(state.message)
             } else {
-                RecipeContent (
-                    paddingValues = paddingValues,
-                    recipe = recipe,
-                    onRefresh = viewModel::refresh,
-                    snackbarHostState = snackbarHostState
-                )
+                RecipeContent(recipe)
             }
         }
     }
 }
 
 @Composable
-private fun RecipeContent (
-    paddingValues: PaddingValues,
-    recipe: Recipe?,
-    snackbarHostState: SnackbarHostState,
-    onRefresh: suspend () -> Unit
-) {
-    PullToRefresh (
-        onRefresh = onRefresh,
+private fun RecipeContent(recipe: Recipe?) {
+    Column (
         modifier = Modifier
             .fillMaxSize()
-            .padding(paddingValues),
-        snackbarHostState = snackbarHostState
+            .padding(top = 16.dp)
+            .verticalScroll(rememberScrollState())
     ) {
-        Column (
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 16.dp)
-                .verticalScroll(rememberScrollState())
-        ) {
-            if (recipe == null) {
-                Text (
-                    text = "Cargando receta...",
-                    style = MaterialTheme.typography.bodyLarge
-                )
-            } else {
-                Card (
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-                ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        Text(text = recipe.name, style = MaterialTheme.typography.headlineMedium)
+        if (recipe == null) {
+            Text (
+                text = "Receta no encontrada",
+                style = MaterialTheme.typography.bodyLarge
+            )
+        } else {
+            Card (
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text(text = recipe.name, style = MaterialTheme.typography.headlineMedium)
+
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(text = "Tiempo total: ${recipe.totalTimeInMinutes} min")
+                    Text(text = "Preparación: ${recipe.preparationTimeInMinutes} min")
+                    Text(text = "Cocción: ${recipe.cookingTimeInMinutes} min")
+                }
+            }
+
+            Card (
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text (
+                        text = "Ingredientes",
+                        style = MaterialTheme.typography.titleLarge,
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    recipe.ingredients.forEach { ingredient ->
+                        Text (text = "* ${ingredient["quantity"] ?: "N/A"} de ${ingredient["name"] ?: "N/A"}")
 
                         Spacer(modifier = Modifier.height(8.dp))
-                        Text(text = "Tiempo total: ${recipe.totalTimeInMinutes} min")
-                        Text(text = "Preparación: ${recipe.preparationTimeInMinutes} min")
-                        Text(text = "Cocción: ${recipe.cookingTimeInMinutes} min")
                     }
                 }
+            }
 
-                Card (
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-                ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        Text (
-                            text = "Ingredientes",
-                            style = MaterialTheme.typography.titleLarge,
-                            textAlign = TextAlign.Center,
-                            fontWeight = FontWeight.Bold
-                        )
+            Card (
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text (
+                        text = "Pasos",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center
+                    )
 
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    var index = 0
+
+                    recipe.steps.forEach { step ->
+                        Text(text = "${++index}. $step")
                         Spacer(modifier = Modifier.height(8.dp))
-
-                        recipe.ingredients.forEach { ingredient ->
-                            Text (text = "* ${ingredient["quantity"] ?: "N/A"} de ${ingredient["name"] ?: "N/A"}")
-                            
-                            Spacer(modifier = Modifier.height(8.dp))
-                        }
                     }
                 }
+            }
 
-                Card (
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-                ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        Text (
-                            text = "Pasos",
-                            style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.Bold,
-                            textAlign = TextAlign.Center
-                        )
-                        
-                        Spacer(modifier = Modifier.height(8.dp))
-                        
-                        var index = 0
-                        
-                        recipe.steps.forEach { step ->
-                            Text(text = "${++index}. $step")
-                            Spacer(modifier = Modifier.height(8.dp))
-                        }
-                    }
-                }
-
-                Card (
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-                ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        Text (
-                            text = "Calificación: ${recipe.stars} ⭐",
-                            style = MaterialTheme.typography.titleLarge
-                        )
-                    }
+            Card (
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text (
+                        text = "Calificación: ${recipe.stars} ⭐",
+                        style = MaterialTheme.typography.titleLarge
+                    )
                 }
             }
         }
@@ -185,9 +161,11 @@ private fun RecipeContent (
 }
 
 @Composable
-private fun RecipeContentSkeleton (
-    paddingValues: PaddingValues,
-    loadingMessage: String
-) {
-
+private fun RecipeContentSkeleton(loadingMessage: String) {
+    Column(modifier = Modifier.fillMaxSize()) {
+        Text (
+            text = loadingMessage,
+            style = MaterialTheme.typography.bodyLarge
+        )
+    }
 }
