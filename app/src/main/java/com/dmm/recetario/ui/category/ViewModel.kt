@@ -25,7 +25,9 @@ class CategoryViewModel @Inject constructor (
     private val categoryService: CategoryService,
     private val recipeService: RecipeService
 ) : ViewModel() {
-    var uiState: CategoryUiState by mutableStateOf(CategoryUiState.Loading("Cargando recetas..."))
+    var uiState: CategoryUiState by mutableStateOf (
+        CategoryUiState.Loading("Cargando recetas...")
+    )
         private set
 
     private val _selectedCategoryId = MutableStateFlow<String?>(null)

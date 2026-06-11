@@ -32,7 +32,7 @@ import kotlinx.coroutines.launch
 fun HomeScreen (
     user: User?,
     onCategoryClick: (Category) -> Unit,
-    onSettingsClick: (User?) -> Unit,
+    onSettingsClick: () -> Unit,
     onLogOutSuccess: () -> Unit,
     onCompleteForm: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
@@ -64,7 +64,7 @@ fun HomeScreen (
             } else {
                 HomeContent (
                     categories = categories,
-                    onCategoryClick = onCategoryClick,
+                    onCategoryClick = onCategoryClick
                 )
             }
         }

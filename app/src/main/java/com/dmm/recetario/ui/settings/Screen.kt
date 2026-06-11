@@ -1,0 +1,66 @@
+package com.dmm.recetario.ui.settings
+
+import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.rememberDrawerState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.dmm.recetario.ui.components.BaseLayout
+import kotlinx.coroutines.launch
+
+@Composable
+fun SettingsScreen (
+    onLogOutSuccess: () -> Unit,
+    onCompleteForm: () -> Unit,
+    onHomeClick: () -> Unit,
+    viewModel: SettingViewModel = hiltViewModel()
+) {
+    val uiState = viewModel.uiState
+    val user by viewModel.user.collectAsStateWithLifecycle()
+
+    val scope = rememberCoroutineScope()
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
+
+    BaseLayout (
+        user = user,
+        drawerState = drawerState,
+        onLogOutSuccess = onLogOutSuccess,
+        onCompleteForm = onCompleteForm,
+        onHomeClick = onHomeClick,
+        onSettingsClick = {
+            scope.launch {
+                drawerState.close()
+            }
+        },
+    ) { paddingValues ->
+        Crossfade (
+            targetState = uiState,
+            label = "settings_crossfade"
+        ) { state ->
+            if (state is SettingsUiState.Loading) {
+                SettingsContentSkeleton(paddingValues, state.message)
+            } else {
+                SettingsContent(paddingValues)
+            }
+        }
+    }
+}
+
+@Composable
+fun SettingsContent (
+    paddingValues: PaddingValues
+) {
+
+}
+
+@Composable
+fun SettingsContentSkeleton (
+    paddingValues: PaddingValues,
+    loadingMessage: String
+) {
+
+}

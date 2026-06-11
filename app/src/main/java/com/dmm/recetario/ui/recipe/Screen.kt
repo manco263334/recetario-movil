@@ -30,7 +30,7 @@ import com.dmm.recetario.ui.components.BaseLayoutWithRefresh
 fun RecipeScreen (
     recipeId: String,
     user: User?,
-    onSettingsClick: (user: User?) -> Unit,
+    onSettingsClick: () -> Unit,
     onLogOutSuccess: () -> Unit,
     onHomeClick: () -> Unit,
     onCompleteForm: () -> Unit,

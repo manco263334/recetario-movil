@@ -21,7 +21,9 @@ import kotlinx.coroutines.flow.stateIn
 class RecipeViewModel @Inject constructor (
     private val recipeService: RecipeService
 ) : ViewModel() {
-    var uiState: RecipeUiState by mutableStateOf(RecipeUiState.Loading("Cargando receta..."))
+    var uiState: RecipeUiState by mutableStateOf (
+        RecipeUiState.Loading("Cargando receta...")
+    )
         private set
 
     private val _selectedRecipeId = MutableStateFlow<String?>(null)

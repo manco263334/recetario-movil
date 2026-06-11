@@ -30,7 +30,7 @@ fun CategoryScreen (
     categoryId: String,
     user: User?,
     onRecipeClick: (Recipe) -> Unit,
-    onSettingsClick: (user: User?) -> Unit,
+    onSettingsClick: () -> Unit,
     onLogOutSuccess: () -> Unit,
     onHomeClick: () -> Unit,
     onCompleteForm: () -> Unit,
@@ -60,7 +60,7 @@ fun CategoryScreen (
             } else {
                 CategoryContent (
                     recipes = recipes,
-                    onRecipeClick = onRecipeClick,
+                    onRecipeClick = onRecipeClick
                 )
             }
         }

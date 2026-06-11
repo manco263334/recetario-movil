@@ -16,7 +16,9 @@ import kotlinx.coroutines.launch
 class HomeViewModel @Inject constructor (
     private val categoryService: CategoryService
 ) : ViewModel() {
-    var uiState: HomeUiState by mutableStateOf(HomeUiState.Loading("Cargando categorías..."))
+    var uiState: HomeUiState by mutableStateOf (
+        HomeUiState.Loading("Cargando categorías...")
+    )
         private set
 
     val categories = categoryService

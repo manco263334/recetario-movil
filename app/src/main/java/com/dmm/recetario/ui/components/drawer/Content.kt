@@ -48,7 +48,7 @@ fun DrawerContent (
     drawerState: DrawerState,
     user: User?,
     snackbarHostState: SnackbarHostState? = null,
-    onSettingsClick: (user: User?) -> Unit,
+    onSettingsClick: () -> Unit,
     onLogOutSuccess: () -> Unit,
     onHomeClick: () -> Unit,
     viewModel: DrawerViewModel = hiltViewModel()
@@ -165,9 +165,7 @@ fun DrawerContent (
                 Text("Ajustes")
             },
             selected = false,
-            onClick = {
-                onSettingsClick(user)
-            },
+            onClick = onSettingsClick,
             icon = {
                 Icon(Icons.Default.Settings, null)
             },
