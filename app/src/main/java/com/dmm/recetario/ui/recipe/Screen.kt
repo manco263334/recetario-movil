@@ -66,16 +66,21 @@ fun RecipeScreen (
 
 @Composable
 private fun RecipeContent(recipe: Recipe?) {
+    val scrollState = rememberScrollState()
+
     Column (
         modifier = Modifier
             .fillMaxSize()
             .padding(top = 16.dp)
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(scrollState)
     ) {
         if (recipe == null) {
             Text (
                 text = "Receta no encontrada",
-                style = MaterialTheme.typography.bodyLarge
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
             )
         } else {
             Card (
@@ -111,7 +116,8 @@ private fun RecipeContent(recipe: Recipe?) {
                     Spacer(modifier = Modifier.height(8.dp))
 
                     recipe.ingredients.forEach { ingredient ->
-                        Text (text = "* ${ingredient["quantity"] ?: "N/A"} de ${ingredient["name"] ?: "N/A"}")
+                        Text (text = "* ${ingredient["quantity"] ?: "N/A"} de ${ingredient["name"] 
+                            ?: "N/A"}")
 
                         Spacer(modifier = Modifier.height(8.dp))
                     }
@@ -165,7 +171,10 @@ private fun RecipeContentSkeleton(loadingMessage: String) {
     Column(modifier = Modifier.fillMaxSize()) {
         Text (
             text = loadingMessage,
-            style = MaterialTheme.typography.bodyLarge
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
         )
     }
 }

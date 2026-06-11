@@ -33,11 +33,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import coil.compose.AsyncImage
+import com.dmm.recetario.R
 import com.dmm.recetario.domain.model.User
 import kotlinx.coroutines.launch
 
@@ -51,7 +53,7 @@ fun DrawerContent (
     onHomeClick: () -> Unit,
     viewModel: DrawerViewModel = hiltViewModel()
 ) {
-    val coroutineScope = rememberCoroutineScope()
+    val scope = rememberCoroutineScope()
     val logOutState = viewModel.logOutState
 
     LaunchedEffect(Unit) {
@@ -81,12 +83,16 @@ fun DrawerContent (
         ) {
             IconButton (
                 onClick = {
-                    coroutineScope.launch {
+                    scope.launch {
                         drawerState.close()
                     }
                 }
             ) {
-                Icon(imageVector = Icons.Default.Close, contentDescription = "Cerrar menú")
+                Icon (
+                    imageVector = Icons.Default.Close,
+                    contentDescription = "Cerrar menú",
+                    tint = MaterialTheme.colorScheme.onBackground
+                )
             }
         }
 
@@ -103,15 +109,13 @@ fun DrawerContent (
                     Color(0xFF00C2FF),
                     CircleShape
                 ),
-//            error = painterResource(R.drawable.user_default_icon),
-//            fallback = painterResource(R.drawable.user_default_icon)
+            error = painterResource(R.drawable.user_default_icon),
+            fallback = painterResource(R.drawable.user_default_icon)
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        Column (
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text (
                 text = user?.name ?: "Anónimo",
                 fontSize = 20.sp,
@@ -134,7 +138,8 @@ fun DrawerContent (
             )
 
             Text (
-                text = if (user?.phone.isNullOrBlank()) "Sin número telefónico" else user.phone,
+                text = if (user?.phone.isNullOrBlank()) "Sin número telefónico"
+                    else user.phone,
                 fontSize = 14.sp,
                 color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Center
@@ -160,7 +165,9 @@ fun DrawerContent (
                 Text("Ajustes")
             },
             selected = false,
-            onClick = { onSettingsClick(user) },
+            onClick = {
+                onSettingsClick(user)
+            },
             icon = {
                 Icon(Icons.Default.Settings, null)
             },

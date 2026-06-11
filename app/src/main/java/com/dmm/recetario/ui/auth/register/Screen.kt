@@ -65,29 +65,6 @@ fun RegisterScreen (
     onNavigateToLogin: () -> Unit,
     viewModel: RegisterViewModel = hiltViewModel()
 ) {
-    RegisterContent (
-        uiState = viewModel.uiState,
-        onRegister = viewModel::register,
-        onRetry = viewModel::resetToIdle,
-        onNavigateToHome = onNavigateToHome,
-        onNavigateToLogin = onNavigateToLogin
-    )
-}
-
-@Composable
-fun RegisterContent (
-    uiState: RegisterUiState,
-    onRegister: (String, String, String, String?, String?) -> Unit,
-    onRetry: () -> Unit,
-    onNavigateToHome: () -> Unit,
-    onNavigateToLogin: () -> Unit
-) {
-    LaunchedEffect(uiState) {
-        if (uiState is RegisterUiState.Success) {
-            onNavigateToHome()
-        }
-    }
-
     Column (
         modifier = Modifier
             .fillMaxSize()
@@ -104,20 +81,43 @@ fun RegisterContent (
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        when (uiState) {
-            is RegisterUiState.Loading -> CircularProgressIndicator()
-            is RegisterUiState.Error -> {
-                ErrorScreen (
-                    message = uiState.message,
-                    onRetry = onRetry
-                )
-            }
-            else -> {
-                RegisterForm (
-                    onRegister = onRegister,
-                    onNavigateToLogin = onNavigateToLogin
-                )
-            }
+        RegisterContent (
+            uiState = viewModel.uiState,
+            onRegister = viewModel::register,
+            onRetry = viewModel::resetToIdle,
+            onNavigateToHome = onNavigateToHome,
+            onNavigateToLogin = onNavigateToLogin
+        )
+    }
+}
+
+@Composable
+fun RegisterContent (
+    uiState: RegisterUiState,
+    onRegister: (String, String, String, String?, String?) -> Unit,
+    onRetry: () -> Unit,
+    onNavigateToHome: () -> Unit,
+    onNavigateToLogin: () -> Unit
+) {
+    LaunchedEffect(uiState) {
+        if (uiState is RegisterUiState.Success) {
+            onNavigateToHome()
+        }
+    }
+
+    when (uiState) {
+        is RegisterUiState.Loading -> CircularProgressIndicator()
+        is RegisterUiState.Error -> {
+            ErrorScreen (
+                message = uiState.message,
+                onRetry = onRetry
+            )
+        }
+        else -> {
+            RegisterForm (
+                onRegister = onRegister,
+                onNavigateToLogin = onNavigateToLogin
+            )
         }
     }
 }
@@ -135,6 +135,7 @@ private fun RegisterForm (
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
 
     val keyboardController = LocalSoftwareKeyboardController.current
+    val scrollState = rememberScrollState()
 
     AnimatedVisibility (
         visible = true,
@@ -143,15 +144,13 @@ private fun RegisterForm (
         Card (
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(24.dp),
-            colors = CardDefaults.cardColors (
-                containerColor = Color(0xFF2A2A2A)
-            ),
+            colors = CardDefaults.cardColors(containerColor = Color(0xFF2A2A2A)),
             elevation = CardDefaults.cardElevation(8.dp)
         ) {
-            Column(
+            Column (
                 modifier = Modifier
                     .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
+                    .verticalScroll(scrollState)
                     .padding(24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
@@ -185,23 +184,19 @@ private fun RegisterForm (
                 Card (
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(28.dp),
-                    colors = CardDefaults.cardColors (
-                        containerColor = Color(0xFF1E1E1E)
-                    ),
-                    elevation = CardDefaults.cardElevation (
-                        defaultElevation = 10.dp
-                    )
+                    colors = CardDefaults.cardColors(containerColor = Color(0xFF1E1E1E)),
+                    elevation = CardDefaults.cardElevation( defaultElevation = 10.dp)
                 ) {
-
                     Column (
                         modifier = Modifier.padding(24.dp),
                         verticalArrangement = Arrangement.spacedBy(18.dp)
                     ) {
-
                         // Nombre
                         OutlinedTextField (
                             value = name,
-                            onValueChange = { name = it },
+                            onValueChange = {
+                                name = it
+                            },
                             label = {
                                 Text("Nombre completo")
                             },
@@ -218,7 +213,9 @@ private fun RegisterForm (
                         // Email
                         OutlinedTextField (
                             value = email,
-                            onValueChange = { email = it },
+                            onValueChange = {
+                                email = it
+                            },
                             label = {
                                 Text("Correo electrónico")
                             },
@@ -228,9 +225,8 @@ private fun RegisterForm (
                             leadingIcon = {
                                 Icon(Icons.Default.Email, null)
                             },
-                            keyboardOptions = KeyboardOptions (
-                                keyboardType = KeyboardType.Email
-                            ),
+                            keyboardOptions = KeyboardOptions.Default
+                                .copy(keyboardType = KeyboardType.Email),
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth()
                         )
@@ -238,7 +234,9 @@ private fun RegisterForm (
                         // Password
                         OutlinedTextField (
                             value = password,
-                            onValueChange = { password = it },
+                            onValueChange = {
+                                password = it
+                            },
                             label = {
                                 Text("Contraseña")
                             },
@@ -251,11 +249,10 @@ private fun RegisterForm (
                             trailingIcon = {
                                 IconButton (
                                     onClick = {
-                                        passwordVisible =
-                                            !passwordVisible
+                                        passwordVisible = !passwordVisible
                                     }
                                 ) {
-                                    Icon(
+                                    Icon (
                                         imageVector =
                                             if(passwordVisible)
                                                 Icons.Default.Visibility
@@ -277,16 +274,17 @@ private fun RegisterForm (
                         // Teléfono
                         OutlinedTextField (
                             value = phone,
-                            onValueChange = { phone = it },
+                            onValueChange = {
+                                phone = it
+                            },
                             label = {
                                 Text("Teléfono (Opcional)")
                             },
                             leadingIcon = {
                                 Icon(Icons.Default.Phone, null)
                             },
-                            keyboardOptions = KeyboardOptions (
-                                keyboardType = KeyboardType.Phone
-                            ),
+                            keyboardOptions = KeyboardOptions.Default
+                                .copy(keyboardType = KeyboardType.Phone),
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth()
                         )
@@ -294,7 +292,9 @@ private fun RegisterForm (
                         // Username
                         OutlinedTextField (
                             value = username,
-                            onValueChange = { username = it },
+                            onValueChange = {
+                                username = it
+                            },
                             label = {
                                 Text("Apodo (Opcional)")
                             },
@@ -322,15 +322,13 @@ private fun RegisterForm (
                             },
                             enabled =
                                 name.isNotBlank() &&
-                                        email.isNotBlank() &&
-                                        password.isNotBlank(),
+                                email.isNotBlank() &&
+                                password.isNotBlank(),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(56.dp),
                             shape = RoundedCornerShape(18.dp),
-                            colors = ButtonDefaults.buttonColors (
-                                containerColor = Color(0xFF00C2FF)
-                            )
+                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00C2FF))
                         ) {
                             Icon (
                                 Icons.Default.Check,
@@ -347,9 +345,7 @@ private fun RegisterForm (
                             )
                         }
 
-                        HorizontalDivider (
-                            color = Color.Gray.copy(alpha = 0.3f)
-                        )
+                        HorizontalDivider(color = Color.Gray.copy(alpha = 0.3f))
 
                         // Navegar al login
                         TextButton (

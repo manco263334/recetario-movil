@@ -13,8 +13,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Email
@@ -63,14 +65,31 @@ fun LoginScreen (
     onNavigateToRegister: () -> Unit,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
-    LoginContent (
-        uiState = viewModel.uiState,
-        onLogin = viewModel::login,
-        onLoginAsGuest = viewModel::loginAsGuest,
-        onRetry = viewModel::resetToIdle,
-        onNavigateToHome = onNavigateToHome,
-        onNavigateToRegister = onNavigateToRegister
-    )
+    Column (
+        modifier = Modifier
+            .fillMaxSize()
+            .background (
+                Brush.verticalGradient (
+                    colors = listOf (
+                        Color(0xFF121212),
+                        Color(0xFF1E1E1E),
+                        Color(0xFF252525)
+                    )
+                )
+            )
+            .padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        LoginContent (
+            uiState = viewModel.uiState,
+            onLogin = viewModel::login,
+            onLoginAsGuest = viewModel::loginAsGuest,
+            onRetry = viewModel::resetToIdle,
+            onNavigateToHome = onNavigateToHome,
+            onNavigateToRegister = onNavigateToRegister
+        )
+    }
 }
 
 @Composable
@@ -88,37 +107,20 @@ private fun LoginContent (
         }
     }
 
-    Column (
-        modifier = Modifier
-            .fillMaxSize()
-            .background (
-                Brush.verticalGradient (
-                    colors = listOf (
-                        Color(0xFF121212),
-                        Color(0xFF1E1E1E),
-                        Color(0xFF252525)
-                    )
-                )
+    when (uiState) {
+        is LoginUiState.Loading -> CircularProgressIndicator()
+        is LoginUiState.Error -> {
+            ErrorScreen (
+                message = uiState.message,
+                onRetry = onRetry
             )
-            .padding(24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        when (uiState) {
-            is LoginUiState.Loading -> CircularProgressIndicator()
-            is LoginUiState.Error -> {
-                ErrorScreen (
-                    message = uiState.message,
-                    onRetry = onRetry
-                )
-            }
-            else -> {
-                LoginForm (
-                    onLogin = onLogin,
-                    onLoginAsGuest = onLoginAsGuest,
-                    onNavigateToRegister = onNavigateToRegister
-                )
-            }
+        }
+        else -> {
+            LoginForm (
+                onLogin = onLogin,
+                onLoginAsGuest = onLoginAsGuest,
+                onNavigateToRegister = onNavigateToRegister
+            )
         }
     }
 }
@@ -134,6 +136,7 @@ private fun LoginForm (
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
 
     val keyboardController = LocalSoftwareKeyboardController.current
+    val scrollState = rememberScrollState()
 
     AnimatedVisibility (
         visible = true,
@@ -142,13 +145,14 @@ private fun LoginForm (
         Card (
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(24.dp),
-            colors = CardDefaults.cardColors (
-                containerColor = Color(0xFF2A2A2A)
-            ),
+            colors = CardDefaults.cardColors(containerColor = Color(0xFF2A2A2A)),
             elevation = CardDefaults.cardElevation(8.dp)
         ) {
             Column (
-                modifier = Modifier.padding(24.dp)
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(scrollState)
+                    .padding(24.dp)
             ) {
                 Spacer(modifier = Modifier.height(8.dp))
 
@@ -180,12 +184,15 @@ private fun LoginForm (
 
                 OutlinedTextField (
                     value = email,
-                    onValueChange = { email = it },
+                    onValueChange = {
+                        email = it
+                    },
                     label = {
                         Text("Email")
                     },
                     singleLine = true,
-                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email),
+                    keyboardOptions = KeyboardOptions.Default
+                        .copy(keyboardType = KeyboardType.Email),
                     modifier = Modifier.fillMaxWidth(),
                     textStyle = TextStyle(color = MaterialTheme.colorScheme.onBackground),
                     colors = TextFieldDefaults.colors (
@@ -207,16 +214,22 @@ private fun LoginForm (
 
                 OutlinedTextField (
                     value = password,
-                    onValueChange = { password = it },
+                    onValueChange = {
+                        password = it
+                    },
                     label = {
                         Text("Contraseña")
                     },
                     singleLine = true,
-                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password),
-                    visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                    keyboardOptions = KeyboardOptions.Default
+                        .copy(keyboardType = KeyboardType.Password),
+                    visualTransformation = if (passwordVisible) VisualTransformation.None
+                        else PasswordVisualTransformation(),
                     trailingIcon = {
                         IconButton (
-                            onClick = { passwordVisible = !passwordVisible }
+                            onClick = {
+                                passwordVisible = !passwordVisible
+                            }
                         ) {
                             Icon (
                                 imageVector =
@@ -245,9 +258,7 @@ private fun LoginForm (
                         .fillMaxWidth()
                         .height(56.dp),
                     shape = RoundedCornerShape(16.dp),
-                    colors = ButtonDefaults.buttonColors (
-                        containerColor = Color(0xFF00C2FF)
-                    )
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00C2FF))
                 ) {
                     Text (
                         text =  "Iniciar sesión".uppercase(),
@@ -301,6 +312,14 @@ private fun LoginForm (
                     Text("¿No tienes cuenta? Regístrate aquí, papu")
                 }
 
+                HorizontalDivider (
+                    modifier = Modifier.padding(vertical = 16.dp),
+                    color = Color.Gray.copy(alpha = 0.3f)
+                )
+
+                TextButton(onClick = { }) {
+                    Text("¿Olvidaste tu contraseña? Haz click aquí para recuperarla")
+                }
             }
         }
     }

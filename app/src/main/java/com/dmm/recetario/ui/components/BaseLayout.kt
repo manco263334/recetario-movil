@@ -46,9 +46,7 @@ fun BaseLayout (
     ) {
         Scaffold (
             topBar = {
-                Toolbar (
-                    drawerState = drawerState
-                ) {
+                Toolbar(drawerState = drawerState) {
                     WelcomeHeader(user)
                 }
             },

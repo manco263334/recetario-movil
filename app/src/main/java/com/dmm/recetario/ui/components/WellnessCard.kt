@@ -64,9 +64,7 @@ fun WellnessCard (
             }
             .animateContentSize(),
         shape = RoundedCornerShape(24.dp),
-        elevation = CardDefaults.cardElevation (
-            defaultElevation = 10.dp
-        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
         colors = CardDefaults.cardColors(containerColor = backgroundColor)
     ) {
         Column (
@@ -134,9 +132,7 @@ fun WellnessCardSkeleton (
     Card (
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(24.dp),
-        elevation = CardDefaults.cardElevation (
-            defaultElevation = 10.dp
-        )
+        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
     ) {
         Column (
             modifier = Modifier.padding(16.dp),
@@ -148,9 +144,7 @@ fun WellnessCardSkeleton (
                     modifier = Modifier
                         .size(80.dp)
                         .clip(RoundedCornerShape(8.dp))
-                        .placeholder (
-                            placeholderState = placeholderState
-                        )
+                        .placeholder(placeholderState = placeholderState)
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -161,9 +155,7 @@ fun WellnessCardSkeleton (
                     .fillMaxWidth(0.7f)
                     .height(24.dp)
                     .clip(RoundedCornerShape(8.dp))
-                    .placeholder (
-                        placeholderState = placeholderState
-                    )
+                    .placeholder(placeholderState = placeholderState)
             )
 
             if (showDescription) {
@@ -180,9 +172,7 @@ fun WellnessCardSkeleton (
                             )
                             .height(16.dp)
                             .clip(RoundedCornerShape(6.dp))
-                            .placeholder (
-                                placeholderState = placeholderState
-                            )
+                            .placeholder(placeholderState = placeholderState)
                     )
 
                     Spacer(modifier = Modifier.height(6.dp))

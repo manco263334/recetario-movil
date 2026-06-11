@@ -35,12 +35,8 @@ fun FAB (
     var showMenu by rememberSaveable { mutableStateOf(false) }
     var selectedOption by rememberSaveable { mutableStateOf<String?>(null) }
 
-    Box (
-        contentAlignment = Alignment.BottomEnd
-    ) {
-        Column (
-            horizontalAlignment = Alignment.End
-        ) {
+    Box(contentAlignment = Alignment.BottomEnd) {
+        Column (horizontalAlignment = Alignment.End) {
             if (showMenu) {
                 Card (
                     modifier = Modifier.padding(8.dp),
@@ -78,7 +74,9 @@ fun FAB (
             }
 
             FloatingActionButton (
-                onClick = { showMenu = !showMenu },
+                onClick = {
+                    showMenu = !showMenu
+                },
                 modifier = Modifier.padding(16.dp),
                 containerColor = MaterialTheme.colorScheme.primary
             ) {
@@ -89,11 +87,15 @@ fun FAB (
 
     when (selectedOption) {
         "Category" -> CategoryForm (
-            onDismiss = { selectedOption = null },
+            onDismiss = {
+                selectedOption = null
+            },
             onCompleteForm = onCompleteForm
         )
         "Recipe" -> RecipeForm (
-            onDismiss =  { selectedOption = null },
+            onDismiss =  {
+                selectedOption = null
+            },
             onCompleteForm = onCompleteForm
         )
     }

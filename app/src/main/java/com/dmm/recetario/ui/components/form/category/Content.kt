@@ -45,14 +45,18 @@ fun CategoryForm (
             Column {
                 OutlinedTextField (
                     value = name,
-                    onValueChange = { name = it },
+                    onValueChange = {
+                        name = it
+                    },
                     label = {
                         Text("Nombre")
                     }
                 )
                 OutlinedTextField (
                     value = icon,
-                    onValueChange = { icon = it },
+                    onValueChange = {
+                        icon = it
+                    },
                     label = {
                         Text("Icono (URL)",)
                     }

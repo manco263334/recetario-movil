@@ -65,9 +65,7 @@ fun ErrorScreen (
         Button (
             onClick = onRetry,
             shape = RoundedCornerShape(12.dp),
-            colors = ButtonDefaults.buttonColors (
-                containerColor = MaterialTheme.colorScheme.error
-            )
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
         ) {
             Icon (
                 Icons.Default.Refresh,

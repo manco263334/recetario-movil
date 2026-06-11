@@ -61,7 +61,9 @@ fun RecipeForm (
                 Column {
                     OutlinedTextField (
                         value = name, 
-                        onValueChange = { name = it }, 
+                        onValueChange = {
+                            name = it
+                        },
                         label = { 
                             Text("Nombre de la Receta") 
                         }
@@ -69,7 +71,9 @@ fun RecipeForm (
                     
                     OutlinedTextField (
                         value = persons.toString(), 
-                        onValueChange = { persons = it.toIntOrNull() ?: 0 }, 
+                        onValueChange = {
+                            persons = it.toIntOrNull() ?: 0
+                        },
                         label = { 
                             Text("Personas") 
                         }
@@ -97,7 +101,9 @@ fun RecipeForm (
                 Column {
                     OutlinedTextField (
                         value = totalTimeInMinutes.toString(), 
-                        onValueChange = { totalTimeInMinutes = it.toIntOrNull() ?: 0 }, 
+                        onValueChange = {
+                            totalTimeInMinutes = it.toIntOrNull() ?: 0
+                        },
                         label = { 
                             Text("Tiempo total (en minutos)") 
                         }
@@ -105,7 +111,9 @@ fun RecipeForm (
                     
                     OutlinedTextField (
                         value = cookTimeInMinutes.toString(), 
-                        onValueChange = { cookTimeInMinutes = it.toIntOrNull() ?: 0 }, 
+                        onValueChange = {
+                            cookTimeInMinutes = it.toIntOrNull() ?: 0
+                        },
                         label = { 
                             Text("Tiempo de cocción (en minutos)") 
                         }
@@ -113,7 +121,9 @@ fun RecipeForm (
                     
                     OutlinedTextField (
                         value = prepareTimeInMinutes.toString(), 
-                        onValueChange = { prepareTimeInMinutes = it.toIntOrNull() ?: 0 }, 
+                        onValueChange = {
+                            prepareTimeInMinutes = it.toIntOrNull() ?: 0
+                        },
                         label = { 
                             Text("Tiempo de preparación (en minutos)") 
                         }
@@ -152,7 +162,9 @@ fun RecipeForm (
                 Column {
                     OutlinedTextField (
                         value = ingredientName, 
-                        onValueChange = { ingredientName = it }, 
+                        onValueChange = {
+                            ingredientName = it
+                        },
                         label = { 
                             Text("Nombre del Ingrediente") 
                         }
@@ -160,7 +172,9 @@ fun RecipeForm (
                     
                     OutlinedTextField (
                         value = ingredientQuantity, 
-                        onValueChange = { ingredientQuantity = it }, 
+                        onValueChange = {
+                            ingredientQuantity = it
+                        },
                         label = { 
                             Text("Cantidad") 
                         }
@@ -206,7 +220,9 @@ fun RecipeForm (
                 Column {
                     OutlinedTextField (
                         value = stepDescription, 
-                        onValueChange = { stepDescription = it }, 
+                        onValueChange = {
+                            stepDescription = it
+                        },
                         label = { 
                             Text("Paso") 
                         }
@@ -216,7 +232,9 @@ fun RecipeForm (
         )
 
         4 -> {
-            val checkboxStates = rememberSaveable { mutableStateMapOf<String, Boolean>().withDefault { false } }
+            val checkboxStates = rememberSaveable {
+                mutableStateMapOf<String, Boolean>().withDefault { false }
+            }
             AlertDialog (
                 onDismissRequest = onDismiss,
                 confirmButton = {
