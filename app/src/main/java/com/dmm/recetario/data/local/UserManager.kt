@@ -20,7 +20,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flowOf
 
-@Singleton
 class UserManagerImpl (
     private val tokenManager: TokenManager,
     private val authService: AuthService,

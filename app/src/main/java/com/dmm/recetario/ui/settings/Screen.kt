@@ -9,15 +9,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.dmm.recetario.core.utils.helper.ResourceHelper
 import com.dmm.recetario.ui.components.BaseLayout
 import kotlinx.coroutines.launch
 
 @Composable
 fun SettingsScreen (
+    resourceHelper: ResourceHelper,
+    viewModel: SettingViewModel = hiltViewModel(),
     onHomeClick: () -> Unit,
-    onCompleteForm: () -> Unit,
-    onLogOutSuccess: () -> Unit,
-    viewModel: SettingViewModel = hiltViewModel()
+    onLogOutSuccess: () -> Unit
 ) {
     val uiState = viewModel.uiState
     val user by viewModel.user.collectAsStateWithLifecycle()
@@ -27,9 +28,11 @@ fun SettingsScreen (
 
     BaseLayout (
         user = user,
+        showFab = false,
         drawerState = drawerState,
+        resourceHelper = resourceHelper,
         onHomeClick = onHomeClick,
-        onCompleteForm = onCompleteForm,
+        onCompleteForm = {},
         onLogOutSuccess = onLogOutSuccess,
         onSettingsClick = {
             scope.launch {
@@ -44,7 +47,7 @@ fun SettingsScreen (
             if (state is SettingsUiState.Loading) {
                 SettingsContentSkeleton(paddingValues, state.message)
             } else {
-                SettingsContent(paddingValues)
+                SettingsContent(paddingValues, resourceHelper)
             }
         }
     }
@@ -52,7 +55,8 @@ fun SettingsScreen (
 
 @Composable
 fun SettingsContent (
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
+    resourceHelper: ResourceHelper
 ) {
 
 }

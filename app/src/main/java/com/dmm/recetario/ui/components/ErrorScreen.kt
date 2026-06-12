@@ -23,10 +23,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.dmm.recetario.core.utils.helper.ResourceHelper
 
 @Composable
 fun ErrorScreen (
     message: String,
+    resourceHelper: ResourceHelper,
     onRetry: () -> Unit
 ) {
     Column (

@@ -21,6 +21,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.dmm.recetario.core.utils.helper.ResourceHelper
 import com.dmm.recetario.domain.model.Category
 import com.dmm.recetario.domain.model.User
 import com.dmm.recetario.ui.components.BaseLayoutWithRefresh
@@ -31,6 +32,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeScreen (
     user: User?,
+    resourceHelper: ResourceHelper,
     viewModel: HomeViewModel = hiltViewModel(),
     onCompleteForm: () -> Unit,
     onSettingsClick: () -> Unit,
@@ -45,6 +47,7 @@ fun HomeScreen (
     BaseLayoutWithRefresh (
         user = user,
         drawerState = drawerState,
+        resourceHelper = resourceHelper,
         onRefresh = viewModel::refresh,
         onCompleteForm = onCompleteForm,
         onSettingsClick = onSettingsClick,
@@ -64,6 +67,7 @@ fun HomeScreen (
             } else {
                 HomeContent (
                     categories = categories,
+                    resourceHelper = resourceHelper,
                     onCategoryClick = onCategoryClick
                 )
             }
@@ -74,7 +78,8 @@ fun HomeScreen (
 @Composable
 private fun HomeContent (
     categories: List<Category>,
-    onCategoryClick: (Category) -> Unit,
+    resourceHelper: ResourceHelper,
+    onCategoryClick: (Category) -> Unit
 ) {
     LazyVerticalGrid (
         columns = GridCells.Fixed(2),

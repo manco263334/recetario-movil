@@ -9,9 +9,7 @@ import jakarta.inject.Singleton
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-@Singleton
 class TokenManagerImpl (
-    @param:ApplicationContext
     private val context: Context
 ) : TokenManager {
     companion object {

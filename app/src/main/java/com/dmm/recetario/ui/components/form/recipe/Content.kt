@@ -16,13 +16,15 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.dmm.recetario.core.utils.helper.ResourceHelper
 import kotlin.collections.set
 
 @Composable
 fun RecipeForm (
+    resourceHelper: ResourceHelper,
+    viewModel: RecipeFormViewModel = hiltViewModel(),
     onDismiss: () -> Unit,
-    onCompleteForm: () -> Unit,
-    viewModel: RecipeFormViewModel = hiltViewModel()
+    onCompleteForm: () -> Unit
 ) {
     val categories by viewModel.categories.collectAsStateWithLifecycle()
     var stepIndex by rememberSaveable { mutableIntStateOf(0) }

@@ -57,10 +57,12 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.dmm.recetario.core.utils.helper.ResourceHelper
 import com.dmm.recetario.ui.components.ErrorScreen
 
 @Composable
 fun LoginScreen (
+    resourceHelper: ResourceHelper,
     viewModel: LoginViewModel = hiltViewModel(),
     onNavigateToHome: () -> Unit,
     onNavigateToRegister: () -> Unit
@@ -83,6 +85,7 @@ fun LoginScreen (
     ) {
         LoginContent (
             uiState = viewModel.uiState,
+            resourceHelper = resourceHelper,
             onLogin = viewModel::login,
             onRetry = viewModel::resetToIdle,
             onNavigateToHome = onNavigateToHome,
@@ -95,6 +98,7 @@ fun LoginScreen (
 @Composable
 private fun LoginContent (
     uiState: LoginUiState,
+    resourceHelper: ResourceHelper,
     onRetry: () -> Unit,
     onLoginAsGuest: () -> Unit,
     onNavigateToHome: () -> Unit,
@@ -112,11 +116,13 @@ private fun LoginContent (
         is LoginUiState.Error -> {
             ErrorScreen (
                 message = uiState.message,
+                resourceHelper = resourceHelper,
                 onRetry = onRetry
             )
         }
         else -> {
             LoginForm (
+                resourceHelper = resourceHelper,
                 onLogin = onLogin,
                 onLoginAsGuest = onLoginAsGuest,
                 onNavigateToRegister = onNavigateToRegister
@@ -127,6 +133,7 @@ private fun LoginContent (
 
 @Composable
 private fun LoginForm (
+    resourceHelper: ResourceHelper,
     onLoginAsGuest: () -> Unit,
     onNavigateToRegister: () -> Unit,
     onLogin: (String, String) -> Unit

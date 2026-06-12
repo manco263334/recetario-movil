@@ -23,13 +23,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.dmm.recetario.core.utils.helper.ResourceHelper
 import com.dmm.recetario.ui.components.form.category.CategoryForm
 import com.dmm.recetario.ui.components.form.recipe.RecipeForm
 
 @Composable
 fun FAB (
-    onCompleteForm: () -> Unit,
-    viewModel: FABViewModel = hiltViewModel()
+    resourceHelper: ResourceHelper,
+    viewModel: FABViewModel = hiltViewModel(),
+    onCompleteForm: () -> Unit
 ) {
     val categories by viewModel.categories.collectAsStateWithLifecycle()
     var showMenu by rememberSaveable { mutableStateOf(false) }
@@ -87,12 +89,14 @@ fun FAB (
 
     when (selectedOption) {
         "Category" -> CategoryForm (
+            resourceHelper = resourceHelper,
             onDismiss = {
                 selectedOption = null
             },
             onCompleteForm = onCompleteForm
         )
         "Recipe" -> RecipeForm (
+            resourceHelper = resourceHelper,
             onDismiss =  {
                 selectedOption = null
             },

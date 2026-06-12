@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.dmm.recetario.core.utils.extension.isNeitherNullNorAnonymous
+import com.dmm.recetario.core.utils.helper.ResourceHelper
 import com.dmm.recetario.domain.model.User
 import com.dmm.recetario.ui.components.drawer.DrawerContent
 import com.dmm.recetario.ui.components.fab.FAB
@@ -23,6 +24,8 @@ import com.dmm.recetario.ui.components.refresher.PullToRefresh
 @Composable
 fun BaseLayout (
     user: User?,
+    resourceHelper: ResourceHelper,
+    showFab: Boolean = user.isNeitherNullNorAnonymous(),
     drawerState: DrawerState = rememberDrawerState(DrawerValue.Closed),
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     onHomeClick: () -> Unit,
@@ -46,13 +49,13 @@ fun BaseLayout (
     ) {
         Scaffold (
             topBar = {
-                Toolbar(drawerState = drawerState) {
-                    WelcomeHeader(user)
+                Toolbar(drawerState = drawerState, resourceHelper = resourceHelper) {
+                    WelcomeHeader(user = user, resourceHelper = resourceHelper)
                 }
             },
             floatingActionButton = {
-                if (user.isNeitherNullNorAnonymous()) {
-                    FAB(onCompleteForm = onCompleteForm)
+                if (showFab) {
+                    FAB(onCompleteForm = onCompleteForm, resourceHelper = resourceHelper)
                 }
             },
             snackbarHost = {
@@ -66,6 +69,8 @@ fun BaseLayout (
 @Composable
 fun BaseLayoutWithRefresh (
     user: User?,
+    resourceHelper: ResourceHelper,
+    showFab: Boolean = user.isNeitherNullNorAnonymous(),
     drawerState: DrawerState = rememberDrawerState(DrawerValue.Closed),
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     onHomeClick: () -> Unit,
@@ -77,7 +82,9 @@ fun BaseLayoutWithRefresh (
 ) {
     BaseLayout (
         user = user,
+        showFab = showFab,
         drawerState = drawerState,
+        resourceHelper = resourceHelper,
         snackbarHostState = snackbarHostState,
         onHomeClick = onHomeClick,
         onCompleteForm = onCompleteForm,

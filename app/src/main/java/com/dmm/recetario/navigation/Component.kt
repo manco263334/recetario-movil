@@ -4,7 +4,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.navigation3.ListDetailSceneStrategy
 import androidx.compose.material3.adaptive.navigation3.rememberListDetailSceneStrategy
@@ -19,19 +18,22 @@ import androidx.navigation3.ui.NavDisplay
 import com.dmm.recetario.core.utils.extension.back
 import com.dmm.recetario.core.utils.extension.backTo
 import com.dmm.recetario.core.utils.extension.navigateTo
+import com.dmm.recetario.core.utils.helper.ResourceHelper
 import com.dmm.recetario.domain.model.User
 import com.dmm.recetario.ui.auth.login.LoginScreen
 import com.dmm.recetario.ui.auth.register.RegisterScreen
 import com.dmm.recetario.ui.category.CategoryScreen
 import com.dmm.recetario.ui.home.HomeScreen
 import com.dmm.recetario.ui.recipe.RecipeScreen
+import com.dmm.recetario.ui.settings.SettingsScreen
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 fun AppNavigation (
-    backStack: NavBackStack<NavKey>,
     user: User?,
-    modifier: Modifier = Modifier,
+    resourceHelper: ResourceHelper,
+    backStack: NavBackStack<NavKey>,
+    modifier: Modifier = Modifier
 ) {
     NavDisplay (
         backStack = backStack,
@@ -49,6 +51,7 @@ fun AppNavigation (
         entryProvider = entryProvider {
             entry<Routes.Login> {
                 LoginScreen (
+                    resourceHelper = resourceHelper,
                     onNavigateToHome = {
                         backStack.clear()
                         backStack.navigateTo(Routes.Home)
@@ -61,6 +64,7 @@ fun AppNavigation (
 
             entry<Routes.Register> {
                 RegisterScreen (
+                    resourceHelper = resourceHelper,
                     onNavigateToHome = {
                         backStack.clear()
                         backStack.navigateTo(Routes.Home)
@@ -76,6 +80,7 @@ fun AppNavigation (
             ) {
                 HomeScreen (
                     user = user,
+                    resourceHelper = resourceHelper,
                     onCategoryClick = {
                         backStack.navigateTo(Routes.Category(it.id))
                     },
@@ -96,8 +101,9 @@ fun AppNavigation (
                 metadata = ListDetailSceneStrategy.detailPane()
             ) {
                 CategoryScreen (
-                    categoryId = it.id,
                     user = user,
+                    categoryId = it.id,
+                    resourceHelper = resourceHelper,
                     onRecipeClick = {
                         backStack.navigateTo(Routes.Recipe(it.id))
                     },
@@ -121,8 +127,9 @@ fun AppNavigation (
                 metadata = ListDetailSceneStrategy.extraPane()
             ) {
                 RecipeScreen (
-                    recipeId = it.id,
                     user = user,
+                    recipeId = it.id,
+                    resourceHelper = resourceHelper,
                     onSettingsClick = {
                         backStack.navigateTo(Routes.Settings)
                     },
@@ -140,7 +147,16 @@ fun AppNavigation (
             }
 
             entry <Routes.Settings> {
-
+                SettingsScreen (
+                    resourceHelper = resourceHelper,
+                    onHomeClick = {
+                        backStack.backTo(Routes.Home)
+                    },
+                    onLogOutSuccess = {
+                        backStack.clear()
+                        backStack.navigateTo(Routes.Login)
+                    }
+                )
             }
         },
         transitionSpec = {

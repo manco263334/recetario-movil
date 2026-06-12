@@ -2,11 +2,13 @@ package com.dmm.recetario.data.remote.interceptor
 
 import com.dmm.recetario.domain.manager.TokenManager
 import jakarta.inject.Inject
+import jakarta.inject.Singleton
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
 
+@Singleton
 class AuthInterceptor @Inject constructor (
     private val tokenManager: TokenManager
 ) : Interceptor {

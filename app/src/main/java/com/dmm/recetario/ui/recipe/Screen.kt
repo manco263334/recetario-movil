@@ -22,6 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.dmm.recetario.core.utils.helper.ResourceHelper
 import com.dmm.recetario.domain.model.Recipe
 import com.dmm.recetario.domain.model.User
 import com.dmm.recetario.ui.components.BaseLayoutWithRefresh
@@ -30,6 +31,7 @@ import com.dmm.recetario.ui.components.BaseLayoutWithRefresh
 fun RecipeScreen (
     user: User?,
     recipeId: String,
+    resourceHelper: ResourceHelper,
     viewModel: RecipeViewModel = hiltViewModel(),
     onHomeClick: () -> Unit,
     onCompleteForm: () -> Unit,
@@ -45,6 +47,7 @@ fun RecipeScreen (
 
     BaseLayoutWithRefresh (
         user = user,
+        resourceHelper = resourceHelper,
         onHomeClick = onHomeClick,
         onRefresh = viewModel::refresh,
         onCompleteForm = onCompleteForm,
@@ -58,14 +61,14 @@ fun RecipeScreen (
             if (state is RecipeUiState.Loading) {
                 RecipeContentSkeleton(state.message)
             } else {
-                RecipeContent(recipe)
+                RecipeContent(recipe, resourceHelper)
             }
         }
     }
 }
 
 @Composable
-private fun RecipeContent(recipe: Recipe?) {
+private fun RecipeContent(recipe: Recipe?, resourceHelper: ResourceHelper) {
     val scrollState = rememberScrollState()
 
     Column (
