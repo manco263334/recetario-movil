@@ -45,12 +45,12 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun DrawerContent (
-    drawerState: DrawerState,
     user: User?,
-    snackbarHostState: SnackbarHostState? = null,
+    drawerState: DrawerState,
+    snackbarHostState: SnackbarHostState,
+    onHomeClick: () -> Unit,
     onSettingsClick: () -> Unit,
     onLogOutSuccess: () -> Unit,
-    onHomeClick: () -> Unit,
     viewModel: DrawerViewModel = hiltViewModel()
 ) {
     val scope = rememberCoroutineScope()
@@ -63,9 +63,9 @@ fun DrawerContent (
     LaunchedEffect (logOutState) {
         if (logOutState is LogOutUiState.Success) {
             onLogOutSuccess()
-            snackbarHostState?.showSnackbar(logOutState.message)
+            snackbarHostState.showSnackbar(logOutState.message)
         } else if (logOutState is LogOutUiState.Error) {
-            snackbarHostState?.showSnackbar(logOutState.message)
+            snackbarHostState.showSnackbar(logOutState.message)
         }
     }
 

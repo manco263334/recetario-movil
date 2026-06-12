@@ -61,9 +61,9 @@ import com.dmm.recetario.ui.components.ErrorScreen
 
 @Composable
 fun LoginScreen (
+    viewModel: LoginViewModel = hiltViewModel(),
     onNavigateToHome: () -> Unit,
-    onNavigateToRegister: () -> Unit,
-    viewModel: LoginViewModel = hiltViewModel()
+    onNavigateToRegister: () -> Unit
 ) {
     Column (
         modifier = Modifier
@@ -84,9 +84,9 @@ fun LoginScreen (
         LoginContent (
             uiState = viewModel.uiState,
             onLogin = viewModel::login,
-            onLoginAsGuest = viewModel::loginAsGuest,
             onRetry = viewModel::resetToIdle,
             onNavigateToHome = onNavigateToHome,
+            onLoginAsGuest = viewModel::loginAsGuest,
             onNavigateToRegister = onNavigateToRegister
         )
     }
@@ -95,11 +95,11 @@ fun LoginScreen (
 @Composable
 private fun LoginContent (
     uiState: LoginUiState,
-    onLogin: (String, String) -> Unit,
-    onLoginAsGuest: () -> Unit,
     onRetry: () -> Unit,
+    onLoginAsGuest: () -> Unit,
     onNavigateToHome: () -> Unit,
-    onNavigateToRegister: () -> Unit
+    onNavigateToRegister: () -> Unit,
+    onLogin: (String, String) -> Unit
 ) {
     LaunchedEffect(uiState) {
         if (uiState is LoginUiState.Success) {
@@ -127,9 +127,9 @@ private fun LoginContent (
 
 @Composable
 private fun LoginForm (
-    onLogin: (String, String) -> Unit,
     onLoginAsGuest: () -> Unit,
-    onNavigateToRegister: () -> Unit
+    onNavigateToRegister: () -> Unit,
+    onLogin: (String, String) -> Unit
 ) {
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }

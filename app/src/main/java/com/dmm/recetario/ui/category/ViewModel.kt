@@ -22,8 +22,8 @@ import kotlin.collections.emptyList
 
 @HiltViewModel
 class CategoryViewModel @Inject constructor (
-    private val categoryService: CategoryService,
-    private val recipeService: RecipeService
+    private val recipeService: RecipeService,
+    private val categoryService: CategoryService
 ) : ViewModel() {
     var uiState: CategoryUiState by mutableStateOf (
         CategoryUiState.Loading("Cargando recetas...")

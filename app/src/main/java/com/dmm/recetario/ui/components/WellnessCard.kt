@@ -4,6 +4,8 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,9 +35,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.wear.compose.material3.placeholder
-import androidx.wear.compose.material3.rememberPlaceholderState
 import coil.compose.AsyncImage
+import com.dmm.recetario.core.utils.extension.shimmerLoading
 
 @Composable
 fun WellnessCard (
@@ -48,7 +49,8 @@ fun WellnessCard (
     backgroundColor: Color = MaterialTheme.colorScheme.surface,
     onClick: () -> Unit = {}
 ) {
-    var isPressed by remember { mutableStateOf(false) }
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
 
     val scale by animateFloatAsState (
         targetValue = if (isPressed) 0.95f else 1f,
@@ -59,9 +61,10 @@ fun WellnessCard (
         modifier = modifier
             .graphicsLayer(scaleX = scale, scaleY = scale)
             .fillMaxWidth()
-            .clickable {
-                onClick()
-            }
+            .clickable (
+                onClick = onClick,
+                interactionSource = interactionSource
+            )
             .animateContentSize(),
         shape = RoundedCornerShape(24.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
@@ -124,11 +127,10 @@ fun WellnessCard (
 @Composable
 fun WellnessCardSkeleton (
     modifier: Modifier = Modifier,
+    isLoading: Boolean = true,
     showImage: Boolean = true,
     showDescription: Boolean = true
 ) {
-    val placeholderState = rememberPlaceholderState(true)
-
     Card (
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(24.dp),
@@ -144,7 +146,7 @@ fun WellnessCardSkeleton (
                     modifier = Modifier
                         .size(80.dp)
                         .clip(RoundedCornerShape(8.dp))
-                        .placeholder(placeholderState = placeholderState)
+                        .shimmerLoading(isLoading)
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -155,24 +157,24 @@ fun WellnessCardSkeleton (
                     .fillMaxWidth(0.7f)
                     .height(24.dp)
                     .clip(RoundedCornerShape(8.dp))
-                    .placeholder(placeholderState = placeholderState)
+                    .shimmerLoading(isLoading)
             )
 
             if (showDescription) {
                 Spacer(modifier = Modifier.height(12.dp))
 
-                repeat(3) { index ->
+                repeat(2) { index ->
                     Box (
                         modifier = Modifier
                             .fillMaxWidth (
                                 when (index) {
-                                    2 -> 0.75f
+                                    1 -> 0.75f
                                     else -> 1f
                                 }
                             )
                             .height(16.dp)
                             .clip(RoundedCornerShape(6.dp))
-                            .placeholder(placeholderState = placeholderState)
+                            .shimmerLoading(isLoading)
                     )
 
                     Spacer(modifier = Modifier.height(6.dp))

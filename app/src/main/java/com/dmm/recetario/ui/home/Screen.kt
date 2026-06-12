@@ -31,11 +31,11 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeScreen (
     user: User?,
-    onCategoryClick: (Category) -> Unit,
+    viewModel: HomeViewModel = hiltViewModel(),
+    onCompleteForm: () -> Unit,
     onSettingsClick: () -> Unit,
     onLogOutSuccess: () -> Unit,
-    onCompleteForm: () -> Unit,
-    viewModel: HomeViewModel = hiltViewModel(),
+    onCategoryClick: (Category) -> Unit
 ) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -45,10 +45,10 @@ fun HomeScreen (
     BaseLayoutWithRefresh (
         user = user,
         drawerState = drawerState,
+        onRefresh = viewModel::refresh,
+        onCompleteForm = onCompleteForm,
         onSettingsClick = onSettingsClick,
         onLogOutSuccess = onLogOutSuccess,
-        onCompleteForm = onCompleteForm,
-        onRefresh = viewModel::refresh,
         onHomeClick = {
             scope.launch {
                 drawerState.close()

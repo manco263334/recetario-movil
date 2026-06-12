@@ -11,11 +11,11 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 
 @Composable
 fun PullToRefresh (
-    onRefresh: suspend () -> Unit,
-    snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
+    snackbarHostState: SnackbarHostState,
     viewModel: RefresherViewModel = hiltViewModel(),
-    content: @Composable (BoxScope.() -> Unit)
+    onRefresh: suspend () -> Unit,
+    content: @Composable BoxScope.() -> Unit
 ) {
     val uiState = viewModel.uiState
     val pullToRefreshState = rememberPullToRefreshState()
@@ -29,10 +29,10 @@ fun PullToRefresh (
     }
 
     PullToRefreshBox (
-        isRefreshing = uiState is RefresherUiState.Loading,
-        state = pullToRefreshState,
-        onRefresh = { viewModel.refresh(onRefresh) },
         modifier = modifier,
+        state = pullToRefreshState,
+        isRefreshing = uiState is RefresherUiState.Loading,
+        onRefresh = { viewModel.refresh(onRefresh) },
         content = content
     )
 }

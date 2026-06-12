@@ -27,14 +27,14 @@ import com.dmm.recetario.ui.components.WellnessCardSkeleton
 
 @Composable
 fun CategoryScreen (
-    categoryId: String,
     user: User?,
-    onRecipeClick: (Recipe) -> Unit,
-    onSettingsClick: () -> Unit,
-    onLogOutSuccess: () -> Unit,
+    categoryId: String,
+    viewModel: CategoryViewModel = hiltViewModel(),
     onHomeClick: () -> Unit,
     onCompleteForm: () -> Unit,
-    viewModel: CategoryViewModel = hiltViewModel(),
+    onLogOutSuccess: () -> Unit,
+    onSettingsClick: () -> Unit,
+    onRecipeClick: (Recipe) -> Unit
 ) {
     LaunchedEffect(categoryId) {
         viewModel.loadRecipes(categoryId)
@@ -45,11 +45,11 @@ fun CategoryScreen (
 
     BaseLayoutWithRefresh (
         user = user,
-        onSettingsClick = onSettingsClick,
-        onLogOutSuccess = onLogOutSuccess,
-        onCompleteForm = onCompleteForm,
         onHomeClick = onHomeClick,
-        onRefresh = viewModel::refresh
+        onRefresh = viewModel::refresh,
+        onCompleteForm = onCompleteForm,
+        onSettingsClick = onSettingsClick,
+        onLogOutSuccess = onLogOutSuccess
     ) {
         Crossfade (
             targetState = uiState,

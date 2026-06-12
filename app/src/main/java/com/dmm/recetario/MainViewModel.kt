@@ -23,11 +23,11 @@ import kotlinx.coroutines.flow.SharingStarted
 
 @HiltViewModel
 class MainViewModel @Inject constructor (
-    private val tokenManager: TokenManager,
     private val userService: UserService,
+    private val userManager: UserManager,
+    private val tokenManager: TokenManager,
     private val recipeService: RecipeService,
-    private val categoryService: CategoryService,
-    private val userManager: UserManager
+    private val categoryService: CategoryService
 ) : ViewModel() {
     private val _token = tokenManager.token
 

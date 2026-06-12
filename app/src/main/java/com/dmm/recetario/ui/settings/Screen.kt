@@ -14,9 +14,9 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun SettingsScreen (
-    onLogOutSuccess: () -> Unit,
-    onCompleteForm: () -> Unit,
     onHomeClick: () -> Unit,
+    onCompleteForm: () -> Unit,
+    onLogOutSuccess: () -> Unit,
     viewModel: SettingViewModel = hiltViewModel()
 ) {
     val uiState = viewModel.uiState
@@ -28,9 +28,9 @@ fun SettingsScreen (
     BaseLayout (
         user = user,
         drawerState = drawerState,
-        onLogOutSuccess = onLogOutSuccess,
-        onCompleteForm = onCompleteForm,
         onHomeClick = onHomeClick,
+        onCompleteForm = onCompleteForm,
+        onLogOutSuccess = onLogOutSuccess,
         onSettingsClick = {
             scope.launch {
                 drawerState.close()

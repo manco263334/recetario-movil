@@ -25,22 +25,22 @@ fun BaseLayout (
     user: User?,
     drawerState: DrawerState = rememberDrawerState(DrawerValue.Closed),
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
+    onHomeClick: () -> Unit,
+    onCompleteForm: () -> Unit,
     onSettingsClick: () -> Unit,
     onLogOutSuccess: () -> Unit,
-    onCompleteForm: () -> Unit,
-    onHomeClick: () -> Unit,
     content: @Composable (PaddingValues) -> Unit
 ) {
     ModalNavigationDrawer (
         drawerState = drawerState,
         drawerContent = {
             DrawerContent (
-                drawerState = drawerState,
                 user = user,
+                drawerState = drawerState,
                 snackbarHostState = snackbarHostState,
-                onSettingsClick = onSettingsClick,
-                onLogOutSuccess = onLogOutSuccess,
                 onHomeClick = onHomeClick,
+                onSettingsClick = onSettingsClick,
+                onLogOutSuccess = onLogOutSuccess
             )
         }
     ) {
@@ -68,10 +68,10 @@ fun BaseLayoutWithRefresh (
     user: User?,
     drawerState: DrawerState = rememberDrawerState(DrawerValue.Closed),
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
+    onHomeClick: () -> Unit,
+    onCompleteForm: () -> Unit,
     onSettingsClick: () -> Unit,
     onLogOutSuccess: () -> Unit,
-    onCompleteForm: () -> Unit,
-    onHomeClick: () -> Unit,
     onRefresh: suspend () -> Unit,
     content: @Composable BoxScope.() -> Unit
 ) {
@@ -79,10 +79,10 @@ fun BaseLayoutWithRefresh (
         user = user,
         drawerState = drawerState,
         snackbarHostState = snackbarHostState,
-        onSettingsClick = onSettingsClick,
-        onLogOutSuccess = onLogOutSuccess,
+        onHomeClick = onHomeClick,
         onCompleteForm = onCompleteForm,
-        onHomeClick = onHomeClick
+        onSettingsClick = onSettingsClick,
+        onLogOutSuccess = onLogOutSuccess
     ) { paddingValues ->
         PullToRefresh (
             onRefresh = onRefresh,

@@ -28,13 +28,13 @@ import com.dmm.recetario.ui.components.BaseLayoutWithRefresh
 
 @Composable
 fun RecipeScreen (
-    recipeId: String,
     user: User?,
-    onSettingsClick: () -> Unit,
-    onLogOutSuccess: () -> Unit,
+    recipeId: String,
+    viewModel: RecipeViewModel = hiltViewModel(),
     onHomeClick: () -> Unit,
     onCompleteForm: () -> Unit,
-    viewModel: RecipeViewModel = hiltViewModel(),
+    onSettingsClick: () -> Unit,
+    onLogOutSuccess: () -> Unit
 ) {
     LaunchedEffect(recipeId) {
         viewModel.loadRecipe(recipeId)
@@ -45,11 +45,11 @@ fun RecipeScreen (
 
     BaseLayoutWithRefresh (
         user = user,
-        onSettingsClick = onSettingsClick,
-        onLogOutSuccess = onLogOutSuccess,
-        onCompleteForm = onCompleteForm,
         onHomeClick = onHomeClick,
-        onRefresh = viewModel::refresh
+        onRefresh = viewModel::refresh,
+        onCompleteForm = onCompleteForm,
+        onSettingsClick = onSettingsClick,
+        onLogOutSuccess = onLogOutSuccess
     ) {
         Crossfade (
             targetState = uiState,
