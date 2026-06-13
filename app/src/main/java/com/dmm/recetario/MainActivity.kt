@@ -8,25 +8,18 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.rememberNavBackStack
-import com.dmm.recetario.core.utils.helper.ResourceHelper
 import com.dmm.recetario.navigation.AppNavigation
 import com.dmm.recetario.ui.theme.RecetarioTheme
 import dagger.hilt.android.AndroidEntryPoint
-import jakarta.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val viewModel: MainViewModel by viewModels()
-    private val resourceHelper: ResourceHelper = ResourceHelper(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,8 +36,7 @@ class MainActivity : ComponentActivity() {
 
                     AppNavigation (
                         user = user,
-                        backStack = backStack,
-                        resourceHelper = resourceHelper
+                        backStack = backStack
                     )
                 } else {
                     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {

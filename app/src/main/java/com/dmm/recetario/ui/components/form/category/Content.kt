@@ -10,12 +10,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.dmm.recetario.core.utils.helper.ResourceHelper
+import com.dmm.recetario.R
 
 @Composable
 fun CategoryForm (
-    resourceHelper: ResourceHelper,
     viewModel: CategoryFormViewModel = hiltViewModel(),
     onDismiss: () -> Unit,
     onCompleteForm: () -> Unit
@@ -32,16 +32,16 @@ fun CategoryForm (
                     onCompleteForm()
                 }
             ) {
-                Text("Crear")
+                Text(stringResource(R.string.create))
             }
         },
         dismissButton = {
             Button(onClick = onDismiss) {
-                Text("Cancelar")
+                Text(stringResource(R.string.cancel))
             }
         },
         title = {
-            Text("Agregar categoría")
+            Text(stringResource(R.string.add_category))
         },
         text = {
             Column {
@@ -51,7 +51,7 @@ fun CategoryForm (
                         name = it
                     },
                     label = {
-                        Text("Nombre")
+                        Text(stringResource(R.string.name_label))
                     }
                 )
                 OutlinedTextField (
@@ -60,7 +60,7 @@ fun CategoryForm (
                         icon = it
                     },
                     label = {
-                        Text("Icono (URL)",)
+                        Text(stringResource(R.string.icon_label))
                     }
                 )
             }

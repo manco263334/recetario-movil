@@ -49,6 +49,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -57,12 +58,11 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.dmm.recetario.core.utils.helper.ResourceHelper
+import com.dmm.recetario.R
 import com.dmm.recetario.ui.components.ErrorScreen
 
 @Composable
 fun LoginScreen (
-    resourceHelper: ResourceHelper,
     viewModel: LoginViewModel = hiltViewModel(),
     onNavigateToHome: () -> Unit,
     onNavigateToRegister: () -> Unit
@@ -85,7 +85,6 @@ fun LoginScreen (
     ) {
         LoginContent (
             uiState = viewModel.uiState,
-            resourceHelper = resourceHelper,
             onLogin = viewModel::login,
             onRetry = viewModel::resetToIdle,
             onNavigateToHome = onNavigateToHome,
@@ -98,7 +97,6 @@ fun LoginScreen (
 @Composable
 private fun LoginContent (
     uiState: LoginUiState,
-    resourceHelper: ResourceHelper,
     onRetry: () -> Unit,
     onLoginAsGuest: () -> Unit,
     onNavigateToHome: () -> Unit,
@@ -116,13 +114,11 @@ private fun LoginContent (
         is LoginUiState.Error -> {
             ErrorScreen (
                 message = uiState.message,
-                resourceHelper = resourceHelper,
                 onRetry = onRetry
             )
         }
         else -> {
             LoginForm (
-                resourceHelper = resourceHelper,
                 onLogin = onLogin,
                 onLoginAsGuest = onLoginAsGuest,
                 onNavigateToRegister = onNavigateToRegister
@@ -133,7 +129,6 @@ private fun LoginContent (
 
 @Composable
 private fun LoginForm (
-    resourceHelper: ResourceHelper,
     onLoginAsGuest: () -> Unit,
     onNavigateToRegister: () -> Unit,
     onLogin: (String, String) -> Unit
@@ -173,7 +168,7 @@ private fun LoginForm (
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text (
-                    text = "Login",
+                    text = stringResource(R.string.login_title),
                     fontSize = 24.sp,
                     color = MaterialTheme.colorScheme.onBackground,
                     fontWeight = FontWeight.Bold
@@ -182,7 +177,7 @@ private fun LoginForm (
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text (
-                    text = "Inicia sesión para continuar",
+                    text = stringResource(R.string.login_subtitle),
                     fontSize = 16.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -195,7 +190,7 @@ private fun LoginForm (
                         email = it
                     },
                     label = {
-                        Text("Email")
+                        Text(stringResource(R.string.email))
                     },
                     singleLine = true,
                     keyboardOptions = KeyboardOptions.Default
@@ -213,7 +208,7 @@ private fun LoginForm (
                         Icon(Icons.Default.Email, null)
                     },
                     placeholder = {
-                        Text("correo@gmail.com")
+                        Text(stringResource(R.string.email))
                     }
                 )
 
@@ -225,7 +220,7 @@ private fun LoginForm (
                         password = it
                     },
                     label = {
-                        Text("Contraseña")
+                        Text(stringResource(R.string.password))
                     },
                     singleLine = true,
                     keyboardOptions = KeyboardOptions.Default
@@ -268,7 +263,7 @@ private fun LoginForm (
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00C2FF))
                 ) {
                     Text (
-                        text =  "Iniciar sesión".uppercase(),
+                        text =  stringResource(R.string.login_button),
                         color = MaterialTheme.colorScheme.onSurface,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold
@@ -292,7 +287,7 @@ private fun LoginForm (
 
                     Spacer(modifier = Modifier.width(8.dp))
 
-                    Text("Entrar como invitado")
+                    Text(stringResource(R.string.login_guest))
                 }
 
                 HorizontalDivider (
@@ -307,7 +302,7 @@ private fun LoginForm (
                 ) {
                     Icon(Icons.Default.AccountCircle, null)
 
-                    Text("Continuar con Google")
+                    Text(stringResource(R.string.login_google))
                 }
 
                 HorizontalDivider (
@@ -316,7 +311,7 @@ private fun LoginForm (
                 )
 
                 TextButton(onClick = onNavigateToRegister) {
-                    Text("¿No tienes cuenta? Regístrate aquí, papu")
+                    Text(stringResource(R.string.signup_suggest))
                 }
 
                 HorizontalDivider (
@@ -325,7 +320,7 @@ private fun LoginForm (
                 )
 
                 TextButton(onClick = { }) {
-                    Text("¿Olvidaste tu contraseña? Haz click aquí para recuperarla")
+                    Text(stringResource(R.string.password_forgotten))
                 }
             }
         }

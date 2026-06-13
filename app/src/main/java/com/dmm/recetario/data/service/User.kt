@@ -1,7 +1,9 @@
 package com.dmm.recetario.data.service
 
 import android.util.Log
+import com.dmm.recetario.R
 import com.dmm.recetario.core.utils.extension.isNotNull
+import com.dmm.recetario.core.utils.helper.ResourceHelper
 import com.dmm.recetario.domain.exception.APIException
 import com.dmm.recetario.core.utils.mapper.toDomain
 import com.dmm.recetario.core.utils.mapper.toEntity
@@ -19,9 +21,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class UserServiceImpl (
+    private val userRepository: UserRepository,
+    private val resourceHelper: ResourceHelper,
     private val updateUserUseCase: UpdateUserUseCase,
     private val deleteUserUseCase: DeleteUserUseCase,
-    private val userRepository: UserRepository,
     private val dao: UserDao<UserEntity, TokenUserRef, RecipeEntity>
 ) : UserService {
     override fun getAllUsers(): Flow<List<User>> {
@@ -47,7 +50,8 @@ class UserServiceImpl (
 
             true
         } catch (e: APIException) {
-            Log.e("UserService", "Error syncing users: ${e.message}", e)
+            val message = resourceHelper.getString(R.string.error_syncing_users)
+            Log.e("UserService","$message: ${e.message}",e)
             false
         }
     }

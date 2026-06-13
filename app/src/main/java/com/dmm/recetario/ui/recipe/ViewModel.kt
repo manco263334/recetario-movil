@@ -5,6 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dmm.recetario.R
+import com.dmm.recetario.core.utils.helper.ResourceHelper
 import com.dmm.recetario.domain.model.Recipe
 import com.dmm.recetario.domain.service.RecipeService
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,10 +21,13 @@ import kotlinx.coroutines.flow.stateIn
 
 @HiltViewModel
 class RecipeViewModel @Inject constructor (
-    private val recipeService: RecipeService
+    private val recipeService: RecipeService,
+    private val resourceHelper: ResourceHelper
 ) : ViewModel() {
+    private val getString: (Int) -> String = resourceHelper::getString
+
     var uiState: RecipeUiState by mutableStateOf (
-        RecipeUiState.Loading("Cargando receta...")
+        RecipeUiState.Loading(getString(R.string.loading_recipe))
     )
         private set
 
@@ -51,19 +56,21 @@ class RecipeViewModel @Inject constructor (
     suspend fun refresh() {
         if (uiState is RecipeUiState.Loading) return
 
-        uiState = RecipeUiState.Loading("Actualizando y cargando la receta...")
+        uiState = RecipeUiState.Loading (
+            getString(R.string.refreshing_recipe)
+        )
         val result = _selectedRecipeId.value?.let {
             recipeService.syncRecipe(it, false, false)
         }
 
         when (result) {
             false -> {
-                val message = "Error sincronizando la receta"
+                val message = getString(R.string.refreshing_recipe_failed)
                 uiState = RecipeUiState.Error(message)
                 throw Exception(message)
             }
             null -> {
-                val message = "Receta no encontrada"
+                val message = getString(R.string.recipe_not_found)
                 uiState = RecipeUiState.Error(message)
                 throw Exception(message)
             }

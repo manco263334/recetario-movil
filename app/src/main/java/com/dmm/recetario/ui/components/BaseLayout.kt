@@ -24,7 +24,6 @@ import com.dmm.recetario.ui.components.refresher.PullToRefresh
 @Composable
 fun BaseLayout (
     user: User?,
-    resourceHelper: ResourceHelper,
     showFab: Boolean = user.isNeitherNullNorAnonymous(),
     drawerState: DrawerState = rememberDrawerState(DrawerValue.Closed),
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
@@ -49,13 +48,13 @@ fun BaseLayout (
     ) {
         Scaffold (
             topBar = {
-                Toolbar(drawerState = drawerState, resourceHelper = resourceHelper) {
-                    WelcomeHeader(user = user, resourceHelper = resourceHelper)
+                Toolbar(drawerState = drawerState) {
+                    WelcomeHeader(user = user)
                 }
             },
             floatingActionButton = {
                 if (showFab) {
-                    FAB(onCompleteForm = onCompleteForm, resourceHelper = resourceHelper)
+                    FAB(onCompleteForm = onCompleteForm)
                 }
             },
             snackbarHost = {
@@ -69,7 +68,6 @@ fun BaseLayout (
 @Composable
 fun BaseLayoutWithRefresh (
     user: User?,
-    resourceHelper: ResourceHelper,
     showFab: Boolean = user.isNeitherNullNorAnonymous(),
     drawerState: DrawerState = rememberDrawerState(DrawerValue.Closed),
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
@@ -84,7 +82,6 @@ fun BaseLayoutWithRefresh (
         user = user,
         showFab = showFab,
         drawerState = drawerState,
-        resourceHelper = resourceHelper,
         snackbarHostState = snackbarHostState,
         onHomeClick = onHomeClick,
         onCompleteForm = onCompleteForm,

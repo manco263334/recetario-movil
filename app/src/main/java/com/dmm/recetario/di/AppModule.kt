@@ -1,5 +1,6 @@
 package com.dmm.recetario.di
 
+import com.dmm.recetario.core.utils.helper.ResourceHelper
 import com.dmm.recetario.data.remote.retrofit.AuthRemote
 import com.dmm.recetario.data.remote.retrofit.CategoryRemote
 import com.dmm.recetario.data.remote.retrofit.RecipeRemote
@@ -47,83 +48,101 @@ import jakarta.inject.Singleton
 object AppModule {
     @Provides
     @Singleton
-    fun provideAuthRepository(remote: AuthRemote): AuthRepository {
-        return AuthRepositoryImpl(remote)
+    fun provideAuthRepository (
+        remote: AuthRemote,
+        resourceHelper: ResourceHelper
+    ): AuthRepository {
+        return AuthRepositoryImpl(remote = remote, resourceHelper = resourceHelper)
     }
 
     @Provides
     @Singleton
     fun provideAuthService(repository: AuthRepository): AuthService {
-        return AuthServiceImpl(repository)
+        return AuthServiceImpl(repository = repository)
     }
 
     @Provides
     @Singleton
-    fun provideRecipeRepository(remote: RecipeRemote): RecipeRepository {
-        return RecipeRepositoryImpl(remote)
+    fun provideRecipeRepository (
+        remote: RecipeRemote,
+        resourceHelper: ResourceHelper
+    ): RecipeRepository {
+        return RecipeRepositoryImpl(remote = remote, resourceHelper = resourceHelper)
     }
 
     @Provides
     @Singleton
     fun provideRecipeService (
-        createRecipeUseCase: CreateRecipeUseCase,
-        updateRecipeUSECase: UpdateRecipeUseCase,
-        deleteRecipeUseCase: DeleteRecipeUseCase,
         repository: RecipeRepository,
+        resourceHelper: ResourceHelper,
+        createRecipeUseCase: CreateRecipeUseCase,
+        updateRecipeUseCase: UpdateRecipeUseCase,
+        deleteRecipeUseCase: DeleteRecipeUseCase,
         dao: RecipeDao<RecipeEntity, RecipeCategoryCrossRef, UserEntity, CategoryEntity>
     ): RecipeService {
-        return RecipeServiceImpl(
-            createRecipeUseCase,
-            updateRecipeUSECase,
-            deleteRecipeUseCase,
-            repository,
-            dao
+        return RecipeServiceImpl (
+            dao = dao,
+            repository = repository,
+            resourceHelper = resourceHelper,
+            createRecipeUseCase = createRecipeUseCase,
+            updateRecipeUseCase = updateRecipeUseCase,
+            deleteRecipeUseCase = deleteRecipeUseCase
         )
     }
 
     @Provides
     @Singleton
-    fun provideCategoryRepository(remote: CategoryRemote): CategoryRepository {
-        return CategoryRepositoryImpl(remote)
+    fun provideCategoryRepository (
+        remote: CategoryRemote,
+        resourceHelper: ResourceHelper
+    ): CategoryRepository {
+        return CategoryRepositoryImpl(remote = remote, resourceHelper)
     }
 
     @Provides
     @Singleton
     fun provideCategoryService (
+        repository: CategoryRepository,
+        resourceHelper: ResourceHelper,
         createCategoryUseCase: CreateCategoryUseCase,
         updateCategoryUseCase: UpdateCategoryUseCase,
-        deleteCategoryService: DeleteCategoryUseCase,
-        repository: CategoryRepository,
+        deleteCategoryUseCase: DeleteCategoryUseCase,
         dao: CategoryDao<CategoryEntity, RecipeCategoryCrossRef, RecipeEntity>
     ): CategoryService {
-        return CategoryServiceImpl(
-            createCategoryUseCase,
-            updateCategoryUseCase,
-            deleteCategoryService,
-            repository,
-            dao
+        return CategoryServiceImpl (
+            dao = dao,
+            repository = repository,
+            resourceHelper = resourceHelper,
+            createCategoryUseCase = createCategoryUseCase,
+            updateCategoryUseCase = updateCategoryUseCase,
+            deleteCategoryUseCase = deleteCategoryUseCase
         )
     }
 
     @Provides
     @Singleton
-    fun provideUserRepository(remote: UserRemote): UserRepository {
-        return UserRepositoryImpl(remote)
+    fun provideUserRepository (
+        remote: UserRemote,
+        resourceHelper: ResourceHelper
+    ): UserRepository {
+        return UserRepositoryImpl(remote = remote, resourceHelper = resourceHelper)
     }
 
     @Provides
     @Singleton
     fun provideUserService (
+        repository: UserRepository,
+        resourceHelper: ResourceHelper,
         updateUserUseCase: UpdateUserUseCase,
         deleteUserUseCase: DeleteUserUseCase,
-        repository: UserRepository,
         dao: UserDao<UserEntity, TokenUserRef, RecipeEntity>
     ): UserService {
-        return UserServiceImpl(
-            updateUserUseCase,
-            deleteUserUseCase,
-            repository,
-            dao
+        return UserServiceImpl (
+            dao = dao,
+            userRepository = repository,
+            resourceHelper = resourceHelper,
+            updateUserUseCase = updateUserUseCase,
+            deleteUserUseCase = deleteUserUseCase
         )
     }
 }

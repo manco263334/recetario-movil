@@ -1,6 +1,7 @@
 package com.dmm.recetario.di
 
 import android.content.Context
+import com.dmm.recetario.core.utils.helper.ResourceHelper
 import com.dmm.recetario.data.local.TokenManagerImpl
 import com.dmm.recetario.data.local.UserManagerImpl
 import com.dmm.recetario.domain.dao.UserDao
@@ -25,24 +26,26 @@ object ManagerModule {
     @Provides
     @Singleton
     fun provideTokenManager(@ApplicationContext context: Context): TokenManager {
-        return TokenManagerImpl(context)
+        return TokenManagerImpl(context = context)
     }
 
     @Provides
     @Singleton
     fun provideUserManager (
-        tokenManager: TokenManager,
         authService: AuthService,
+        userService: UserService,
+        tokenManager: TokenManager,
         userRepository: UserRepository,
+        resourceHelper: ResourceHelper,
         userDao: UserDao<UserEntity, TokenUserRef, RecipeEntity>,
-        userService: UserService
     ): UserManager {
         return UserManagerImpl (
-            tokenManager,
-            authService,
-            userRepository,
-            userDao,
-            userService
+            userDao = userDao,
+            userService = userService,
+            authService = authService,
+            tokenManager = tokenManager,
+            resourceHelper = resourceHelper,
+            userRepository = userRepository
         )
     }
 }

@@ -19,9 +19,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 object NetworkModule {
 //    private const val BASE_URL = "http://10.0.2.2:8080/api/"
     private const val BASE_URL = "http://192.168.11.125:8080/api/"
-//    private const val BASE_URL = "http://192.168.1.125:8080/api/"
-//    private const val BASE_URL = "http://192.168.1.96:8080/api/"
-//    private const val BASE_URL = "http://192.168.33.29:8080/api/"
 
     @Provides
     @Singleton

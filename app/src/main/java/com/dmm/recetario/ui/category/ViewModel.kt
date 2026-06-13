@@ -5,6 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dmm.recetario.R
+import com.dmm.recetario.core.utils.helper.ResourceHelper
 import com.dmm.recetario.domain.model.Recipe
 import com.dmm.recetario.domain.service.CategoryService
 import com.dmm.recetario.domain.service.RecipeService
@@ -23,10 +25,15 @@ import kotlin.collections.emptyList
 @HiltViewModel
 class CategoryViewModel @Inject constructor (
     private val recipeService: RecipeService,
+    private val resourceHelper: ResourceHelper,
     private val categoryService: CategoryService
 ) : ViewModel() {
+    private val getString: (Int) -> String = resourceHelper::getString
+
     var uiState: CategoryUiState by mutableStateOf (
-        CategoryUiState.Loading("Cargando recetas...")
+        CategoryUiState.Loading (
+            getString(R.string.loading_recipes)
+        )
     )
         private set
 
@@ -74,19 +81,21 @@ class CategoryViewModel @Inject constructor (
     suspend fun refresh() {
         if (uiState is CategoryUiState.Loading) return
 
-        uiState = CategoryUiState.Loading("Actualizando y cargando nuevas recetas...")
+        uiState = CategoryUiState.Loading (
+            getString(R.string.refreshing_recipes)
+        )
         val result = _selectedCategoryId.value?.let {
             categoryService.syncCategory(it, true)
         }
 
         when (result) {
             false -> {
-                val message = "Error sincronizando la categoría"
+                val message = getString(R.string.refreshing_category_failed)
                 uiState = CategoryUiState.Error(message)
                 throw Exception(message)
             }
             null -> {
-                val message = "Categoría no encontrada"
+                val message = getString(R.string.category_not_found)
                 uiState = CategoryUiState.Error(message)
                 throw Exception(message)
             }

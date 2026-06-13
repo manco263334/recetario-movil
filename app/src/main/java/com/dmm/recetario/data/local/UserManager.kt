@@ -1,7 +1,9 @@
 package com.dmm.recetario.data.local
 
 import android.util.Log
+import com.dmm.recetario.R
 import com.dmm.recetario.core.jwt.isTokenExpired
+import com.dmm.recetario.core.utils.helper.ResourceHelper
 import com.dmm.recetario.domain.exception.APIException
 import com.dmm.recetario.core.utils.mapper.toEntity
 import com.dmm.recetario.domain.dao.UserDao
@@ -21,11 +23,12 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flowOf
 
 class UserManagerImpl (
-    private val tokenManager: TokenManager,
     private val authService: AuthService,
+    private val userService: UserService,
+    private val tokenManager: TokenManager,
     private val userRepository: UserRepository,
-    private val userDao: UserDao<UserEntity, TokenUserRef, RecipeEntity>,
-    private val userService: UserService
+    private val resourceHelper: ResourceHelper,
+    private val userDao: UserDao<UserEntity, TokenUserRef, RecipeEntity>
 ) : UserManager {
     private suspend fun getUserByAPI(): User {
         val me = authService.me()
@@ -46,7 +49,8 @@ class UserManagerImpl (
 
             userDao.saveUser(userFromAPI.toEntity())
         } catch (e: APIException) {
-            Log.e("UserManager", "Error syncing user: ${e.message}", e)
+            val message = resourceHelper.getString(R.string.error_syncing_user)
+            Log.e("UserManager", "$message: ${e.message}", e)
         }
     }
 

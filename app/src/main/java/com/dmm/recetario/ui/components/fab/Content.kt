@@ -20,16 +20,16 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.dmm.recetario.core.utils.helper.ResourceHelper
+import com.dmm.recetario.R
 import com.dmm.recetario.ui.components.form.category.CategoryForm
 import com.dmm.recetario.ui.components.form.recipe.RecipeForm
 
 @Composable
 fun FAB (
-    resourceHelper: ResourceHelper,
     viewModel: FABViewModel = hiltViewModel(),
     onCompleteForm: () -> Unit
 ) {
@@ -47,13 +47,13 @@ fun FAB (
                 ) {
                     Column {
                         Text (
-                            text = "¿Qué gustas agregar?",
+                            text = stringResource(R.string.what_will_you_add),
                             modifier = Modifier.padding(8.dp),
                             style = MaterialTheme.typography.bodyMedium
                         )
                         DropdownMenuItem (
                             text = {
-                                Text("Categoría")
+                                Text(stringResource(R.string.category_model))
                             },
                             onClick = {
                                 selectedOption = "Category"
@@ -63,7 +63,7 @@ fun FAB (
                         if (categories.isNotEmpty()) {
                             DropdownMenuItem (
                                 text = {
-                                    Text("Receta")
+                                    Text(stringResource(R.string.recipe_model))
                                 },
                                 onClick = {
                                     selectedOption = "Recipe"
@@ -82,21 +82,22 @@ fun FAB (
                 modifier = Modifier.padding(16.dp),
                 containerColor = MaterialTheme.colorScheme.primary
             ) {
-                Icon(Icons.Default.Add, contentDescription = "Agregar")
+                Icon (
+                    Icons.Default.Add,
+                    contentDescription = stringResource(R.string.add)
+                )
             }
         }
     }
 
     when (selectedOption) {
         "Category" -> CategoryForm (
-            resourceHelper = resourceHelper,
             onDismiss = {
                 selectedOption = null
             },
             onCompleteForm = onCompleteForm
         )
         "Recipe" -> RecipeForm (
-            resourceHelper = resourceHelper,
             onDismiss =  {
                 selectedOption = null
             },

@@ -28,7 +28,7 @@ class RecipeFormViewModel @Inject constructor (
             initialValue = emptyList()
         )
 
-    private var recipe by mutableStateOf<Recipe?>(null)
+    private var recipe: Recipe? by mutableStateOf(null)
 
     fun addRecipeData (
         name: String,

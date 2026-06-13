@@ -20,15 +20,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.dmm.recetario.R
 import com.dmm.recetario.core.utils.helper.ResourceHelper
 
 @Composable
 fun ErrorScreen (
     message: String,
-    resourceHelper: ResourceHelper,
     onRetry: () -> Unit
 ) {
     Column (
@@ -48,7 +49,7 @@ fun ErrorScreen (
         Spacer(modifier = Modifier.height(16.dp))
 
         Text (
-            text = "¡Ups! Algo salió mal",
+            text = stringResource(R.string.something_went_wrong),
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold
         )
@@ -71,12 +72,12 @@ fun ErrorScreen (
         ) {
             Icon (
                 Icons.Default.Refresh,
-                contentDescription = null
+                contentDescription = stringResource(R.string.refresh)
             )
 
             Spacer(Modifier.width(8.dp))
 
-            Text("Reintentar")
+            Text(stringResource(R.string.retry))
         }
     }
 }

@@ -16,12 +16,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.dmm.recetario.core.utils.helper.ResourceHelper
+import com.dmm.recetario.R
 import com.dmm.recetario.domain.model.Category
 import com.dmm.recetario.domain.model.User
 import com.dmm.recetario.ui.components.BaseLayoutWithRefresh
@@ -32,7 +33,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeScreen (
     user: User?,
-    resourceHelper: ResourceHelper,
     viewModel: HomeViewModel = hiltViewModel(),
     onCompleteForm: () -> Unit,
     onSettingsClick: () -> Unit,
@@ -47,7 +47,6 @@ fun HomeScreen (
     BaseLayoutWithRefresh (
         user = user,
         drawerState = drawerState,
-        resourceHelper = resourceHelper,
         onRefresh = viewModel::refresh,
         onCompleteForm = onCompleteForm,
         onSettingsClick = onSettingsClick,
@@ -67,7 +66,6 @@ fun HomeScreen (
             } else {
                 HomeContent (
                     categories = categories,
-                    resourceHelper = resourceHelper,
                     onCategoryClick = onCategoryClick
                 )
             }
@@ -78,7 +76,6 @@ fun HomeScreen (
 @Composable
 private fun HomeContent (
     categories: List<Category>,
-    resourceHelper: ResourceHelper,
     onCategoryClick: (Category) -> Unit
 ) {
     LazyVerticalGrid (
@@ -90,8 +87,10 @@ private fun HomeContent (
     ) {
         item(span = { GridItemSpan(2) }) {
             Text (
-                text = if (categories.isNotEmpty()) "Categorías disponibles"
-                    else "No hay categorías",
+                text = if (categories.isNotEmpty())
+                        stringResource(R.string.available_categories)
+                    else
+                        stringResource(R.string.no_available_categories),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(),
                 fontWeight = FontWeight.Bold

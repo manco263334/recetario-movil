@@ -6,15 +6,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dmm.recetario.R
+import com.dmm.recetario.core.utils.helper.ResourceHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.time.Duration.Companion.seconds
 
 @HiltViewModel
-class RefresherViewModel @Inject constructor() : ViewModel() {
-    var uiState by mutableStateOf<RefresherUiState>(RefresherUiState.Idle)
+class RefresherViewModel @Inject constructor (
+    private val resourceHelper: ResourceHelper
+) : ViewModel() {
+    private val getString: (Int) -> String = resourceHelper::getString
+
+    var uiState: RefresherUiState by mutableStateOf(RefresherUiState.Idle)
         private set
 
     fun refresh(call: suspend () -> Unit) {
@@ -25,12 +29,14 @@ class RefresherViewModel @Inject constructor() : ViewModel() {
 
             try {
                 call()
-                uiState = RefresherUiState.Success("Elements refreshed successfully")
+                uiState = RefresherUiState.Success (
+                    getString(R.string.elements_refreshed_succeed)
+                )
             } catch (e: Exception) {
-                Log.d("RefresherViewModel", "Error refrescando elementos: ${e.message}", e)
-                uiState = RefresherUiState.Error("Error while refreshing elements")
+                val message = getString(R.string.elements_refreshed_failed)
+                Log.d("RefresherViewModel", "$message: ${e.message}", e)
+                uiState = RefresherUiState.Error(message)
             } finally {
-                delay(3.seconds)
                 uiState = RefresherUiState.Idle
             }
         }

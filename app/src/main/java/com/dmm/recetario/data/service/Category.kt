@@ -1,7 +1,9 @@
 package com.dmm.recetario.data.service
 
 import android.util.Log
+import com.dmm.recetario.R
 import com.dmm.recetario.core.utils.extension.isNotNull
+import com.dmm.recetario.core.utils.helper.ResourceHelper
 import com.dmm.recetario.domain.exception.APIException
 import com.dmm.recetario.core.utils.mapper.toDomain
 import com.dmm.recetario.core.utils.mapper.toEntity
@@ -21,10 +23,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class CategoryServiceImpl (
+    private val repository: CategoryRepository,
+    private val resourceHelper: ResourceHelper,
     private val createCategoryUseCase: CreateCategoryUseCase,
     private val updateCategoryUseCase: UpdateCategoryUseCase,
     private val deleteCategoryUseCase: DeleteCategoryUseCase,
-    private val repository: CategoryRepository,
     private val dao: CategoryDao<CategoryEntity, RecipeCategoryCrossRef, RecipeEntity>
 ) : CategoryService {
     override suspend fun createCategory(data: Category): Category {
@@ -79,7 +82,8 @@ class CategoryServiceImpl (
 
             true
         } catch (e: APIException) {
-            Log.e("CategoryService", "Error syncing categories: ${e.message}", e)
+            val message = resourceHelper.getString(R.string.refreshing_categories_failed)
+            Log.e("CategoryService", "$message: ${e.message}", e)
             false
         }
     }
@@ -98,7 +102,8 @@ class CategoryServiceImpl (
 
             true
         } catch (e: APIException) {
-            Log.e("CategoryService", "Error syncing category: ${e.message}", e)
+            val message = resourceHelper.getString(R.string.refreshing_category_failed)
+            Log.e("CategoryService", "$message: ${e.message}", e)
             false
         }
     }

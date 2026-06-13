@@ -14,12 +14,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.dmm.recetario.core.utils.helper.ResourceHelper
+import com.dmm.recetario.R
 import com.dmm.recetario.domain.model.Recipe
 import com.dmm.recetario.domain.model.User
 import com.dmm.recetario.ui.components.BaseLayoutWithRefresh
@@ -30,7 +31,6 @@ import com.dmm.recetario.ui.components.WellnessCardSkeleton
 fun CategoryScreen (
     user: User?,
     categoryId: String,
-    resourceHelper: ResourceHelper,
     viewModel: CategoryViewModel = hiltViewModel(),
     onHomeClick: () -> Unit,
     onCompleteForm: () -> Unit,
@@ -47,7 +47,6 @@ fun CategoryScreen (
 
     BaseLayoutWithRefresh (
         user = user,
-        resourceHelper = resourceHelper,
         onHomeClick = onHomeClick,
         onRefresh = viewModel::refresh,
         onCompleteForm = onCompleteForm,
@@ -63,7 +62,6 @@ fun CategoryScreen (
             } else {
                 CategoryContent (
                     recipes = recipes,
-                    resourceHelper = resourceHelper,
                     onRecipeClick = onRecipeClick
                 )
             }
@@ -74,7 +72,6 @@ fun CategoryScreen (
 @Composable
 private fun CategoryContent (
     recipes: List<Recipe>,
-    resourceHelper: ResourceHelper,
     onRecipeClick: (Recipe) -> Unit
 ) {
     LazyVerticalGrid (
@@ -86,8 +83,10 @@ private fun CategoryContent (
     ) {
         item(span = { GridItemSpan(2) }) {
             Text (
-                text = if (recipes.isNotEmpty()) "Recetas disponibles"
-                    else "No hay recetas",
+                text = if (recipes.isNotEmpty())
+                        stringResource(R.string.available_recipes)
+                    else
+                        stringResource(R.string.no_available_recipes),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(),
                 fontWeight = FontWeight.Bold

@@ -57,12 +57,10 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.dmm.recetario.core.utils.helper.ResourceHelper
 import com.dmm.recetario.ui.components.ErrorScreen
 
 @Composable
 fun RegisterScreen (
-    resourceHelper: ResourceHelper,
     viewModel: RegisterViewModel = hiltViewModel(),
     onNavigateToHome: () -> Unit,
     onNavigateToLogin: () -> Unit,
@@ -85,7 +83,6 @@ fun RegisterScreen (
     ) {
         RegisterContent (
             uiState = viewModel.uiState,
-            resourceHelper = resourceHelper,
             onRegister = viewModel::register,
             onRetry = viewModel::resetToIdle,
             onNavigateToHome = onNavigateToHome,
@@ -97,7 +94,6 @@ fun RegisterScreen (
 @Composable
 fun RegisterContent (
     uiState: RegisterUiState,
-    resourceHelper: ResourceHelper,
     onRegister: (String, String, String, String?, String?) -> Unit,
     onRetry: () -> Unit,
     onNavigateToHome: () -> Unit,
@@ -114,13 +110,11 @@ fun RegisterContent (
         is RegisterUiState.Error -> {
             ErrorScreen (
                 message = uiState.message,
-                resourceHelper = resourceHelper,
                 onRetry = onRetry
             )
         }
         else -> {
             RegisterForm (
-                resourceHelper = resourceHelper,
                 onRegister = onRegister,
                 onNavigateToLogin = onNavigateToLogin
             )
@@ -130,7 +124,6 @@ fun RegisterContent (
 
 @Composable
 private fun RegisterForm (
-    resourceHelper: ResourceHelper,
     onNavigateToLogin: () -> Unit,
     onRegister: (String, String, String, String?, String?) -> Unit
 ) {

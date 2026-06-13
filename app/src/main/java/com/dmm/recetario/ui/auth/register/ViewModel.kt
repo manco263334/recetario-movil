@@ -1,10 +1,13 @@
 package com.dmm.recetario.ui.auth.register
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dmm.recetario.R
+import com.dmm.recetario.core.utils.helper.ResourceHelper
 import com.dmm.recetario.data.local.database.entity.TokenUserRefImpl
 import com.dmm.recetario.domain.dao.UserDao
 import com.dmm.recetario.domain.entity.RecipeEntity
@@ -23,8 +26,9 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class RegisterViewModel @Inject constructor (
     private val service: AuthService,
-    private val tokenManager: TokenManager,
     private val userManager: UserManager,
+    private val tokenManager: TokenManager,
+    private val resourceHelper: ResourceHelper,
     private val dao: UserDao<UserEntity, TokenUserRef, RecipeEntity>
 ) : ViewModel() {
     var uiState by mutableStateOf<RegisterUiState>(RegisterUiState.Idle)
@@ -54,7 +58,10 @@ class RegisterViewModel @Inject constructor (
 
                 uiState = RegisterUiState.Success(token)
             } catch (e: Exception) {
-                uiState = RegisterUiState.Error("Error: ${e.message}")
+                Log.d("RegisterViewModel", "Error: ${e.message}", e)
+                uiState = RegisterUiState.Error (
+                    resourceHelper.getString(R.string.something_went_wrong)
+                )
             }
         }
     }

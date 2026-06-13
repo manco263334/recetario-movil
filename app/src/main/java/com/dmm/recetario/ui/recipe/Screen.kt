@@ -17,12 +17,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.dmm.recetario.core.utils.helper.ResourceHelper
+import com.dmm.recetario.R
 import com.dmm.recetario.domain.model.Recipe
 import com.dmm.recetario.domain.model.User
 import com.dmm.recetario.ui.components.BaseLayoutWithRefresh
@@ -31,7 +33,6 @@ import com.dmm.recetario.ui.components.BaseLayoutWithRefresh
 fun RecipeScreen (
     user: User?,
     recipeId: String,
-    resourceHelper: ResourceHelper,
     viewModel: RecipeViewModel = hiltViewModel(),
     onHomeClick: () -> Unit,
     onCompleteForm: () -> Unit,
@@ -47,7 +48,6 @@ fun RecipeScreen (
 
     BaseLayoutWithRefresh (
         user = user,
-        resourceHelper = resourceHelper,
         onHomeClick = onHomeClick,
         onRefresh = viewModel::refresh,
         onCompleteForm = onCompleteForm,
@@ -61,14 +61,14 @@ fun RecipeScreen (
             if (state is RecipeUiState.Loading) {
                 RecipeContentSkeleton(state.message)
             } else {
-                RecipeContent(recipe, resourceHelper)
+                RecipeContent(recipe)
             }
         }
     }
 }
 
 @Composable
-private fun RecipeContent(recipe: Recipe?, resourceHelper: ResourceHelper) {
+private fun RecipeContent(recipe: Recipe?) {
     val scrollState = rememberScrollState()
 
     Column (
@@ -79,7 +79,7 @@ private fun RecipeContent(recipe: Recipe?, resourceHelper: ResourceHelper) {
     ) {
         if (recipe == null) {
             Text (
-                text = "Receta no encontrada",
+                text = stringResource(R.string.recipe_not_found),
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -96,9 +96,27 @@ private fun RecipeContent(recipe: Recipe?, resourceHelper: ResourceHelper) {
                     Text(text = recipe.name, style = MaterialTheme.typography.headlineMedium)
 
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text(text = "Tiempo total: ${recipe.totalTimeInMinutes} min")
-                    Text(text = "Preparación: ${recipe.preparationTimeInMinutes} min")
-                    Text(text = "Cocción: ${recipe.cookingTimeInMinutes} min")
+                    Text (
+                        pluralStringResource (
+                            R.plurals.total_time_description,
+                            recipe.totalTimeInMinutes,
+                            recipe.totalTimeInMinutes
+                        )
+                    )
+                    Text (
+                        pluralStringResource (
+                            R.plurals.preparation_time_description,
+                            recipe.preparationTimeInMinutes,
+                            recipe.preparationTimeInMinutes
+                        )
+                    )
+                    Text (
+                        pluralStringResource (
+                            R.plurals.cooking_time_description,
+                            recipe.cookingTimeInMinutes,
+                            recipe.cookingTimeInMinutes
+                        )
+                    )
                 }
             }
 
@@ -110,7 +128,7 @@ private fun RecipeContent(recipe: Recipe?, resourceHelper: ResourceHelper) {
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text (
-                        text = "Ingredientes",
+                        text = stringResource(R.string.ingredients_model),
                         style = MaterialTheme.typography.titleLarge,
                         textAlign = TextAlign.Center,
                         fontWeight = FontWeight.Bold
@@ -135,7 +153,7 @@ private fun RecipeContent(recipe: Recipe?, resourceHelper: ResourceHelper) {
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text (
-                        text = "Pasos",
+                        text = stringResource(R.string.steps_label),
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center
@@ -160,7 +178,10 @@ private fun RecipeContent(recipe: Recipe?, resourceHelper: ResourceHelper) {
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text (
-                        text = "Calificación: ${recipe.stars} ⭐",
+                        text = stringResource (
+                            R.string.rating,
+                            recipe.stars
+                        ),
                         style = MaterialTheme.typography.titleLarge
                     )
                 }

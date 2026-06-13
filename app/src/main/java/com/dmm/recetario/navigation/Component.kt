@@ -18,7 +18,6 @@ import androidx.navigation3.ui.NavDisplay
 import com.dmm.recetario.core.utils.extension.back
 import com.dmm.recetario.core.utils.extension.backTo
 import com.dmm.recetario.core.utils.extension.navigateTo
-import com.dmm.recetario.core.utils.helper.ResourceHelper
 import com.dmm.recetario.domain.model.User
 import com.dmm.recetario.ui.auth.login.LoginScreen
 import com.dmm.recetario.ui.auth.register.RegisterScreen
@@ -31,7 +30,6 @@ import com.dmm.recetario.ui.settings.SettingsScreen
 @Composable
 fun AppNavigation (
     user: User?,
-    resourceHelper: ResourceHelper,
     backStack: NavBackStack<NavKey>,
     modifier: Modifier = Modifier
 ) {
@@ -51,7 +49,6 @@ fun AppNavigation (
         entryProvider = entryProvider {
             entry<Routes.Login> {
                 LoginScreen (
-                    resourceHelper = resourceHelper,
                     onNavigateToHome = {
                         backStack.clear()
                         backStack.navigateTo(Routes.Home)
@@ -64,7 +61,6 @@ fun AppNavigation (
 
             entry<Routes.Register> {
                 RegisterScreen (
-                    resourceHelper = resourceHelper,
                     onNavigateToHome = {
                         backStack.clear()
                         backStack.navigateTo(Routes.Home)
@@ -80,7 +76,6 @@ fun AppNavigation (
             ) {
                 HomeScreen (
                     user = user,
-                    resourceHelper = resourceHelper,
                     onCategoryClick = {
                         backStack.navigateTo(Routes.Category(it.id))
                     },
@@ -103,7 +98,6 @@ fun AppNavigation (
                 CategoryScreen (
                     user = user,
                     categoryId = it.id,
-                    resourceHelper = resourceHelper,
                     onRecipeClick = {
                         backStack.navigateTo(Routes.Recipe(it.id))
                     },
@@ -129,7 +123,6 @@ fun AppNavigation (
                 RecipeScreen (
                     user = user,
                     recipeId = it.id,
-                    resourceHelper = resourceHelper,
                     onSettingsClick = {
                         backStack.navigateTo(Routes.Settings)
                     },
@@ -148,7 +141,6 @@ fun AppNavigation (
 
             entry <Routes.Settings> {
                 SettingsScreen (
-                    resourceHelper = resourceHelper,
                     onHomeClick = {
                         backStack.backTo(Routes.Home)
                     },

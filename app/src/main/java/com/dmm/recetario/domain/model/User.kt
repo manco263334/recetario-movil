@@ -15,10 +15,10 @@ open class User (
 }
 
 class AnonymousUser : User (
-    id = "No ID",
-    name = "Anónimo",
-    email = "No email",
-    role = "No role",
+    id = "",
+    name = "",
+    email = "",
+    role = "",
     phone = null,
     username = null,
     icon = null,

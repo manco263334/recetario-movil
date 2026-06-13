@@ -1,7 +1,9 @@
 package com.dmm.recetario.data.service
 
 import android.util.Log
+import com.dmm.recetario.R
 import com.dmm.recetario.core.utils.extension.isNotNull
+import com.dmm.recetario.core.utils.helper.ResourceHelper
 import com.dmm.recetario.domain.exception.APIException
 import com.dmm.recetario.core.utils.mapper.toDomain
 import com.dmm.recetario.core.utils.mapper.toEntity
@@ -21,10 +23,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class RecipeServiceImpl (
+    private val repository: RecipeRepository,
+    private val resourceHelper: ResourceHelper,
     private val createRecipeUseCase: CreateRecipeUseCase,
     private val updateRecipeUseCase: UpdateRecipeUseCase,
     private val deleteRecipeUseCase: DeleteRecipeUseCase,
-    private val repository: RecipeRepository,
     private val dao: RecipeDao<RecipeEntity, RecipeCategoryCrossRef, UserEntity, CategoryEntity>
 ) : RecipeService {
     override suspend fun createRecipe(data: Recipe): Recipe {
@@ -74,7 +77,8 @@ class RecipeServiceImpl (
 
             true
         } catch (e: APIException) {
-            Log.e("RecipeService", "Error syncing recipes: ${e.message}", e)
+            val message = resourceHelper.getString(R.string.refreshing_recipes_failed)
+            Log.e("RecipeService", "$message: ${e.message}", e)
             false
         }
     }
@@ -97,7 +101,8 @@ class RecipeServiceImpl (
 
             true
         } catch (e: APIException) {
-            Log.e("RecipeService", "Error syncing recipe: ${e.message}", e)
+            val message = resourceHelper.getString(R.string.refreshing_recipe_failed)
+            Log.e("RecipeService", "$message: ${e.message}", e)
             false
         }
     }

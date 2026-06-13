@@ -13,8 +13,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.dmm.recetario.core.utils.helper.ResourceHelper
+import com.dmm.recetario.R
 import com.dmm.recetario.ui.theme.PurpleGrey40
 import kotlinx.coroutines.launch
 
@@ -22,7 +23,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun Toolbar (
     drawerState: DrawerState,
-    resourceHelper: ResourceHelper,
     modifier: Modifier = Modifier,
     title: @Composable () -> Unit
 ) {
@@ -47,7 +47,10 @@ fun Toolbar (
                     }
                 }
             ) {
-                Icon(imageVector = Icons.Default.Menu, contentDescription = "Abrir menú")
+                Icon (
+                    imageVector = Icons.Default.Menu,
+                    contentDescription = stringResource(R.string.open_menu)
+                )
             }
         }
     )

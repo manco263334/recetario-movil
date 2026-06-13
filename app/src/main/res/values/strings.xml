@@ -1,3 +1,149 @@
 <resources>
     <string name="app_name">Recetario</string>
+
+    <string name="login_title">Iniciar sesión</string>
+    <string name="login_subtitle">Inicia sesión para continuar</string>
+    <string name="login_button">INICIAR SESIÓN</string>
+    <string name="login_google">Continuar con Google</string>
+    <string name="login_guest">Entrar como invitado</string>
+
+    <string name="signup_title">Registrarse</string>
+    <string name="signup_subtitle">Registrate si deseas disfrutar de maravillosas recetas</string>
+    <string name="signup_suggest">¿No tienes cuenta? Regístrate aquí, papu</string>
+
+    <string name="logout">Cerrar sesión</string>
+    <string name="logout_succeed">Sesión cerrada con éxito</string>
+    <string name="logout_failed">Un error ocurrió mientras se intentaba cerrar sesión</string>
+
+    <string name="password">Contraseña</string>
+    <string name="password_forgotten">
+        ¿Olvidaste tu contraseña? Haz click aquí para reestablecerla
+    </string>
+    <string name="email">Correo electrónico</string>
+    <string name="email_placeholder">correo@gmail.com</string>
+
+    <string name="welcome">Hola, %1$s</string>
+    <string name="welcome_anonymous">Hola, usuario anónimo</string>
+    <string name="anonymous_text">Usuario anónimo</string>
+    <string name="anonymous_email">Sin correo</string>
+    <string name="anonymous_username">Sin Apodo</string>
+    <string name="anonymous_phone">Sin número telefónico</string>
+
+    <string name="open_menu">Abrir menú</string>
+    <string name="close_menu">Cerrar menú</string>
+
+    <string name="something_went_wrong">¡Ups! Algo salió mal</string>
+    <string name="retry">Reintentar</string>
+    <string name="refresh">Actualizar</string>
+
+    <string name="create">Crear</string>
+    <string name="create_category">Crear categoría</string>
+
+    <string name="cancel">Cancelar</string>
+    <string name="cancel_recipe">Cancelar receta</string>
+
+    <string name="add_category">Añadir categoría</string>
+
+    <string name="next">Siguiente</string>
+    <string name="back">Regresar</string>
+
+    <string name="recipe_name_label">Nombre de la receta</string>
+    <string name="persons_label">Personas</string>
+    <string name="stimulated_time_label">Tiempos estimados</string>
+    <string name="total_time_label">Tiempo total (en minutos)</string>
+    <string name="cooking_time_label">Tiempo de cocción (en minutos)</string>
+    <string name="preparation_time_label">Tiempo de preparación (en minutos)</string>
+    <string name="add_ingredient_label">Añadir otro ingrediente</string>
+    <string name="add_ingredients">Agregar ingredientes</string>
+    <string name="ingredient_name_label">Nombre del ingrediente</string>
+    <string name="quantity_label">Cantidad</string>
+    <string name="go_to_steps">Pasar a añadir los pasos</string>
+    <string name="add_step_label">Añadir otro paso</string>
+    <string name="add_steps">Agregar pasos</string>
+    <string name="step_label">Paso</string>
+    <string name="steps_label">Pasos</string>
+    <string name="add_categories_label">Agregar las categorías a las que pertenece</string>
+    <string name="add_categories">Añadir sus categorías</string>
+    <string name="save_recipe">Guardar receta</string>
+
+    <string name="name_label">Nombre</string>
+    <string name="icon_label">Ícono (URL)</string>
+
+    <string name="category_model">Categoría</string>
+    <string name="categories_model">Categorías</string>
+    <string name="recipe_model">Receta</string>
+    <string name="recipes_model">Recetas</string>
+    <string name="ingredient_model">Ingrediente</string>
+    <string name="ingredients_model">Ingredientes</string>
+
+    <string name="what_will_you_add">¿Qué gustas agregar?</string>
+
+    <string name="add">Agregar</string>
+
+    <string name="home">Inicio</string>
+    <string name="settings">Ajustes</string>
+
+    <string name="user_photo_description">Foto del usuario</string>
+
+    <plurals name="total_time_description">
+        <item quantity="one">Tiempo total: %1$s minuto</item>
+        <item quantity="other">Tiempo total: %1$s minutos</item>
+    </plurals>
+    <plurals name="cooking_time_description">
+        <item quantity="one">Cocción: %1$s minuto</item>
+        <item quantity="other">Cocción: %1$s minutos</item>
+    </plurals>
+    <plurals name="preparation_time_description">
+        <item quantity="one">Preparación: %1$s minutos</item>
+        <item quantity="other">Preparación: %1$s minutos</item>
+    </plurals>
+    <string name="rating">Calificación: %1$s ⭐</string>
+
+    <string name="available_categories">Categorías disponibles</string>
+    <string name="no_available_categories">No se encontraron categorías</string>
+
+    <string name="available_recipes">Recetas disponibles</string>
+    <string name="no_available_recipes">No se encontraron recetas</string>
+
+    <string name="loading_user">Cargando usuario…</string>
+    <string name="loading_users">Cargando usuarios…</string>
+
+    <string name="loading_recipe">Cargando receta…</string>
+    <string name="loading_recipes">Cargando recetas…</string>
+    <string name="refreshing_recipe">Actualizando y cargando la receta…</string>
+    <string name="refreshing_recipe_failed">Error sincronizando la receta</string>
+    <string name="refreshing_recipes">Actualizando y cargando nuevas recetas…</string>
+    <string name="refreshing_recipes_failed">Error sincronizando las recetas</string>
+    <string name="recipe_not_found">Receta no encontrada</string>
+
+    <string name="loading_category">Cargando categoría…</string>
+    <string name="loading_categories">Cargando categorías…</string>
+    <string name="refreshing_category">Actualizando y cargando la categoría…</string>
+    <string name="refreshing_category_failed">Error sincronizando la categoría</string>
+    <string name="refreshing_categories">Actualizando y cargando nuevas categorías…</string>
+    <string name="refreshing_categories_failed">Error sincronizando las categorías</string>
+    <string name="category_not_found">Categoría no encontrada</string>
+
+    <string name="error_fetching_data">
+        Ocurrió un error inesperado al obtener los datos: %1$s
+    </string>
+
+    <string name="elements_refreshed_succeed">Elementos actualizados con éxito</string>
+    <string name="elements_refreshed_failed">
+        Un error ocurrió mientras se estaban refrescando los elementos
+    </string>
+
+    <string name="error_syncing_user">Ocurrió un error al sincronizar usuario</string>
+    <string name="error_syncing_users">Ocurrió un error al sincronizar usuarios</string>
+
+    <string name="invalid_credentials">Credenciales inválidas</string>
+    <string name="error_400">Solicitud incorrecta</string>
+    <string name="error_401">No autorizado</string>
+    <string name="error_403">Prohibido</string>
+    <string name="error_404">No encontrado</string>
+    <string name="error_422">Unprocesable</string>
+    <string name="error_429">Demasiadas solicitudes</string>
+    <string name="error_500">Error interno del servidor</string>
+    <string name="network_error">Error de red</string>
+    <string name="unknown_error">Error desconocido</string>
 </resources>

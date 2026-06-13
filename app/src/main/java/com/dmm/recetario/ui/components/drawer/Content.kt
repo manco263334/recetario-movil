@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -48,10 +49,10 @@ fun DrawerContent (
     user: User?,
     drawerState: DrawerState,
     snackbarHostState: SnackbarHostState,
+    viewModel: DrawerViewModel = hiltViewModel(),
     onHomeClick: () -> Unit,
     onSettingsClick: () -> Unit,
-    onLogOutSuccess: () -> Unit,
-    viewModel: DrawerViewModel = hiltViewModel()
+    onLogOutSuccess: () -> Unit
 ) {
     val scope = rememberCoroutineScope()
     val logOutState = viewModel.logOutState
@@ -90,7 +91,7 @@ fun DrawerContent (
             ) {
                 Icon (
                     imageVector = Icons.Default.Close,
-                    contentDescription = "Cerrar menú",
+                    contentDescription = stringResource(R.string.close_menu),
                     tint = MaterialTheme.colorScheme.onBackground
                 )
             }
@@ -100,7 +101,7 @@ fun DrawerContent (
 
         AsyncImage (
             model = user?.icon,
-            contentDescription = "User Photo",
+            contentDescription = stringResource(R.string.user_photo_description),
             modifier = Modifier
                 .size(80.dp)
                 .clip(CircleShape)
@@ -117,28 +118,28 @@ fun DrawerContent (
 
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text (
-                text = user?.name ?: "Anónimo",
+                text = user?.name ?: stringResource(R.string.anonymous_text),
                 fontSize = 20.sp,
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.onBackground
             )
 
             Text (
-                text = user?.email ?: "Sin email",
+                text = user?.email ?: stringResource(R.string.anonymous_email),
                 fontSize = 16.sp,
                 color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Center
             )
 
             Text (
-                text = user?.username ?: "Sin apodo",
+                text = user?.username ?: stringResource(R.string.anonymous_username),
                 fontSize = 14.sp,
                 color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Center
             )
 
             Text (
-                text = if (user?.phone.isNullOrBlank()) "Sin número telefónico"
+                text = if (user?.phone.isNullOrBlank()) stringResource(R.string.anonymous_phone)
                     else user.phone,
                 fontSize = 14.sp,
                 color = MaterialTheme.colorScheme.onBackground,
@@ -150,7 +151,7 @@ fun DrawerContent (
 
         NavigationDrawerItem (
             label = {
-                Text("Inicio")
+                Text(stringResource(R.string.home))
             },
             selected = false,
             onClick = onHomeClick,
@@ -162,7 +163,7 @@ fun DrawerContent (
 
         NavigationDrawerItem (
             label = {
-                Text("Ajustes")
+                Text(stringResource(R.string.settings))
             },
             selected = false,
             onClick = onSettingsClick,
@@ -174,7 +175,7 @@ fun DrawerContent (
 
         NavigationDrawerItem (
             label = {
-                Text("Cerrar sesión")
+                Text(stringResource(R.string.logout))
             },
             selected = false,
             onClick = viewModel::logout,

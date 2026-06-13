@@ -1,10 +1,13 @@
 package com.dmm.recetario.ui.auth.login
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dmm.recetario.R
+import com.dmm.recetario.core.utils.helper.ResourceHelper
 import com.dmm.recetario.data.local.database.entity.TokenUserRefImpl
 import com.dmm.recetario.domain.dao.UserDao
 import com.dmm.recetario.domain.entity.RecipeEntity
@@ -23,11 +26,12 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class LoginViewModel @Inject constructor (
     private val service: AuthService,
-    private val tokenManager: TokenManager,
     private val userManager: UserManager,
+    private val tokenManager: TokenManager,
+    private val resourceHelper: ResourceHelper,
     private val dao: UserDao<UserEntity, TokenUserRef, RecipeEntity>
 ) : ViewModel() {
-    var uiState by mutableStateOf<LoginUiState>(LoginUiState.Idle)
+    var uiState: LoginUiState by mutableStateOf(LoginUiState.Idle)
         private set
 
     fun login (
@@ -51,7 +55,18 @@ class LoginViewModel @Inject constructor (
 
                 uiState = LoginUiState.Success(token)
             } catch (e: Exception) {
-                uiState = LoginUiState.Error("Error: ${e.message}")
+                Log.d (
+                    "LoginViewModel",
+                    resourceHelper.getString (
+                        R.string.error_fetching_data,
+                        e.message ?: ""
+                    ),
+                    e
+                )
+
+                uiState = LoginUiState.Error (
+                    resourceHelper.getString (R.string.something_went_wrong)
+                )
             }
         }
     }
@@ -65,7 +80,7 @@ class LoginViewModel @Inject constructor (
     }
 
     private suspend fun insertTokenReference(token: String, email: String) {
-        dao.insertTokenRefs(listOf(TokenUserRefImpl(token, email)))
+        dao.insertTokenRef(TokenUserRefImpl(token, email))
     }
 
     fun loginAsGuest() {

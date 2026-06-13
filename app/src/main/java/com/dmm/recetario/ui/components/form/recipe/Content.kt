@@ -14,14 +14,14 @@ import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.dmm.recetario.core.utils.helper.ResourceHelper
+import com.dmm.recetario.R
 import kotlin.collections.set
 
 @Composable
 fun RecipeForm (
-    resourceHelper: ResourceHelper,
     viewModel: RecipeFormViewModel = hiltViewModel(),
     onDismiss: () -> Unit,
     onCompleteForm: () -> Unit
@@ -48,16 +48,16 @@ fun RecipeForm (
             onDismissRequest = onDismiss,
             confirmButton = {
                 Button(onClick = { stepIndex = 1 }) {
-                    Text("Siguiente")
+                    Text(stringResource(R.string.next))
                 }
             },
             dismissButton = {
                 Button(onClick = onDismiss) {
-                    Text("Cancelar")
+                    Text(stringResource(R.string.cancel))
                 }
             },
             title = { 
-                Text("Cancelar receta") 
+                Text(stringResource(R.string.cancel_recipe))
             },
             text = {
                 Column {
@@ -67,7 +67,7 @@ fun RecipeForm (
                             name = it
                         },
                         label = { 
-                            Text("Nombre de la Receta") 
+                            Text(stringResource(R.string.recipe_name_label))
                         }
                     )
                     
@@ -77,7 +77,7 @@ fun RecipeForm (
                             persons = it.toIntOrNull() ?: 0
                         },
                         label = { 
-                            Text("Personas") 
+                            Text(stringResource(R.string.persons_label))
                         }
                     )
                 }
@@ -88,16 +88,16 @@ fun RecipeForm (
             onDismissRequest = onDismiss,
             confirmButton = {
                 Button(onClick = { stepIndex = 2 }) {
-                    Text("Siguiente")
+                    Text(stringResource(R.string.next))
                 }
             },
             dismissButton = {
                 Button(onClick = { stepIndex = 0 }) {
-                    Text("Regresar")
+                    Text(stringResource(R.string.back))
                 }
             },
             title = { 
-                Text("Tiempos estimados") 
+                Text(stringResource(R.string.stimulated_time_label))
             },
             text = {
                 Column {
@@ -107,7 +107,7 @@ fun RecipeForm (
                             totalTimeInMinutes = it.toIntOrNull() ?: 0
                         },
                         label = { 
-                            Text("Tiempo total (en minutos)") 
+                            Text(stringResource(R.string.total_time_label))
                         }
                     )
                     
@@ -117,7 +117,7 @@ fun RecipeForm (
                             cookTimeInMinutes = it.toIntOrNull() ?: 0
                         },
                         label = { 
-                            Text("Tiempo de cocción (en minutos)") 
+                            Text(stringResource(R.string.cooking_time_label))
                         }
                     )
                     
@@ -127,7 +127,7 @@ fun RecipeForm (
                             prepareTimeInMinutes = it.toIntOrNull() ?: 0
                         },
                         label = { 
-                            Text("Tiempo de preparación (en minutos)") 
+                            Text(stringResource(R.string.preparation_time_label)) 
                         }
                     )
                 }
@@ -149,16 +149,16 @@ fun RecipeForm (
                         ingredientQuantity = ""
                     }
                 ) {
-                    Text("Agregar otro ingrediente")
+                    Text(stringResource(R.string.add_ingredient_label))
                 }
             },
             dismissButton = {
                 Button(onClick = { stepIndex = 3 }) {
-                    Text("Pasar a pasos")
+                    Text(stringResource(R.string.go_to_steps))
                 }
             },
             title = { 
-                Text("Agregar Ingredientes") 
+                Text(stringResource(R.string.add_ingredients))
             },
             text = {
                 Column {
@@ -168,7 +168,7 @@ fun RecipeForm (
                             ingredientName = it
                         },
                         label = { 
-                            Text("Nombre del Ingrediente") 
+                            Text(stringResource(R.string.ingredient_name_label))
                         }
                     )
                     
@@ -178,7 +178,7 @@ fun RecipeForm (
                             ingredientQuantity = it
                         },
                         label = { 
-                            Text("Cantidad") 
+                            Text(stringResource(R.string.quantity_label))
                         }
                     )
                 }
@@ -194,7 +194,7 @@ fun RecipeForm (
                         stepDescription = ""
                     }
                 ) {
-                    Text("Agregar otro paso")
+                    Text(stringResource(R.string.add_step_label))
                 }
             },
             dismissButton = {
@@ -212,11 +212,11 @@ fun RecipeForm (
                         stepIndex = 4
                     }
                 ) {
-                    Text("Agregar las categorías a las que pertenece")
+                    Text(stringResource(R.string.add_categories_label))
                 }
             },
             title = { 
-                Text("Agregar Pasos") 
+                Text(stringResource(R.string.add_steps))
             },
             text = {
                 Column {
@@ -226,7 +226,7 @@ fun RecipeForm (
                             stepDescription = it
                         },
                         label = { 
-                            Text("Paso") 
+                            Text(stringResource(R.string.step_label))
                         }
                     )
                 }
@@ -246,16 +246,16 @@ fun RecipeForm (
                             onCompleteForm()
                         }
                     ) {
-                        Text("Guardar receta")
+                        Text(stringResource(R.string.save_recipe))
                     }
                 },
                 dismissButton = {
                     Button(onClick = onDismiss) {
-                        Text("Cancelar")
+                        Text(stringResource(R.string.cancel))
                     }
                 },
                 title = {
-                    Text("Agregar sus categorías")
+                    Text(stringResource(R.string.add_categories))
                 },
                 text = {
                     Column {

@@ -6,6 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dmm.recetario.R
+import com.dmm.recetario.core.utils.helper.ResourceHelper
 import com.dmm.recetario.domain.dao.UserDao
 import com.dmm.recetario.domain.entity.RecipeEntity
 import com.dmm.recetario.domain.entity.TokenUserRef
@@ -16,17 +18,18 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.time.Duration.Companion.seconds
 
 @HiltViewModel
 class DrawerViewModel @Inject constructor (
-    private val tokenManager: TokenManager,
     private val authService: AuthService,
+    private val tokenManager: TokenManager,
+    private val resourceHelper: ResourceHelper,
     private val userDAO: UserDao<UserEntity, TokenUserRef, RecipeEntity>
 ) : ViewModel() {
-    var logOutState by mutableStateOf<LogOutUiState>(LogOutUiState.Idle)
+    private val getString: (Int) -> String = resourceHelper::getString
+
+    var logOutState: LogOutUiState by mutableStateOf(LogOutUiState.Idle)
         private set
 
     fun logout() {
@@ -44,12 +47,14 @@ class DrawerViewModel @Inject constructor (
                     async { userDAO.clearTokenRefs() },
                 )
 
-                logOutState = LogOutUiState.Success("Sesión cerrada con éxito")
+                logOutState = LogOutUiState.Success (
+                    resourceHelper.getString(R.string.logout_succeed)
+                )
             } catch (e: Exception) {
-                Log.w("DrawerViewModel", "Error al cerrar sesión: ${e.message}")
-                logOutState = LogOutUiState.Error("Error al cerrar sesión: ${e.message}")
+                val message = getString(R.string.logout_failed)
+                Log.w("DrawerViewModel", "$message: ${e.message}")
+                logOutState = LogOutUiState.Error(message)
             } finally {
-                delay(3.seconds)
                 logOutState = LogOutUiState.Idle
             }
         }
