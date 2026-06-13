@@ -58,13 +58,14 @@ fun DrawerContent (
     val logOutState = viewModel.logOutState
 
     LaunchedEffect(Unit) {
-        drawerState.close()
+        if (drawerState.isOpen) {
+            drawerState.close()
+        }
     }
 
     LaunchedEffect (logOutState) {
         if (logOutState is LogOutUiState.Success) {
             onLogOutSuccess()
-            snackbarHostState.showSnackbar(logOutState.message)
         } else if (logOutState is LogOutUiState.Error) {
             snackbarHostState.showSnackbar(logOutState.message)
         }
@@ -139,8 +140,10 @@ fun DrawerContent (
             )
 
             Text (
-                text = if (user?.phone.isNullOrBlank()) stringResource(R.string.anonymous_phone)
-                    else user.phone,
+                text = if (user?.phone.isNullOrBlank())
+                        stringResource(R.string.anonymous_phone)
+                    else
+                        user.phone,
                 fontSize = 14.sp,
                 color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Center

@@ -25,7 +25,7 @@ class DrawerViewModel @Inject constructor (
     private val authService: AuthService,
     private val tokenManager: TokenManager,
     private val resourceHelper: ResourceHelper,
-    private val userDAO: UserDao<UserEntity, TokenUserRef, RecipeEntity>
+    private val userDao: UserDao<UserEntity, TokenUserRef, RecipeEntity>
 ) : ViewModel() {
     private val getString: (Int) -> String = resourceHelper::getString
 
@@ -43,8 +43,8 @@ class DrawerViewModel @Inject constructor (
 
                 awaitAll (
                     async { tokenManager.clearToken() },
-                    async { userDAO.clear() },
-                    async { userDAO.clearTokenRefs() },
+                    async { userDao.clear() },
+                    async { userDao.clearTokenRefs() }
                 )
 
                 logOutState = LogOutUiState.Success (
@@ -54,8 +54,6 @@ class DrawerViewModel @Inject constructor (
                 val message = getString(R.string.logout_failed)
                 Log.w("DrawerViewModel", "$message: ${e.message}")
                 logOutState = LogOutUiState.Error(message)
-            } finally {
-                logOutState = LogOutUiState.Idle
             }
         }
     }
