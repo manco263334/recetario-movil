@@ -4,7 +4,7 @@ import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 
 @OptIn(ExperimentalContracts::class)
-fun Any?.isNotNull(): Boolean {
+fun <T : Any> T?.isNotNull(): Boolean {
     contract {
         returns(true) implies (this@isNotNull != null)
     }

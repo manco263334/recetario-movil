@@ -1,6 +1,7 @@
 package com.dmm.recetario.ui.auth.login
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
@@ -67,6 +68,14 @@ fun LoginScreen (
     onNavigateToHome: () -> Unit,
     onNavigateToRegister: () -> Unit
 ) {
+    val uiState = viewModel.uiState
+
+    LaunchedEffect(uiState) {
+        if (uiState is LoginUiState.Success) {
+            onNavigateToHome()
+        }
+    }
+
     Column (
         modifier = Modifier
             .fillMaxSize()
@@ -83,48 +92,41 @@ fun LoginScreen (
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        LoginContent (
-            uiState = viewModel.uiState,
-            onLogin = viewModel::login,
-            onRetry = viewModel::resetToIdle,
-            onNavigateToHome = onNavigateToHome,
-            onLoginAsGuest = viewModel::loginAsGuest,
-            onNavigateToRegister = onNavigateToRegister
-        )
+        Crossfade (
+            targetState = uiState,
+            label = "login_crossfade"
+        ) { state ->
+            when (state) {
+                is LoginUiState.Loading -> CircularProgressIndicator()
+                is LoginUiState.Error -> {
+                    ErrorScreen (
+                        message = state.message,
+                        onRetry = viewModel::resetToIdle
+                    )
+                }
+                else -> {
+                    LoginContent (
+                        onLogin = viewModel::login,
+                        onLoginAsGuest = viewModel::loginAsGuest,
+                        onNavigateToRegister = onNavigateToRegister
+                    )
+                }
+            }
+        }
     }
 }
 
 @Composable
 private fun LoginContent (
-    uiState: LoginUiState,
-    onRetry: () -> Unit,
     onLoginAsGuest: () -> Unit,
-    onNavigateToHome: () -> Unit,
     onNavigateToRegister: () -> Unit,
     onLogin: (String, String) -> Unit
 ) {
-    LaunchedEffect(uiState) {
-        if (uiState is LoginUiState.Success) {
-            onNavigateToHome()
-        }
-    }
-
-    when (uiState) {
-        is LoginUiState.Loading -> CircularProgressIndicator()
-        is LoginUiState.Error -> {
-            ErrorScreen (
-                message = uiState.message,
-                onRetry = onRetry
-            )
-        }
-        else -> {
-            LoginForm (
-                onLogin = onLogin,
-                onLoginAsGuest = onLoginAsGuest,
-                onNavigateToRegister = onNavigateToRegister
-            )
-        }
-    }
+    LoginForm (
+        onLogin = onLogin,
+        onLoginAsGuest = onLoginAsGuest,
+        onNavigateToRegister = onNavigateToRegister
+    )
 }
 
 @Composable

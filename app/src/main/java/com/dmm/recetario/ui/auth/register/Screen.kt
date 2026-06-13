@@ -1,6 +1,7 @@
 package com.dmm.recetario.ui.auth.register
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
@@ -67,6 +68,14 @@ fun RegisterScreen (
     onNavigateToHome: () -> Unit,
     onNavigateToLogin: () -> Unit,
 ) {
+    val uiState = viewModel.uiState
+
+    LaunchedEffect(uiState) {
+        if (uiState is RegisterUiState.Success) {
+            onNavigateToHome()
+        }
+    }
+
     Column (
         modifier = Modifier
             .fillMaxSize()
@@ -83,45 +92,38 @@ fun RegisterScreen (
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        RegisterContent (
-            uiState = viewModel.uiState,
-            onRegister = viewModel::register,
-            onRetry = viewModel::resetToIdle,
-            onNavigateToHome = onNavigateToHome,
-            onNavigateToLogin = onNavigateToLogin
-        )
+        Crossfade (
+            targetState = uiState,
+            label = "register_crossfade"
+        ) { state ->
+            when (state) {
+                is RegisterUiState.Loading -> CircularProgressIndicator()
+                is RegisterUiState.Error -> {
+                    ErrorScreen (
+                        message = state.message,
+                        onRetry = viewModel::resetToIdle
+                    )
+                }
+                else -> {
+                    RegisterContent (
+                        onRegister = viewModel::register,
+                        onNavigateToLogin = onNavigateToLogin
+                    )
+                }
+            }
+        }
     }
 }
 
 @Composable
 fun RegisterContent (
-    uiState: RegisterUiState,
-    onRegister: (String, String, String, String?, String?) -> Unit,
-    onRetry: () -> Unit,
-    onNavigateToHome: () -> Unit,
-    onNavigateToLogin: () -> Unit
+    onNavigateToLogin: () -> Unit,
+    onRegister: (String, String, String, String?, String?) -> Unit
 ) {
-    LaunchedEffect(uiState) {
-        if (uiState is RegisterUiState.Success) {
-            onNavigateToHome()
-        }
-    }
-
-    when (uiState) {
-        is RegisterUiState.Loading -> CircularProgressIndicator()
-        is RegisterUiState.Error -> {
-            ErrorScreen (
-                message = uiState.message,
-                onRetry = onRetry
-            )
-        }
-        else -> {
-            RegisterForm (
-                onRegister = onRegister,
-                onNavigateToLogin = onNavigateToLogin
-            )
-        }
-    }
+    RegisterForm (
+        onRegister = onRegister,
+        onNavigateToLogin = onNavigateToLogin
+    )
 }
 
 @Composable
