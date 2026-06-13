@@ -34,8 +34,8 @@ fun AppNavigation (
     modifier: Modifier = Modifier
 ) {
     NavDisplay (
-        backStack = backStack,
         modifier = modifier,
+        backStack = backStack,
         onBack = {
             backStack.back()
         },

@@ -25,13 +25,12 @@ class UserRepositoryImpl (
             )
         }
 
-        return users?.content?.map { it.toDomain() } ?: emptyList()
+        return users?.content?.map {
+            it.toDomain()
+        } ?: emptyList()
     }
 
-    override suspend fun getUser (
-        id: String,
-        withRecipes: Boolean?
-    ): User {
+    override suspend fun getUser(id: String, withRecipes: Boolean?): User {
         val user = handleApiCall(resourceHelper) {
             remote.getUser (
                 id = id,
@@ -44,11 +43,10 @@ class UserRepositoryImpl (
         return user!!.toDomain()
     }
 
-    override suspend fun updateUser (
-        id: String,
-        data: User
-    ): User {
-        val user = handleApiCall(resourceHelper) { remote.updateUser(id, data) }
+    override suspend fun updateUser(id: String, data: User): User {
+        val user = handleApiCall(resourceHelper) {
+            remote.updateUser(id, data)
+        }
 
         assert(user.isNotNull())
 
@@ -56,6 +54,8 @@ class UserRepositoryImpl (
     }
 
     override suspend fun deleteUser(id: String) {
-        handleApiCall(resourceHelper) { remote.deleteUser(id) }
+        handleApiCall(resourceHelper) {
+            remote.deleteUser(id)
+        }
     }
 }

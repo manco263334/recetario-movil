@@ -13,10 +13,7 @@ interface CategoryService {
         withRecipes: Boolean?
     ): Flow<List<Category>>
 
-    fun getCategory (
-        id: String,
-        withRecipes: Boolean?
-    ): Flow<Category?>
+    fun getCategory(id: String, withRecipes: Boolean?): Flow<Category?>
 
     suspend fun syncCategories (
         page: Int,
@@ -26,10 +23,7 @@ interface CategoryService {
 
     suspend fun syncCategory(id: String, withRecipes: Boolean?): Boolean
 
-    suspend fun updateCategory (
-        id: String,
-        data: Category
-    ): Category
+    suspend fun updateCategory(id: String, data: Category): Category
 
     suspend fun deleteCategory(id: String)
 

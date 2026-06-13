@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Recetario</string>
 
@@ -9,18 +10,27 @@
 
     <string name="signup_title">Registrarse</string>
     <string name="signup_subtitle">Registrate si deseas disfrutar de maravillosas recetas</string>
-    <string name="signup_suggest">¿No tienes cuenta? Regístrate aquí, papu</string>
+    <string name="create_account">Crear cuenta</string>
+    <string name="redirect_to_signup">¿No tienes cuenta? Regístrate aquí, papu</string>
+    <string name="signup_suggest">Únete y comienza ahora</string>
 
     <string name="logout">Cerrar sesión</string>
     <string name="logout_succeed">Sesión cerrada con éxito</string>
     <string name="logout_failed">Un error ocurrió mientras se intentaba cerrar sesión</string>
 
     <string name="password">Contraseña</string>
+    <string name="password_guide">Debe tener mínimo una longitud de 8 caracteres</string>
+    <string name="password_placeholder">************</string>
     <string name="password_forgotten">
         ¿Olvidaste tu contraseña? Haz click aquí para reestablecerla
     </string>
     <string name="email">Correo electrónico</string>
     <string name="email_placeholder">correo@gmail.com</string>
+    <string name="name">Nombre completo</string>
+    <string name="name_placeholder">Juan Pérez</string>
+    <string name="number_phone">Teléfono (opcional)</string>
+    <string name="username">Apodo (opcional)</string>
+    <string name="redirect_to_login">¿Ya tienes cuenta? Inicia sesión aquí</string>
 
     <string name="welcome">Hola, %1$s</string>
     <string name="welcome_anonymous">Hola, usuario anónimo</string>

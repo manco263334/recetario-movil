@@ -9,13 +9,21 @@ import com.dmm.recetario.domain.entity.UserEntity
 data class UserEntityImpl (
     @PrimaryKey
     override val id: String,
-    override val name: String,
-    override val email: String,
     override val role: String,
-    override val phone: String?,
-    override val username: String?,
+    override val name: String,
     override val icon: String?,
-) : UserEntity(id, name, email, role, phone, username, icon)
+    override val email: String,
+    override val phone: String?,
+    override val username: String?
+) : UserEntity (
+    id = id,
+    name = name,
+    role = role,
+    icon = icon,
+    email = email,
+    phone = phone,
+    username = username
+)
 
 @Entity (
     tableName = "tokens_users",

@@ -6,22 +6,22 @@ data class LoginData (
 )
 
 data class LoginResponse (
-    val token: String,
     val name: String,
+    val token: String,
     val username: String?
 )
 
 data class RegisterData (
     val name: String,
     val email: String,
-    val password: String,
     val phone: String?,
-    val username: String?,
+    val password: String,
+    val username: String?
 )
 
 data class MeResponse (
     val id: String,
-    val email: String,
     val name: String,
+    val email: String,
     val username: String?
 )

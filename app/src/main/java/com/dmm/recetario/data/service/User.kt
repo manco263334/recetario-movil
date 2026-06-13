@@ -46,7 +46,12 @@ class UserServiceImpl (
                 size = size,
                 withRecipes = withRecipes
             )
-            dao.saveUsers(users.map { it.toEntity() })
+
+            dao.saveUsers (
+                users = users.map {
+                    it.toEntity()
+                }
+            )
 
             true
         } catch (e: APIException) {
@@ -57,33 +62,30 @@ class UserServiceImpl (
     }
 
     override fun getUserById(id: String): Flow<User?> {
-        return dao.getUser(id).map { user ->
+        return dao.getUser(id = id).map { user ->
             user?.toDomain()
         }
     }
 
     override fun getUserByEmail(email: String): Flow<User?> {
-        return dao.getUserByEmail(email).map { user ->
+        return dao.getUserByEmail(email = email).map { user ->
             user?.toDomain()
         }
     }
 
     override fun getUserByUsername(username: String): Flow<User?> {
-        return dao.getUserByUsername(username).map { user ->
+        return dao.getUserByUsername(username = username).map { user ->
             user?.toDomain()
         }
     }
 
     override fun getUserByTokenOrAnonymous(token: String): Flow<User?> {
-        return dao.getUserByToken(token).map { user ->
+        return dao.getUserByToken(token = token).map { user ->
             user?.toDomain() ?: AnonymousUser()
         }
     }
 
-    override suspend fun updateUser (
-        id: String,
-        data: User
-    ): User {
+    override suspend fun updateUser(id: String, data: User): User {
         val user = updateUserUseCase(id, data)
 
         assert(user.isNotNull())

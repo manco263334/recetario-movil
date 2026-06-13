@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Recipe book</string>
 
@@ -9,16 +10,25 @@
 
     <string name="signup_title">Sign up</string>
     <string name="signup_subtitle">Sign up if you want to enjoy wonderful recipes</string>
-    <string name="signup_suggest">Don\'t have an account? Register here</string>
+    <string name="create_account">Create account</string>
+    <string name="redirect_to_signup">Don\'t have an account? Register here</string>
+    <string name="signup_suggest">Sign up and start now</string>
 
     <string name="logout">Log out</string>
     <string name="logout_succeed">Log out successfully</string>
     <string name="logout_failed">Something unexpected happened while trying to log out</string>
 
     <string name="password">Password</string>
+    <string name="password_guide">Must have a minimum of 8 characters</string>
+    <string name="password_placeholder">************</string>
     <string name="password_forgotten">Forgot your password? Click here to reset it</string>
     <string name="email">Email</string>
     <string name="email_placeholder">mail@gmail.com</string>
+    <string name="name">Full name</string>
+    <string name="name_placeholder">John Doe</string>
+    <string name="number_phone">Phone number (optional)</string>
+    <string name="username">Username (opcional)</string>
+    <string name="redirect_to_login">Already have an account? Log in here</string>
 
     <string name="welcome">Hello, %1$s</string>
     <string name="welcome_anonymous">Hello, guest</string>

@@ -208,7 +208,7 @@ private fun LoginForm (
                         Icon(Icons.Default.Email, null)
                     },
                     placeholder = {
-                        Text(stringResource(R.string.email))
+                        Text(stringResource(R.string.email_placeholder))
                     }
                 )
 
@@ -311,7 +311,7 @@ private fun LoginForm (
                 )
 
                 TextButton(onClick = onNavigateToRegister) {
-                    Text(stringResource(R.string.signup_suggest))
+                    Text(stringResource(R.string.redirect_to_signup))
                 }
 
                 HorizontalDivider (

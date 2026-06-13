@@ -31,7 +31,7 @@ class RegisterViewModel @Inject constructor (
     private val resourceHelper: ResourceHelper,
     private val dao: UserDao<UserEntity, TokenUserRef, RecipeEntity>
 ) : ViewModel() {
-    var uiState by mutableStateOf<RegisterUiState>(RegisterUiState.Idle)
+    var uiState: RegisterUiState by mutableStateOf(RegisterUiState.Idle)
         private set
 
     fun register (
@@ -41,11 +41,19 @@ class RegisterViewModel @Inject constructor (
         phone: String?,
         username: String?
     ) {
-        uiState = RegisterUiState.Loading
+        if (uiState is RegisterUiState.Loading) return
 
         viewModelScope.launch {
+            uiState = RegisterUiState.Loading
+
             try {
-                val data = RegisterData(name, email, password, phone, username)
+                val data = RegisterData (
+                    name = name,
+                    email = email,
+                    password = password,
+                    phone = phone,
+                    username = username
+                )
                 val response = service.register(data)
                 val token = response.token
 

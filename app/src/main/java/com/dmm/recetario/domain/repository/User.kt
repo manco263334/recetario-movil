@@ -9,15 +9,9 @@ interface UserRepository {
         withRecipes: Boolean?
     ): List<User>
 
-    suspend fun getUser (
-        id: String,
-        withRecipes: Boolean?
-    ): User
+    suspend fun getUser(id: String, withRecipes: Boolean?): User
 
-    suspend fun updateUser (
-        id: String,
-        data: User
-    ): User
+    suspend fun updateUser(id: String, data: User): User
 
     suspend fun deleteUser(id: String)
 }

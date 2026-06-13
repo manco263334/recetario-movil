@@ -29,7 +29,7 @@ class HomeViewModel @Inject constructor (
         private set
 
     val categories = categoryService
-        .getAllCategories(1, 10, false)
+        .getAllCategories(0, 10, false)
         .stateIn (
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
@@ -41,10 +41,7 @@ class HomeViewModel @Inject constructor (
         sync()
     }
 
-    fun sync (
-        page: Int = 0,
-        size: Int = 10
-    ) {
+    fun sync(page: Int = 0, size: Int = 10) {
         viewModelScope.launch {
             categoryService.syncCategories (
                 page,
@@ -54,13 +51,13 @@ class HomeViewModel @Inject constructor (
         }
     }
 
-    suspend fun refresh () {
+    suspend fun refresh() {
         if (uiState is HomeUiState.Loading) return
 
         uiState = HomeUiState.Loading (
             getString(R.string.refreshing_categories)
         )
-        val result = categoryService.syncCategories(1, 10, withRecipes = true)
+        val result = categoryService.syncCategories(0, 10, withRecipes = true)
 
         if (!result) {
             val message = getString(R.string.refreshing_categories_failed)

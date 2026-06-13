@@ -63,16 +63,13 @@ class CategoryViewModel @Inject constructor (
         _selectedCategoryId.value = categoryId
     }
 
-    fun sync (
-        page: Int = 0,
-        size: Int = 10
-    ) {
+    fun sync(page: Int = 0, size: Int = 10) {
         viewModelScope.launch {
             recipeService.syncRecipes (
                 page = page,
                 size = size,
-                withCategories = true,
-                withCreator = false
+                withCreator = false,
+                withCategories = true
             )
             categoryService.syncCategories(page, size, true)
         }

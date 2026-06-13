@@ -13,7 +13,9 @@ class RecipeRepositoryImpl (
     private val resourceHelper: ResourceHelper
 ) : RecipeRepository {
     override suspend fun createRecipe (data: Recipe): Recipe {
-        val recipe = handleApiCall(resourceHelper) { remote.createRecipe(data) }
+        val recipe = handleApiCall(resourceHelper) {
+            remote.createRecipe(data)
+        }
 
         assert(recipe.isNotNull())
 
@@ -23,8 +25,8 @@ class RecipeRepositoryImpl (
     override suspend fun getAllRecipes (
         page: Int,
         size: Int,
-        withCategories: Boolean?,
-        withCreator: Boolean?
+        withCreator: Boolean?,
+        withCategories: Boolean?
     ): List<Recipe> {
         val recipes = handleApiCall(resourceHelper) {
             remote.getAllRecipes (
@@ -35,13 +37,15 @@ class RecipeRepositoryImpl (
             )
         }
 
-        return recipes?.content?.map { it.toDomain() } ?: emptyList()
+        return recipes?.content?.map {
+            it.toDomain()
+        } ?: emptyList()
     }
 
     override suspend fun getRecipe (
         id: String,
-        withCategories: Boolean?,
-        withCreator: Boolean?
+        withCreator: Boolean?,
+        withCategories: Boolean?
     ): Recipe {
         val recipe = handleApiCall(resourceHelper) {
             remote.getRecipe (
@@ -56,11 +60,10 @@ class RecipeRepositoryImpl (
         return recipe!!.toDomain()
     }
 
-    override suspend fun updateRecipe (
-        id: String,
-        data: Recipe
-    ): Recipe {
-        val recipe = handleApiCall(resourceHelper) { remote.updateRecipe(id, data) }
+    override suspend fun updateRecipe(id: String, data: Recipe): Recipe {
+        val recipe = handleApiCall(resourceHelper) {
+            remote.updateRecipe(id, data)
+        }
 
         assert(recipe.isNotNull())
 
@@ -68,6 +71,8 @@ class RecipeRepositoryImpl (
     }
 
     override suspend fun deleteRecipe(id: String) {
-        handleApiCall(resourceHelper) { remote.deleteRecipe(id) }
+        handleApiCall(resourceHelper) {
+            remote.deleteRecipe(id)
+        }
     }
 }

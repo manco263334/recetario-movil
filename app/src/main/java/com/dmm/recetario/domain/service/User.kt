@@ -22,8 +22,5 @@ interface UserService {
 
     suspend fun deleteUser(id: String)
 
-    suspend fun updateUser (
-        id: String,
-        data: User
-    ): User
+    suspend fun updateUser(id: String, data: User): User
 }

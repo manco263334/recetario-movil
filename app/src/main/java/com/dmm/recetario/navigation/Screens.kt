@@ -17,12 +17,8 @@ sealed interface Routes : NavKey {
     data object Settings : Routes
 
     @Serializable
-    data class Category (
-        val id: String
-    ) : Routes
+    data class Category(val id: String) : Routes
 
     @Serializable
-    data class Recipe (
-        val id: String
-    ) : Routes
+    data class Recipe(val id: String) : Routes
 }

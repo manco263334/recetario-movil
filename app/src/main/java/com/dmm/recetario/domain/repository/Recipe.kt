@@ -8,20 +8,17 @@ interface RecipeRepository {
     suspend fun getAllRecipes (
         page: Int,
         size: Int,
-        withCategories: Boolean?,
-        withCreator: Boolean?
+        withCreator: Boolean?,
+        withCategories: Boolean?
     ): List<Recipe>
 
     suspend fun getRecipe (
         id: String,
-        withCategories: Boolean?,
-        withCreator: Boolean?
+        withCreator: Boolean?,
+        withCategories: Boolean?
     ): Recipe
 
-    suspend fun updateRecipe (
-        id: String,
-        data: Recipe
-    ): Recipe
+    suspend fun updateRecipe(id: String, data: Recipe): Recipe
 
     suspend fun deleteRecipe(id: String)
 }

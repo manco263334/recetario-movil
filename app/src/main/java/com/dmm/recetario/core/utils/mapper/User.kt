@@ -12,12 +12,12 @@ fun UserDTO.toDomain(): User {
 
     return User (
         id = this.id,
+        role = this.role,
+        icon = this.icon,
         name = this.name,
         email = this.email,
-        role = this.role,
         phone = this.phone,
         username = this.username,
-        icon = this.icon,
 
         recipes = recipes
     )
@@ -26,12 +26,12 @@ fun UserDTO.toDomain(): User {
 fun UserEntity.toDomain(): User {
     return User (
         id = this.id,
+        icon = this.icon,
+        role = this.role,
         name = this.name,
         email = this.email,
-        role = this.role,
         phone = this.phone,
         username = this.username,
-        icon = this.icon,
 
         recipes = null
     )
@@ -40,11 +40,11 @@ fun UserEntity.toDomain(): User {
 fun User.toEntity(): UserEntity {
     return UserEntityImpl (
         id = this.id,
+        role = this.role,
+        icon = this.icon,
         name = this.name,
         email = this.email,
-        role = this.role,
         phone = this.phone,
         username = this.username,
-        icon = this.icon,
     )
 }

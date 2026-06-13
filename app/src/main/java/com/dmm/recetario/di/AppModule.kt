@@ -96,7 +96,7 @@ object AppModule {
         remote: CategoryRemote,
         resourceHelper: ResourceHelper
     ): CategoryRepository {
-        return CategoryRepositoryImpl(remote = remote, resourceHelper)
+        return CategoryRepositoryImpl(remote = remote, resourceHelper = resourceHelper)
     }
 
     @Provides

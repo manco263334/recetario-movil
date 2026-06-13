@@ -51,7 +51,7 @@ class CategoryServiceImpl (
     }
 
     override fun getRecipes(categoryId: String): Flow<List<Recipe>> {
-        return dao.getRecipes(categoryId).map { entities ->
+        return dao.getRecipes(categoryId = categoryId).map { entities ->
             entities.map { entity ->
                 entity.toDomain()
             }
@@ -70,13 +70,22 @@ class CategoryServiceImpl (
                 withRecipes = withRecipes
             )
 
-            dao.saveCategories(categories.map { it.toEntity() })
+            dao.saveCategories (
+                categories = categories.map {
+                    it.toEntity()
+                }
+            )
 
             if (withRecipes == true) {
                 categories.forEach { category ->
-                    dao.insertReferences(category.recipes?.map { recipeId ->
-                        RecipeCategoryCrossRefImpl(recipeId, category.id)
-                    } ?: emptyList())
+                    dao.insertReferences (
+                        refs = category.recipes?.map { recipeId ->
+                            RecipeCategoryCrossRefImpl (
+                                recipeId = recipeId,
+                                categoryId = category.id
+                            )
+                        } ?: emptyList()
+                    )
                 }
             }
 
@@ -90,14 +99,22 @@ class CategoryServiceImpl (
 
     override suspend fun syncCategory(id: String, withRecipes: Boolean?): Boolean {
         return try {
-            val category = repository.getCategory(id, withRecipes)
+            val category = repository.getCategory (
+                id = id,
+                withRecipes = withRecipes
+            )
 
-            dao.saveCategory(category.toEntity())
+            dao.saveCategory(category = category.toEntity())
 
             if (withRecipes == true) {
-                dao.insertReferences(category.recipes?.map {
-                    RecipeCategoryCrossRefImpl(it, category.id)
-                } ?: emptyList())
+                dao.insertReferences (
+                    refs = category.recipes?.map { recipeId ->
+                        RecipeCategoryCrossRefImpl (
+                            recipeId = recipeId,
+                            categoryId = category.id
+                        )
+                    } ?: emptyList()
+                )
             }
 
             true
@@ -108,19 +125,13 @@ class CategoryServiceImpl (
         }
     }
 
-    override fun getCategory (
-        id: String,
-        withRecipes: Boolean?)
-    : Flow<Category?> {
-        return dao.getCategory(id).map { category ->
+    override fun getCategory(id: String, withRecipes: Boolean?): Flow<Category?> {
+        return dao.getCategory(id = id).map { category ->
             category?.toDomain()
         }
     }
 
-    override suspend fun updateCategory (
-        id: String,
-        data: Category
-    ): Category {
+    override suspend fun updateCategory(id: String, data: Category): Category {
         val category = updateCategoryUseCase(id, data)
 
         assert(category.isNotNull())

@@ -27,7 +27,9 @@ class RecipeViewModel @Inject constructor (
     private val getString: (Int) -> String = resourceHelper::getString
 
     var uiState: RecipeUiState by mutableStateOf (
-        RecipeUiState.Loading(getString(R.string.loading_recipe))
+        RecipeUiState.Loading (
+            getString(R.string.loading_recipe)
+        )
     )
         private set
 

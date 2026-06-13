@@ -16,15 +16,19 @@ class AuthRepositoryImpl (
     private val resourceHelper: ResourceHelper
 ) : AuthRepository {
     override suspend fun login(data: LoginData): LoginResponse {
-        val response = handleApiCall(resourceHelper) { remote.login(data) }
+        val response = handleApiCall(resourceHelper) {
+            remote.login(data)
+        }
 
-        return response ?: throw NoSuchElementException(
+        return response ?: throw NoSuchElementException (
             resourceHelper.getString(R.string.invalid_credentials)
         )
     }
 
     override suspend fun register(data: RegisterData): LoginResponse {
-        val response = handleApiCall(resourceHelper) { remote.register(data) }
+        val response = handleApiCall(resourceHelper) {
+            remote.register(data)
+        }
 
         assert(response.isNotNull())
 
@@ -32,11 +36,15 @@ class AuthRepositoryImpl (
     }
 
     override suspend fun logout() {
-        handleApiCall(resourceHelper) { remote.logout() }
+        handleApiCall(resourceHelper) {
+            remote.logout()
+        }
     }
 
     override suspend fun me(): MeResponse {
-        val response = handleApiCall(resourceHelper) { remote.me() }
+        val response = handleApiCall(resourceHelper) {
+            remote.me()
+        }
 
         return response!!
     }

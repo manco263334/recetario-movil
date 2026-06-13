@@ -50,6 +50,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -57,6 +58,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.dmm.recetario.R
 import com.dmm.recetario.ui.components.ErrorScreen
 
 @Composable
@@ -68,7 +70,7 @@ fun RegisterScreen (
     Column (
         modifier = Modifier
             .fillMaxSize()
-            .background(
+            .background (
                 Brush.verticalGradient (
                     colors = listOf (
                         Color(0xFF121212),
@@ -165,7 +167,7 @@ private fun RegisterForm (
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text (
-                    text = "Crear cuenta",
+                    text = stringResource(R.string.create_account),
                     style = MaterialTheme.typography.headlineMedium,
                     color = Color.White,
                     fontWeight = FontWeight.Bold
@@ -174,7 +176,7 @@ private fun RegisterForm (
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text (
-                    text = "Únete y comienza ahora",
+                    text = stringResource(R.string.signup_suggest),
                     style = MaterialTheme.typography.bodyLarge,
                     color = Color.LightGray
                 )
@@ -198,10 +200,10 @@ private fun RegisterForm (
                                 name = it
                             },
                             label = {
-                                Text("Nombre completo")
+                                Text(stringResource(R.string.name))
                             },
                             placeholder = {
-                                Text("Juan Pérez")
+                                Text(stringResource(R.string.name_placeholder))
                             },
                             leadingIcon = {
                                 Icon(Icons.Default.Person, null)
@@ -217,10 +219,10 @@ private fun RegisterForm (
                                 email = it
                             },
                             label = {
-                                Text("Correo electrónico")
+                                Text(stringResource(R.string.email))
                             },
                             placeholder = {
-                                Text("correo@gmail.com")
+                                Text(stringResource(R.string.email_placeholder))
                             },
                             leadingIcon = {
                                 Icon(Icons.Default.Email, null)
@@ -238,10 +240,13 @@ private fun RegisterForm (
                                 password = it
                             },
                             label = {
-                                Text("Contraseña")
+                                Text(stringResource(R.string.password))
+                            },
+                            placeholder = {
+                                Text(stringResource(R.string.password_placeholder))
                             },
                             supportingText = {
-                                Text("Debe contener mínimo 8 caracteres")
+                                Text(stringResource(R.string.password_guide))
                             },
                             leadingIcon = {
                                 Icon(Icons.Default.Lock, null)
@@ -278,7 +283,7 @@ private fun RegisterForm (
                                 phone = it
                             },
                             label = {
-                                Text("Teléfono (Opcional)")
+                                Text(stringResource(R.string.number_phone))
                             },
                             leadingIcon = {
                                 Icon(Icons.Default.Phone, null)
@@ -296,7 +301,7 @@ private fun RegisterForm (
                                 username = it
                             },
                             label = {
-                                Text("Apodo (Opcional)")
+                                Text(stringResource(R.string.username))
                             },
                             leadingIcon = {
                                 Icon(Icons.Default.AlternateEmail, null)
@@ -338,7 +343,7 @@ private fun RegisterForm (
                             Spacer(modifier = Modifier.width(8.dp))
 
                             Text (
-                                text = "Crear cuenta",
+                                text = stringResource(R.string.create_account),
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 16.sp,
                                 color = Color.Black
@@ -353,7 +358,7 @@ private fun RegisterForm (
                             onClick = onNavigateToLogin
                         ) {
                             Text (
-                                text = "¿Ya tienes cuenta? Inicia sesión",
+                                text = stringResource(R.string.redirect_to_login),
                                 color = Color(0xFF00C2FF)
                             )
                         }

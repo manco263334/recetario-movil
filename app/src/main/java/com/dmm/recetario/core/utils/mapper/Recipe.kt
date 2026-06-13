@@ -14,14 +14,14 @@ fun RecipeDTO.toDomain(): Recipe {
     return Recipe (
         id = this.id,
         name = this.name,
+        icon = this.icon,
+        steps = this.steps,
+        stars = this.stars,
         persons = this.persons,
         ingredients = this.ingredients,
-        steps = this.steps,
         totalTimeInMinutes = this.totalTimeInMinutes,
         cookingTimeInMinutes = this.cookingTimeInMinutes,
         preparationTimeInMinutes = this.preparationTimeInMinutes,
-        stars = this.stars,
-        icon = this.icon,
 
         creator = creator,
         categories = categories
@@ -32,14 +32,14 @@ fun RecipeEntity.toDomain(): Recipe {
     return Recipe (
         id = this.id,
         name = this.name,
+        icon = this.icon,
+        steps = this.steps,
+        stars = this.stars,
         persons = this.persons,
         ingredients = this.ingredients,
-        steps = this.steps,
         totalTimeInMinutes = this.totalTimeInMinutes,
         cookingTimeInMinutes = this.cookingTimeInMinutes,
         preparationTimeInMinutes = this.preparationTimeInMinutes,
-        stars = this.stars,
-        icon = this.icon,
 
         categories = emptyList(),
         creator = null
@@ -50,15 +50,15 @@ fun Recipe.toEntity(): RecipeEntity {
     return RecipeEntityImpl (
         id = this.id,
         name = this.name,
+        icon = this.icon,
+        steps = this.steps,
+        stars = this.stars,
         persons = this.persons,
         ingredients = this.ingredients,
-        steps = this.steps,
         totalTimeInMinutes = this.totalTimeInMinutes,
         cookingTimeInMinutes = this.cookingTimeInMinutes,
         preparationTimeInMinutes = this.preparationTimeInMinutes,
-        stars = this.stars,
-        icon = this.icon,
 
-        user_id = ""
+        userId = ""
     )
 }

@@ -21,7 +21,7 @@ class RecipeFormViewModel @Inject constructor (
     private val recipeService: RecipeService
 ) : ViewModel() {
     val categories = categoryService
-        .getAllCategories(1, 10 ,false)
+        .getAllCategories(0, 10 ,false)
         .stateIn (
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
@@ -33,23 +33,23 @@ class RecipeFormViewModel @Inject constructor (
     fun addRecipeData (
         name: String,
         persons: Int,
-        ingredients: List<Map<String, String>>,
         steps: List<String>,
         totalTimeInMinutes: Int,
         cookingTimeInMinutes: Int,
         preparationTimeInMinutes: Int,
+        ingredients: List<Map<String, String>>
     ) {
         recipe = Recipe (
             id = "",
+            stars = 0,
+            icon = null,
             name = name,
+            steps = steps,
             persons = persons,
             ingredients = ingredients,
-            steps = steps,
             totalTimeInMinutes = totalTimeInMinutes,
             cookingTimeInMinutes = cookingTimeInMinutes,
             preparationTimeInMinutes = preparationTimeInMinutes,
-            stars = 0,
-            icon = null,
 
             creator = null,
             categories = null

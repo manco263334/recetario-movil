@@ -11,15 +11,9 @@ interface CategoryRepository {
         withRecipes: Boolean?
     ): List<Category>
 
-    suspend fun getCategory (
-        id: String,
-        withRecipes: Boolean? = null
-    ): Category
+    suspend fun getCategory(id: String,withRecipes: Boolean?): Category
 
-    suspend fun updateCategory (
-        id: String,
-        data: Category
-    ): Category
+    suspend fun updateCategory(id: String,data: Category): Category
 
     suspend fun deleteCategory(id: String)
 }

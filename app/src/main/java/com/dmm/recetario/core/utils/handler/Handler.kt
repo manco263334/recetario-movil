@@ -10,8 +10,10 @@ suspend fun <T> handleApiCall (
     call: suspend () -> Response<T>
 ): T? {
     val getString: (Int) -> String = resourceHelper::getString
+
     return try {
         val response = call()
+
         if (response.isSuccessful) {
             response.body()
         } else {
@@ -45,7 +47,6 @@ suspend fun <T> handleApiCall (
             }
         }
     } catch (e: Exception) {
-        // Errores de red o conexión
         throw APIException.UnknownException (
             e.message ?: getString(R.string.unknown_error)
         )

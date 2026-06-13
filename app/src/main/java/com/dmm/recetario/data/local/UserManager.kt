@@ -17,7 +17,6 @@ import com.dmm.recetario.domain.model.User
 import com.dmm.recetario.domain.repository.UserRepository
 import com.dmm.recetario.domain.service.AuthService
 import com.dmm.recetario.domain.service.UserService
-import jakarta.inject.Singleton
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flowOf

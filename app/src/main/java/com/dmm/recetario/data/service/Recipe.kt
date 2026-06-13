@@ -41,8 +41,8 @@ class RecipeServiceImpl (
     override fun getAllRecipes (
         page: Int,
         size: Int,
-        withCategories: Boolean?,
-        withCreator: Boolean?
+        withCreator: Boolean?,
+        withCategories: Boolean?
     ): Flow<List<Recipe>> {
         return dao.getRecipes().map { recipes ->
             recipes.map { recipe ->
@@ -54,24 +54,33 @@ class RecipeServiceImpl (
     override suspend fun syncRecipes (
         page: Int,
         size: Int,
-        withCategories: Boolean?,
-        withCreator: Boolean?
+        withCreator: Boolean?,
+        withCategories: Boolean?
     ): Boolean {
         return try {
             val recipes = repository.getAllRecipes (
                 page = page,
                 size = size,
-                withCategories = withCategories,
-                withCreator = withCreator
+                withCreator = withCreator,
+                withCategories = withCategories
             )
 
-            dao.saveRecipes(recipes.map { it.toEntity() })
+            dao.saveRecipes (
+                recipes = recipes.map {
+                    it.toEntity()
+                }
+            )
 
             if (withCategories == true) {
                 recipes.forEach { recipe ->
-                    dao.insertReferences(recipe.categories?.map { categoryId ->
-                        RecipeCategoryCrossRefImpl(recipe.id, categoryId)
-                    } ?: emptyList())
+                    dao.insertReferences (
+                        refs = recipe.categories?.map { categoryId ->
+                            RecipeCategoryCrossRefImpl (
+                                recipeId = recipe.id,
+                                categoryId = categoryId
+                            )
+                        } ?: emptyList()
+                    )
                 }
             }
 
@@ -85,18 +94,27 @@ class RecipeServiceImpl (
 
     override suspend fun syncRecipe (
         id: String,
-        withCategories: Boolean?,
-        withCreator: Boolean?
+        withCreator: Boolean?,
+        withCategories: Boolean?
     ): Boolean {
         return try {
-            val recipe = repository.getRecipe(id, withCategories, withCreator)
+            val recipe = repository.getRecipe (
+                id = id,
+                withCreator = withCreator,
+                withCategories = withCategories
+            )
 
-            dao.saveRecipe(recipe.toEntity())
+            dao.saveRecipe(recipe = recipe.toEntity())
 
             if (withCategories == true) {
-                dao.insertReferences(recipe.categories?.map {
-                    RecipeCategoryCrossRefImpl(recipe.id, it)
-                } ?: emptyList())
+                dao.insertReferences (
+                    refs = recipe.categories?.map { categoryId ->
+                        RecipeCategoryCrossRefImpl (
+                            recipeId = recipe.id,
+                            categoryId = categoryId
+                        )
+                    } ?: emptyList()
+                )
             }
 
             true
@@ -113,10 +131,7 @@ class RecipeServiceImpl (
         }
     }
 
-    override suspend fun updateRecipe (
-        id: String,
-        data: Recipe
-    ): Recipe {
+    override suspend fun updateRecipe(id: String, data: Recipe): Recipe {
         val recipe = updateRecipeUseCase(id, data)
 
         assert(recipe.isNotNull())

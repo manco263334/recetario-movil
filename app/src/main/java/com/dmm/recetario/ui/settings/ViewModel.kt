@@ -26,7 +26,9 @@ class SettingViewModel @Inject constructor (
 ) : ViewModel() {
 
     var uiState: SettingsUiState by mutableStateOf (
-        SettingsUiState.Loading(resourceHelper.getString(R.string.loading_user))
+        SettingsUiState.Loading (
+            resourceHelper.getString(R.string.loading_user)
+        )
     )
         private set
 

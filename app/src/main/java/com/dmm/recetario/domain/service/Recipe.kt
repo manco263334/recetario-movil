@@ -9,29 +9,26 @@ interface RecipeService {
     fun getAllRecipes (
         page: Int,
         size: Int,
-        withCategories: Boolean?,
-        withCreator: Boolean?
+        withCreator: Boolean?,
+        withCategories: Boolean?
     ): Flow<List<Recipe>>
 
     suspend fun syncRecipes (
         page: Int,
         size: Int,
-        withCategories: Boolean?,
-        withCreator: Boolean?
+        withCreator: Boolean?,
+        withCategories: Boolean?
     ): Boolean
 
     suspend fun syncRecipe (
         id: String,
-        withCategories: Boolean?,
-        withCreator: Boolean?
+        withCreator: Boolean?,
+        withCategories: Boolean?
     ): Boolean
 
     fun getRecipe(id: String): Flow<Recipe?>
 
-    suspend fun updateRecipe (
-        id: String,
-        data: Recipe
-    ): Recipe
+    suspend fun updateRecipe(id: String, data: Recipe): Recipe
 
     suspend fun deleteRecipe(id: String)
 }

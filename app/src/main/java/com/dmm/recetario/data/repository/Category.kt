@@ -13,7 +13,9 @@ class CategoryRepositoryImpl (
     private val resourceHelper: ResourceHelper
 ) : CategoryRepository {
     override suspend fun createCategory(data: Category): Category {
-        val category = handleApiCall(resourceHelper) { remote.createCategory(data) }
+        val category = handleApiCall(resourceHelper) {
+            remote.createCategory(data)
+        }
 
         assert(category.isNotNull())
 
@@ -33,13 +35,12 @@ class CategoryRepositoryImpl (
             )
         }
 
-        return categories?.content?.map { it.toDomain() } ?: emptyList()
+        return categories?.content?.map {
+            it.toDomain()
+        } ?: emptyList()
     }
 
-    override suspend fun getCategory (
-        id: String,
-        withRecipes: Boolean?
-    ): Category {
+    override suspend fun getCategory(id: String, withRecipes: Boolean?): Category {
         val category = handleApiCall(resourceHelper) {
             remote.getCategory (
                 id = id,
@@ -52,11 +53,10 @@ class CategoryRepositoryImpl (
         return category!!.toDomain()
     }
 
-    override suspend fun updateCategory (
-        id: String,
-        data: Category
-    ): Category {
-        val category = handleApiCall(resourceHelper) { remote.updateCategory(id, data) }
+    override suspend fun updateCategory(id: String, data: Category): Category {
+        val category = handleApiCall(resourceHelper) {
+            remote.updateCategory(id, data)
+        }
 
         assert(category.isNotNull())
 
@@ -64,6 +64,8 @@ class CategoryRepositoryImpl (
     }
 
     override suspend fun deleteCategory(id: String) {
-        handleApiCall(resourceHelper) { remote.deleteCategory(id) }
+        handleApiCall(resourceHelper) {
+            remote.deleteCategory(id)
+        }
     }
 }

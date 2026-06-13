@@ -34,13 +34,12 @@ class LoginViewModel @Inject constructor (
     var uiState: LoginUiState by mutableStateOf(LoginUiState.Idle)
         private set
 
-    fun login (
-        email: String,
-        password: String
-    ) {
-        uiState = LoginUiState.Loading
+    fun login(email: String, password: String) {
+        if (uiState is LoginUiState.Loading) return
 
         viewModelScope.launch {
+            uiState = LoginUiState.Loading
+
             try {
                 val data = LoginData(email, password)
                 val response = service.login(data)

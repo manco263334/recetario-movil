@@ -202,9 +202,9 @@ fun RecipeForm (
                     onClick = {
                         viewModel.addRecipeData (
                             name = name,
+                            steps = steps,
                             persons = persons,
                             ingredients = ingredients,
-                            steps = steps,
                             totalTimeInMinutes = totalTimeInMinutes,
                             cookingTimeInMinutes = cookTimeInMinutes,
                             preparationTimeInMinutes = prepareTimeInMinutes
