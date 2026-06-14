@@ -25,7 +25,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.dmm.recetario.R
-import com.dmm.recetario.core.utils.helper.ResourceHelper
 
 @Composable
 fun ErrorScreen (
@@ -40,9 +39,9 @@ fun ErrorScreen (
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Icon (
-            imageVector = Icons.Default.Warning,
             contentDescription = null,
             modifier = Modifier.size(64.dp),
+            imageVector = Icons.Default.Warning,
             tint = MaterialTheme.colorScheme.error
         )
 
@@ -58,17 +57,17 @@ fun ErrorScreen (
 
         Text (
             text = message,
-            style = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         Spacer(modifier = Modifier.height(24.dp))
 
         Button (
-            onClick = onRetry,
             shape = RoundedCornerShape(12.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
+            onClick = onRetry
         ) {
             Icon (
                 Icons.Default.Refresh,

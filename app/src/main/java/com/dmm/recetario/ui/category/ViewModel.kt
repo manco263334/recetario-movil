@@ -1,6 +1,7 @@
 package com.dmm.recetario.ui.category
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -37,6 +38,9 @@ class CategoryViewModel @Inject constructor (
     )
         private set
 
+    var page by mutableIntStateOf(0)
+        private set
+
     private val _selectedCategoryId = MutableStateFlow<String?>(null)
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -63,7 +67,7 @@ class CategoryViewModel @Inject constructor (
         _selectedCategoryId.value = categoryId
     }
 
-    fun sync(page: Int = 0, size: Int = 10) {
+    fun sync(size: Int = 10) {
         viewModelScope.launch {
             recipeService.syncRecipes (
                 page = page,
@@ -100,5 +104,13 @@ class CategoryViewModel @Inject constructor (
                 uiState = CategoryUiState.Success
             }
         }
+    }
+
+    fun incrementePage() {
+        page++
+    }
+
+    fun decrementPage() {
+        page--
     }
 }

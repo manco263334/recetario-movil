@@ -89,8 +89,8 @@ fun RegisterScreen (
                 )
             )
             .padding(24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Crossfade (
             targetState = uiState,
@@ -148,39 +148,39 @@ private fun RegisterForm (
         Card (
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(24.dp),
-            colors = CardDefaults.cardColors(containerColor = Color(0xFF2A2A2A)),
-            elevation = CardDefaults.cardElevation(8.dp)
+            elevation = CardDefaults.cardElevation(8.dp),
+            colors = CardDefaults.cardColors(containerColor = Color(0xFF2A2A2A))
         ) {
             Column (
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(scrollState)
                     .padding(24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Icon (
-                    imageVector = Icons.Default.PersonAdd,
-                    contentDescription = null,
                     tint = Color(0xFF00C2FF),
-                    modifier = Modifier.size(72.dp)
+                    contentDescription = null,
+                    modifier = Modifier.size(72.dp),
+                    imageVector = Icons.Default.PersonAdd
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text (
-                    text = stringResource(R.string.create_account),
-                    style = MaterialTheme.typography.headlineMedium,
                     color = Color.White,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    text = stringResource(R.string.create_account),
+                    style = MaterialTheme.typography.headlineMedium
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text (
-                    text = stringResource(R.string.signup_suggest),
+                    color = Color.LightGray,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = Color.LightGray
+                    text = stringResource(R.string.signup_suggest)
                 )
 
                 Spacer(modifier = Modifier.height(32.dp))
@@ -188,16 +188,17 @@ private fun RegisterForm (
                 Card (
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(28.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color(0xFF1E1E1E)),
-                    elevation = CardDefaults.cardElevation( defaultElevation = 10.dp)
+                    elevation = CardDefaults.cardElevation( defaultElevation = 10.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color(0xFF1E1E1E))
                 ) {
                     Column (
                         modifier = Modifier.padding(24.dp),
                         verticalArrangement = Arrangement.spacedBy(18.dp)
                     ) {
-                        // Nombre
                         OutlinedTextField (
                             value = name,
+                            singleLine = true,
+                            modifier = Modifier.fillMaxWidth(),
                             onValueChange = {
                                 name = it
                             },
@@ -209,14 +210,15 @@ private fun RegisterForm (
                             },
                             leadingIcon = {
                                 Icon(Icons.Default.Person, null)
-                            },
-                            singleLine = true,
-                            modifier = Modifier.fillMaxWidth()
+                            }
                         )
 
-                        // Email
                         OutlinedTextField (
                             value = email,
+                            singleLine = true,
+                            modifier = Modifier.fillMaxWidth(),
+                            keyboardOptions = KeyboardOptions.Default
+                                .copy(keyboardType = KeyboardType.Email),
                             onValueChange = {
                                 email = it
                             },
@@ -228,16 +230,18 @@ private fun RegisterForm (
                             },
                             leadingIcon = {
                                 Icon(Icons.Default.Email, null)
-                            },
-                            keyboardOptions = KeyboardOptions.Default
-                                .copy(keyboardType = KeyboardType.Email),
-                            singleLine = true,
-                            modifier = Modifier.fillMaxWidth()
+                            }
                         )
 
-                        // Password
                         OutlinedTextField (
                             value = password,
+                            singleLine = true,
+                            modifier = Modifier.fillMaxWidth(),
+                            visualTransformation =
+                                if(passwordVisible)
+                                    VisualTransformation.None
+                                else
+                                    PasswordVisualTransformation(),
                             onValueChange = {
                                 password = it
                             },
@@ -260,27 +264,23 @@ private fun RegisterForm (
                                     }
                                 ) {
                                     Icon (
+                                        contentDescription = null,
                                         imageVector =
                                             if(passwordVisible)
                                                 Icons.Default.Visibility
                                             else
-                                                Icons.Default.VisibilityOff,
-                                        contentDescription = null
+                                                Icons.Default.VisibilityOff
                                     )
                                 }
-                            },
-                            visualTransformation =
-                                if(passwordVisible)
-                                    VisualTransformation.None
-                                else
-                                    PasswordVisualTransformation(),
-                            singleLine = true,
-                            modifier = Modifier.fillMaxWidth()
+                            }
                         )
 
-                        // Teléfono
                         OutlinedTextField (
                             value = phone,
+                            singleLine = true,
+                            modifier = Modifier.fillMaxWidth(),
+                            keyboardOptions = KeyboardOptions.Default
+                                .copy(keyboardType = KeyboardType.Phone),
                             onValueChange = {
                                 phone = it
                             },
@@ -289,16 +289,13 @@ private fun RegisterForm (
                             },
                             leadingIcon = {
                                 Icon(Icons.Default.Phone, null)
-                            },
-                            keyboardOptions = KeyboardOptions.Default
-                                .copy(keyboardType = KeyboardType.Phone),
-                            singleLine = true,
-                            modifier = Modifier.fillMaxWidth()
+                            }
                         )
 
-                        // Username
                         OutlinedTextField (
                             value = username,
+                            singleLine = true,
+                            modifier = Modifier.fillMaxWidth(),
                             onValueChange = {
                                 username = it
                             },
@@ -307,15 +304,23 @@ private fun RegisterForm (
                             },
                             leadingIcon = {
                                 Icon(Icons.Default.AlternateEmail, null)
-                            },
-                            singleLine = true,
-                            modifier = Modifier.fillMaxWidth()
+                            }
                         )
 
                         Spacer(modifier = Modifier.height(8.dp))
 
-                        // Botón principal
-                        Button(
+                        Button (
+                            shape = RoundedCornerShape(18.dp),
+                            colors = ButtonDefaults.buttonColors (
+                                containerColor = Color(0xFF00C2FF)
+                            ),
+                            enabled =
+                                name.isNotBlank() &&
+                                email.isNotBlank() &&
+                                password.isNotBlank(),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(56.dp),
                             onClick = {
                                 keyboardController?.hide()
 
@@ -326,16 +331,7 @@ private fun RegisterForm (
                                     phone.ifBlank { null },
                                     username.ifBlank { null }
                                 )
-                            },
-                            enabled =
-                                name.isNotBlank() &&
-                                email.isNotBlank() &&
-                                password.isNotBlank(),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(56.dp),
-                            shape = RoundedCornerShape(18.dp),
-                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00C2FF))
+                            }
                         ) {
                             Icon (
                                 Icons.Default.Check,
@@ -345,23 +341,22 @@ private fun RegisterForm (
                             Spacer(modifier = Modifier.width(8.dp))
 
                             Text (
-                                text = stringResource(R.string.create_account),
-                                fontWeight = FontWeight.Bold,
                                 fontSize = 16.sp,
-                                color = Color.Black
+                                color = Color.Black,
+                                fontWeight = FontWeight.Bold,
+                                text = stringResource(R.string.create_account)
                             )
                         }
 
                         HorizontalDivider(color = Color.Gray.copy(alpha = 0.3f))
 
-                        // Navegar al login
                         TextButton (
                             modifier = Modifier.fillMaxWidth(),
                             onClick = onNavigateToLogin
                         ) {
                             Text (
-                                text = stringResource(R.string.redirect_to_login),
-                                color = Color(0xFF00C2FF)
+                                color = Color(0xFF00C2FF),
+                                text = stringResource(R.string.redirect_to_login)
                             )
                         }
                     }

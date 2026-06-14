@@ -89,8 +89,8 @@ fun LoginScreen (
                 )
             )
             .padding(24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Crossfade (
             targetState = uiState,
@@ -149,8 +149,8 @@ private fun LoginForm (
         Card (
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(24.dp),
-            colors = CardDefaults.cardColors(containerColor = Color(0xFF2A2A2A)),
-            elevation = CardDefaults.cardElevation(8.dp)
+            elevation = CardDefaults.cardElevation(8.dp),
+            colors = CardDefaults.cardColors(containerColor = Color(0xFF2A2A2A))
         ) {
             Column (
                 modifier = Modifier
@@ -161,56 +161,56 @@ private fun LoginForm (
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Icon (
-                    imageVector = Icons.Default.Lock,
-                    contentDescription = null,
                     tint = Color.Cyan,
-                    modifier = Modifier.size(72.dp)
+                    contentDescription = null,
+                    modifier = Modifier.size(72.dp),
+                    imageVector = Icons.Default.Lock
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text (
-                    text = stringResource(R.string.login_title),
                     fontSize = 24.sp,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    text = stringResource(R.string.login_title),
+                    color = MaterialTheme.colorScheme.onBackground
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text (
-                    text = stringResource(R.string.login_subtitle),
                     fontSize = 16.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    text = stringResource(R.string.login_subtitle)
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
 
                 OutlinedTextField (
                     value = email,
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth(),
+                    keyboardOptions = KeyboardOptions.Default
+                        .copy(keyboardType = KeyboardType.Email),
+                    textStyle = TextStyle(color = MaterialTheme.colorScheme.onBackground),
+                    colors = TextFieldDefaults.colors (
+                        focusedContainerColor = Color.Transparent,
+                        unfocusedContainerColor = Color.Transparent,
+                        cursorColor = MaterialTheme.colorScheme.onBackground,
+                        focusedTextColor = MaterialTheme.colorScheme.onBackground,
+                        unfocusedTextColor = MaterialTheme.colorScheme.onBackground
+                    ),
                     onValueChange = {
                         email = it
+                    },
+                    placeholder = {
+                        Text(stringResource(R.string.email_placeholder))
                     },
                     label = {
                         Text(stringResource(R.string.email))
                     },
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions.Default
-                        .copy(keyboardType = KeyboardType.Email),
-                    modifier = Modifier.fillMaxWidth(),
-                    textStyle = TextStyle(color = MaterialTheme.colorScheme.onBackground),
-                    colors = TextFieldDefaults.colors (
-                        focusedTextColor = MaterialTheme.colorScheme.onBackground,
-                        unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
-                        focusedContainerColor = Color.Transparent,
-                        unfocusedContainerColor = Color.Transparent,
-                        cursorColor = MaterialTheme.colorScheme.onBackground
-                    ),
                     leadingIcon = {
                         Icon(Icons.Default.Email, null)
-                    },
-                    placeholder = {
-                        Text(stringResource(R.string.email_placeholder))
                     }
                 )
 
@@ -218,17 +218,23 @@ private fun LoginForm (
 
                 OutlinedTextField (
                     value = password,
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth(),
+                    keyboardOptions = KeyboardOptions.Default
+                        .copy(keyboardType = KeyboardType.Password),
+                    visualTransformation = if (passwordVisible)
+                            VisualTransformation.None
+                        else
+                            PasswordVisualTransformation(),
                     onValueChange = {
                         password = it
                     },
                     label = {
                         Text(stringResource(R.string.password))
                     },
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions.Default
-                        .copy(keyboardType = KeyboardType.Password),
-                    visualTransformation = if (passwordVisible) VisualTransformation.None
-                        else PasswordVisualTransformation(),
+                    leadingIcon = {
+                        Icon(Icons.Default.Lock, null)
+                    },
                     trailingIcon = {
                         IconButton (
                             onClick = {
@@ -236,55 +242,51 @@ private fun LoginForm (
                             }
                         ) {
                             Icon (
+                                contentDescription = null,
                                 imageVector =
                                     if(passwordVisible)
                                         Icons.Default.Visibility
                                     else
-                                        Icons.Default.VisibilityOff,
-                                contentDescription = null
+                                        Icons.Default.VisibilityOff
                             )
                         }
-                    },
-                    leadingIcon = {
-                        Icon(Icons.Default.Lock, null)
-                    },
-                    modifier = Modifier.fillMaxWidth()
+                    }
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
 
                 Button (
-                    onClick = {
-                        keyboardController?.hide()
-                        onLogin(email, password)
-                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp),
                     shape = RoundedCornerShape(16.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00C2FF))
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00C2FF)),
+                    onClick = {
+                        keyboardController?.hide()
+                        onLogin(email, password)
+                    }
                 ) {
                     Text (
-                        text =  stringResource(R.string.login_button),
-                        color = MaterialTheme.colorScheme.onSurface,
                         fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        text = stringResource(R.string.login_button),
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 }
 
                 HorizontalDivider (
-                    modifier = Modifier.padding(vertical = 16.dp),
-                    color = Color.Gray.copy(alpha = 0.3f)
+                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.3f),
+                    modifier = Modifier.padding(vertical = 16.dp)
                 )
 
                 OutlinedButton (
-                    onClick = onLoginAsGuest,
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(14.dp)
+                    shape = RoundedCornerShape(14.dp),
+                    onClick = onLoginAsGuest
                 ) {
                     Icon (
-                        imageVector = Icons.Default.Person,
-                        contentDescription = null
+                        contentDescription = null,
+                        imageVector = Icons.Default.Person
                     )
 
                     Spacer(modifier = Modifier.width(8.dp))
@@ -294,13 +296,13 @@ private fun LoginForm (
 
                 HorizontalDivider (
                     modifier = Modifier.padding(vertical = 16.dp),
-                    color = Color.Gray.copy(alpha = 0.3f)
+                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.3f)
                 )
 
                 OutlinedButton (
-                    onClick = {  },
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(14.dp)
+                    shape = RoundedCornerShape(14.dp),
+                    onClick = {  }
                 ) {
                     Icon(Icons.Default.AccountCircle, null)
 
@@ -309,7 +311,7 @@ private fun LoginForm (
 
                 HorizontalDivider (
                     modifier = Modifier.padding(vertical = 16.dp),
-                    color = Color.Gray.copy(alpha = 0.3f)
+                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.3f)
                 )
 
                 TextButton(onClick = onNavigateToRegister) {
@@ -318,7 +320,7 @@ private fun LoginForm (
 
                 HorizontalDivider (
                     modifier = Modifier.padding(vertical = 16.dp),
-                    color = Color.Gray.copy(alpha = 0.3f)
+                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.3f)
                 )
 
                 TextButton(onClick = { }) {

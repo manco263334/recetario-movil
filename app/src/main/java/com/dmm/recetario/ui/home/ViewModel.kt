@@ -1,6 +1,7 @@
 package com.dmm.recetario.ui.home
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -28,6 +29,9 @@ class HomeViewModel @Inject constructor (
     )
         private set
 
+    var page by mutableIntStateOf(0)
+        private set
+
     val categories = categoryService
         .getAllCategories(0, 10, false)
         .stateIn (
@@ -41,7 +45,7 @@ class HomeViewModel @Inject constructor (
         sync()
     }
 
-    fun sync(page: Int = 0, size: Int = 10) {
+    fun sync(size: Int = 10) {
         viewModelScope.launch {
             categoryService.syncCategories (
                 page,
@@ -57,7 +61,7 @@ class HomeViewModel @Inject constructor (
         uiState = HomeUiState.Loading (
             getString(R.string.refreshing_categories)
         )
-        val result = categoryService.syncCategories(0, 10, withRecipes = true)
+        val result = categoryService.syncCategories(page, 10, withRecipes = true)
 
         if (!result) {
             val message = getString(R.string.refreshing_categories_failed)
@@ -66,5 +70,13 @@ class HomeViewModel @Inject constructor (
         } else {
             uiState = HomeUiState.Success
         }
+    }
+
+    fun incrementePage() {
+        page++
+    }
+
+    fun decrementPage() {
+        page--
     }
 }

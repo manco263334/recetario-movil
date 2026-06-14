@@ -15,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.dmm.recetario.core.utils.extension.isNeitherNullNorAnonymous
-import com.dmm.recetario.core.utils.helper.ResourceHelper
 import com.dmm.recetario.domain.model.User
 import com.dmm.recetario.ui.components.drawer.DrawerContent
 import com.dmm.recetario.ui.components.fab.FAB
@@ -25,8 +24,8 @@ import com.dmm.recetario.ui.components.refresher.PullToRefresh
 fun BaseLayout (
     user: User?,
     showFab: Boolean = user.isNeitherNullNorAnonymous(),
-    drawerState: DrawerState = rememberDrawerState(DrawerValue.Closed),
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
+    drawerState: DrawerState = rememberDrawerState(DrawerValue.Closed),
     onHomeClick: () -> Unit,
     onCompleteForm: () -> Unit,
     onSettingsClick: () -> Unit,
@@ -69,8 +68,8 @@ fun BaseLayout (
 fun BaseLayoutWithRefresh (
     user: User?,
     showFab: Boolean = user.isNeitherNullNorAnonymous(),
-    drawerState: DrawerState = rememberDrawerState(DrawerValue.Closed),
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
+    drawerState: DrawerState = rememberDrawerState(DrawerValue.Closed),
     onHomeClick: () -> Unit,
     onCompleteForm: () -> Unit,
     onSettingsClick: () -> Unit,

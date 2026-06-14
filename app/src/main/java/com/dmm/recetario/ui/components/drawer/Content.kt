@@ -76,8 +76,8 @@ fun DrawerContent (
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
             .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row (
             modifier = Modifier.fillMaxWidth(),
@@ -92,8 +92,8 @@ fun DrawerContent (
             ) {
                 Icon (
                     imageVector = Icons.Default.Close,
-                    contentDescription = stringResource(R.string.close_menu),
-                    tint = MaterialTheme.colorScheme.onBackground
+                    tint = MaterialTheme.colorScheme.onBackground,
+                    contentDescription = stringResource(R.string.close_menu)
                 )
             }
         }
@@ -103,6 +103,8 @@ fun DrawerContent (
         AsyncImage (
             model = user?.icon,
             contentDescription = stringResource(R.string.user_photo_description),
+            error = painterResource(R.drawable.user_default_icon),
+            fallback = painterResource(R.drawable.user_default_icon),
             modifier = Modifier
                 .size(80.dp)
                 .clip(CircleShape)
@@ -110,82 +112,80 @@ fun DrawerContent (
                     2.dp,
                     Color(0xFF00C2FF),
                     CircleShape
-                ),
-            error = painterResource(R.drawable.user_default_icon),
-            fallback = painterResource(R.drawable.user_default_icon)
+                )
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text (
-                text = user?.name ?: stringResource(R.string.anonymous_text),
                 fontSize = 20.sp,
                 textAlign = TextAlign.Center,
-                color = MaterialTheme.colorScheme.onBackground
+                color = MaterialTheme.colorScheme.onBackground,
+                text = user?.name ?: stringResource(R.string.anonymous_text)
             )
 
             Text (
-                text = user?.email ?: stringResource(R.string.anonymous_email),
                 fontSize = 16.sp,
+                textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.onBackground,
-                textAlign = TextAlign.Center
+                text = user?.email ?: stringResource(R.string.anonymous_email)
             )
 
             Text (
-                text = user?.username ?: stringResource(R.string.anonymous_username),
                 fontSize = 14.sp,
+                textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.onBackground,
-                textAlign = TextAlign.Center
+                text = user?.username ?: stringResource(R.string.anonymous_username)
             )
 
             Text (
+                fontSize = 14.sp,
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.onBackground,
                 text = if (user?.phone.isNullOrBlank())
                         stringResource(R.string.anonymous_phone)
                     else
-                        user.phone,
-                fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.onBackground,
-                textAlign = TextAlign.Center
+                        user.phone
             )
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
         NavigationDrawerItem (
+            selected = false,
+            shape = RoundedCornerShape(16.dp),
+            onClick = onHomeClick,
             label = {
                 Text(stringResource(R.string.home))
             },
-            selected = false,
-            onClick = onHomeClick,
             icon = {
                 Icon(Icons.Default.Home, null)
-            },
-            shape = RoundedCornerShape(16.dp)
+            }
         )
 
         NavigationDrawerItem (
+            selected = false,
+            shape = RoundedCornerShape(16.dp),
+            onClick = onSettingsClick,
             label = {
                 Text(stringResource(R.string.settings))
             },
-            selected = false,
-            onClick = onSettingsClick,
             icon = {
                 Icon(Icons.Default.Settings, null)
-            },
-            shape = RoundedCornerShape(16.dp)
+            }
         )
 
         NavigationDrawerItem (
+            selected = false,
+            shape = RoundedCornerShape(16.dp),
+            onClick = viewModel::logout,
             label = {
                 Text(stringResource(R.string.logout))
             },
-            selected = false,
-            onClick = viewModel::logout,
             icon = {
                 Icon(Icons.AutoMirrored.Filled.ExitToApp, null)
-            },
-            shape = RoundedCornerShape(16.dp)
+            }
         )
 
         if (logOutState is LogOutUiState.Loading) {

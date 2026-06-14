@@ -47,9 +47,9 @@ fun FAB (
                 ) {
                     Column {
                         Text (
-                            text = stringResource(R.string.what_will_you_add),
                             modifier = Modifier.padding(8.dp),
-                            style = MaterialTheme.typography.bodyMedium
+                            style = MaterialTheme.typography.bodyMedium,
+                            text = stringResource(R.string.what_will_you_add)
                         )
                         DropdownMenuItem (
                             text = {
@@ -76,11 +76,11 @@ fun FAB (
             }
 
             FloatingActionButton (
+                modifier = Modifier.padding(16.dp),
+                containerColor = MaterialTheme.colorScheme.primary,
                 onClick = {
                     showMenu = !showMenu
-                },
-                modifier = Modifier.padding(16.dp),
-                containerColor = MaterialTheme.colorScheme.primary
+                }
             ) {
                 Icon (
                     Icons.Default.Add,

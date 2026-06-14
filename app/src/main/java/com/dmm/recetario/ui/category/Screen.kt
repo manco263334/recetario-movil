@@ -75,21 +75,21 @@ private fun CategoryContent (
     onRecipeClick: (Recipe) -> Unit
 ) {
     LazyVerticalGrid (
-        columns = GridCells.Fixed(2),
         modifier = Modifier.fillMaxSize(),
+        columns = GridCells.Fixed(2),
         contentPadding = PaddingValues(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         item(span = { GridItemSpan(2) }) {
             Text (
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth(),
                 text = if (recipes.isNotEmpty())
                         stringResource(R.string.available_recipes)
                     else
-                        stringResource(R.string.no_available_recipes),
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth(),
-                fontWeight = FontWeight.Bold
+                        stringResource(R.string.no_available_recipes)
             )
         }
 

@@ -79,21 +79,21 @@ private fun HomeContent (
     onCategoryClick: (Category) -> Unit
 ) {
     LazyVerticalGrid (
-        columns = GridCells.Fixed(2),
         modifier = Modifier.fillMaxSize(),
+        columns = GridCells.Fixed(2),
         contentPadding = PaddingValues(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         item(span = { GridItemSpan(2) }) {
             Text (
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.fillMaxWidth(),
                 text = if (categories.isNotEmpty())
                         stringResource(R.string.available_categories)
                     else
-                        stringResource(R.string.no_available_categories),
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth(),
-                fontWeight = FontWeight.Bold
+                        stringResource(R.string.no_available_categories)
             )
         }
 
@@ -112,18 +112,18 @@ private fun HomeContent (
 @Composable
 private fun HomeContentSkeleton(loadingMessage: String) {
     LazyVerticalGrid (
-        columns = GridCells.Fixed(2),
         modifier = Modifier.fillMaxSize(),
+        columns = GridCells.Fixed(2),
         contentPadding = PaddingValues(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         item(span = { GridItemSpan(2) }) {
             Text (
                 text = loadingMessage,
+                fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth(),
-                fontWeight = FontWeight.Bold
+                modifier = Modifier.fillMaxWidth()
             )
         }
 

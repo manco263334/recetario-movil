@@ -79,8 +79,8 @@ private fun RecipeContent(recipe: Recipe?) {
     ) {
         if (recipe == null) {
             Text (
-                text = stringResource(R.string.recipe_not_found),
                 style = MaterialTheme.typography.bodyLarge,
+                text = stringResource(R.string.recipe_not_found),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)
@@ -128,10 +128,10 @@ private fun RecipeContent(recipe: Recipe?) {
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text (
-                        text = stringResource(R.string.ingredients_model),
-                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center,
-                        fontWeight = FontWeight.Bold
+                        style = MaterialTheme.typography.titleLarge,
+                        text = stringResource(R.string.ingredients_model)
                     )
 
                     Spacer(modifier = Modifier.height(8.dp))
@@ -153,10 +153,10 @@ private fun RecipeContent(recipe: Recipe?) {
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text (
-                        text = stringResource(R.string.steps_label),
-                        style = MaterialTheme.typography.titleLarge,
+                        textAlign = TextAlign.Center,
                         fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.Center
+                        style = MaterialTheme.typography.titleLarge,
+                        text = stringResource(R.string.steps_label)
                     )
 
                     Spacer(modifier = Modifier.height(8.dp))

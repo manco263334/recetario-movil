@@ -21,9 +21,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -72,18 +70,18 @@ fun WellnessCard (
     ) {
         Column (
             modifier = Modifier.padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             if (!image.isNullOrEmpty()) {
                 Box {
                     AsyncImage (
                         model = image,
+                        contentScale = ContentScale.Crop,
                         contentDescription = imageDescription,
                         modifier = Modifier
                             .size(80.dp)
-                            .clip(RoundedCornerShape(8.dp)),
-                        contentScale = ContentScale.Crop
+                            .clip(RoundedCornerShape(8.dp))
                     )
 
                     Box (
@@ -93,7 +91,7 @@ fun WellnessCard (
                                 Brush.verticalGradient (
                                     colors = listOf (
                                         Color.Transparent,
-                                        Color.Black.copy(alpha = 0.7f)
+                                        backgroundColor.copy(alpha = 0.7f)
                                     )
                                 )
                             )
@@ -105,19 +103,19 @@ fun WellnessCard (
 
             Text (
                 text = title,
-                fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
-                textAlign = TextAlign.Center,
-                color = titleColor
+                color = titleColor,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center
             )
 
             if (!description.isNullOrEmpty()) {
                 Spacer(modifier = Modifier.height(8.dp))
                 Text (
-                    text = description,
                     fontSize = 16.sp,
-                    textAlign = TextAlign.Justify,
-                    color = titleColor
+                    text = description,
+                    color = titleColor,
+                    textAlign = TextAlign.Justify
                 )
             }
         }
@@ -138,8 +136,8 @@ fun WellnessCardSkeleton (
     ) {
         Column (
             modifier = Modifier.padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             if (showImage) {
                 Box (
