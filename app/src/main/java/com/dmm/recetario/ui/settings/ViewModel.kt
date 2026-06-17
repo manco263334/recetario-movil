@@ -24,7 +24,6 @@ class SettingViewModel @Inject constructor (
     private val tokenManager: TokenManager,
     private val resourceHelper: ResourceHelper
 ) : ViewModel() {
-
     var uiState: SettingsUiState by mutableStateOf (
         SettingsUiState.Loading (
             resourceHelper.getString(R.string.loading_user)

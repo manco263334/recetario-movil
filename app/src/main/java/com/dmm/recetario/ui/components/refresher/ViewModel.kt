@@ -27,17 +27,15 @@ class RefresherViewModel @Inject constructor (
         viewModelScope.launch {
             uiState = RefresherUiState.Loading
 
-            try {
+            uiState = try {
                 call()
-                uiState = RefresherUiState.Success (
+                 RefresherUiState.Success (
                     getString(R.string.elements_refreshed_succeed)
                 )
             } catch (e: Exception) {
                 val message = getString(R.string.elements_refreshed_failed)
                 Log.d("RefresherViewModel", "$message: ${e.message}", e)
-                uiState = RefresherUiState.Error(message)
-            } finally {
-                uiState = RefresherUiState.Idle
+                RefresherUiState.Error(message)
             }
         }
     }

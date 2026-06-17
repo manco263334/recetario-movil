@@ -83,7 +83,7 @@ class RegisterViewModel @Inject constructor (
     }
 
     private suspend fun insertTokenReference(token: String, email: String) {
-        dao.insertTokenRefs(listOf(TokenUserRefImpl(token, email)))
+        dao.insertTokenRef(TokenUserRefImpl(token, email))
     }
 
     fun resetToIdle () {

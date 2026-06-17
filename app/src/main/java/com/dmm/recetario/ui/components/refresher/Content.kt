@@ -11,8 +11,8 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 
 @Composable
 fun PullToRefresh (
-    modifier: Modifier = Modifier,
     snackbarHostState: SnackbarHostState,
+    modifier: Modifier = Modifier,
     viewModel: RefresherViewModel = hiltViewModel(),
     onRefresh: suspend () -> Unit,
     content: @Composable BoxScope.() -> Unit
@@ -32,7 +32,9 @@ fun PullToRefresh (
         modifier = modifier,
         state = pullToRefreshState,
         isRefreshing = uiState is RefresherUiState.Loading,
-        onRefresh = { viewModel.refresh(onRefresh) },
+        onRefresh = {
+            viewModel.refresh(onRefresh)
+        },
         content = content
     )
 }

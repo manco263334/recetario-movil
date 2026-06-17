@@ -151,9 +151,18 @@
     <string name="error_401">No autorizado</string>
     <string name="error_403">Prohibido</string>
     <string name="error_404">No encontrado</string>
-    <string name="error_422">Unprocesable</string>
+    <string name="error_422">Inprocesable</string>
     <string name="error_429">Demasiadas solicitudes</string>
     <string name="error_500">Error interno del servidor</string>
     <string name="network_error">Error de red</string>
     <string name="unknown_error">Error desconocido</string>
+
+    <string name="select_image">Seleccionar imagen</string>
+    <string name="select_image_description">Elige una opción para agregar una imagen</string>
+    <string name="select_image_from_gallery">Seleccionar de la galería</string>
+    <string name="take_photo">Tomar foto</string>
+
+    <string name="profile_picture_description">Foto de perfil</string>
+    <string name="add_photo">Añadir foto</string>
+    <string name="save_changes">Guardar cambios</string>
 </resources>
