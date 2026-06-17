@@ -14,7 +14,6 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import com.dmm.recetario.core.utils.extension.isNeitherNullNorAnonymous
 import com.dmm.recetario.domain.model.User
 import com.dmm.recetario.ui.components.drawer.DrawerContent
 import com.dmm.recetario.ui.components.fab.FAB
@@ -23,7 +22,43 @@ import com.dmm.recetario.ui.components.refresher.PullToRefresh
 @Composable
 fun BaseLayout (
     user: User?,
-    showFab: Boolean = user.isNeitherNullNorAnonymous(),
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
+    drawerState: DrawerState = rememberDrawerState(DrawerValue.Closed),
+    onHomeClick: () -> Unit,
+    onSettingsClick: () -> Unit,
+    onLogOutSuccess: () -> Unit,
+    content: @Composable (PaddingValues) -> Unit
+) {
+    ModalNavigationDrawer (
+        drawerState = drawerState,
+        drawerContent = {
+            DrawerContent (
+                user = user,
+                drawerState = drawerState,
+                snackbarHostState = snackbarHostState,
+                onHomeClick = onHomeClick,
+                onSettingsClick = onSettingsClick,
+                onLogOutSuccess = onLogOutSuccess
+            )
+        }
+    ) {
+        Scaffold (
+            topBar = {
+                Toolbar(drawerState = drawerState) {
+                    WelcomeHeader(user = user)
+                }
+            },
+            snackbarHost = {
+                SnackbarHost(hostState = snackbarHostState)
+            },
+            content = content
+        )
+    }
+}
+
+@Composable
+fun BaseLayout (
+    user: User?,
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     drawerState: DrawerState = rememberDrawerState(DrawerValue.Closed),
     onHomeClick: () -> Unit,
@@ -52,9 +87,7 @@ fun BaseLayout (
                 }
             },
             floatingActionButton = {
-                if (showFab) {
-                    FAB(onCompleteForm = onCompleteForm)
-                }
+                FAB(onCompleteForm = onCompleteForm)
             },
             snackbarHost = {
                 SnackbarHost(hostState = snackbarHostState)
@@ -67,7 +100,36 @@ fun BaseLayout (
 @Composable
 fun BaseLayoutWithRefresh (
     user: User?,
-    showFab: Boolean = user.isNeitherNullNorAnonymous(),
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
+    drawerState: DrawerState = rememberDrawerState(DrawerValue.Closed),
+    onHomeClick: () -> Unit,
+    onSettingsClick: () -> Unit,
+    onLogOutSuccess: () -> Unit,
+    onRefresh: suspend () -> Unit,
+    content: @Composable BoxScope.() -> Unit
+) {
+    BaseLayout (
+        user = user,
+        drawerState = drawerState,
+        snackbarHostState = snackbarHostState,
+        onHomeClick = onHomeClick,
+        onSettingsClick = onSettingsClick,
+        onLogOutSuccess = onLogOutSuccess
+    ) { paddingValues ->
+        PullToRefresh (
+            onRefresh = onRefresh,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
+            snackbarHostState = snackbarHostState,
+            content = content
+        )
+    }
+}
+
+@Composable
+fun BaseLayoutWithRefresh (
+    user: User?,
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     drawerState: DrawerState = rememberDrawerState(DrawerValue.Closed),
     onHomeClick: () -> Unit,
@@ -79,7 +141,6 @@ fun BaseLayoutWithRefresh (
 ) {
     BaseLayout (
         user = user,
-        showFab = showFab,
         drawerState = drawerState,
         snackbarHostState = snackbarHostState,
         onHomeClick = onHomeClick,

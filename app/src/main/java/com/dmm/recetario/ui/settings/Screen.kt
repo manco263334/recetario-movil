@@ -2,7 +2,7 @@ package com.dmm.recetario.ui.settings
 
 import android.content.Context
 import android.net.Uri
-import androidx.activity.compose.ManagedActivityResultLauncher
+import android.widget.Toast
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -68,8 +68,6 @@ fun SettingsScreen (
     onLogOutSuccess: () -> Unit
 ) {
     val uiState = viewModel.uiState
-    val galleryLauncher = openGallery {  }
-    val cameraLauncher = openCamera {  }
     val user by viewModel.user.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
@@ -78,10 +76,8 @@ fun SettingsScreen (
 
     BaseLayout (
         user = user,
-        showFab = false,
         drawerState = drawerState,
         onHomeClick = onHomeClick,
-        onCompleteForm = {},
         onLogOutSuccess = onLogOutSuccess,
         onSettingsClick = {
             scope.launch {
@@ -102,9 +98,7 @@ fun SettingsScreen (
                 SettingsContent (
                     user = user,
                     context = context,
-                    paddingValues = paddingValues,
-                    cameraLauncher = cameraLauncher,
-                    galleryLauncher = galleryLauncher
+                    paddingValues = paddingValues
                 )
             }
         }
@@ -115,9 +109,7 @@ fun SettingsScreen (
 fun SettingsContent (
     user: User?,
     context: Context,
-    paddingValues: PaddingValues,
-    cameraLauncher: ManagedActivityResultLauncher<Uri, Boolean>,
-    galleryLauncher: ManagedActivityResultLauncher<String, Uri?>
+    paddingValues: PaddingValues
 ) {
     val getString: (Int) -> String = context::getString
     val canEditInfo = user.isNeitherNullNorAnonymous()
@@ -153,6 +145,20 @@ fun SettingsContent (
     var profilePictureUri by rememberSaveable { mutableStateOf<Uri?>(null) }
     var isUploading by remember { mutableStateOf(false) }
 
+    val galleryLauncher = openGallery {
+        it?.let { uri ->
+            profilePictureUri = uri
+        }
+    }
+
+    val cameraLauncher = openCamera { success ->
+        if (success) {
+            profilePictureUri = uri
+        } else {
+            Toast.makeText(context, "Error al tomar la foto", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     Box (
         modifier = Modifier
             .fillMaxSize()
@@ -161,9 +167,7 @@ fun SettingsContent (
             .verticalScroll(rememberScrollState()),
         contentAlignment = Alignment.TopCenter
     ) {
-        Column (
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Box (
                 modifier = Modifier
                     .size(140.dp)
@@ -175,11 +179,11 @@ fun SettingsContent (
                 if (profilePictureUri != null) {
                     AsyncImage (
                         model = profilePictureUri,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize(),
                         contentDescription = stringResource (
                             R.string.profile_picture_description
-                        ),
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop
+                        )
                     )
                 } else {
                     Text (
@@ -196,28 +200,41 @@ fun SettingsContent (
                 value = name,
                 canEdit = canEditInfo,
                 label = getString(R.string.name),
-            ) { name = it }
+                onValueChange = { name = it }
+            )
+
             CustomOutlinedTextField (
                 value = email,
                 canEdit = canEditInfo,
                 label = getString(R.string.email),
-                keyboardType = KeyboardType.Email
-            ) { email = it }
+                keyboardType = KeyboardType.Email,
+                onValueChange = { email = it }
+            )
+
             CustomOutlinedTextField (
                 value = username,
                 canEdit = canEditInfo,
-                label = getString(R.string.username)
-            ) { username = it }
+                label = getString(R.string.username),
+                onValueChange = { username = it }
+            )
+
             CustomOutlinedTextField (
                 value = phone,
                 canEdit = canEditInfo,
                 keyboardType = KeyboardType.Phone,
-                label = getString(R.string.number_phone)
-            ) { phone = it }
+                label = getString(R.string.number_phone),
+                onValueChange = { phone = it }
+            )
 
             Spacer(modifier = Modifier.height(20.dp))
 
             Button (
+                shape = RoundedCornerShape(12.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Cyan),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .shadow(8.dp, RoundedCornerShape(12.dp))
+                    .padding(horizontal = 20.dp),
                 onClick = {
 //                    user.let {
 //                        it.name = name
@@ -233,13 +250,7 @@ fun SettingsContent (
 //                            }
 //                        }
 //                    }
-                },
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Cyan),
-                shape = RoundedCornerShape(12.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .shadow(8.dp, RoundedCornerShape(12.dp))
-                    .padding(horizontal = 20.dp)
+                }
             ) {
                 if (isUploading) {
                     CircularProgressIndicator (
@@ -248,9 +259,9 @@ fun SettingsContent (
                     )
                 } else {
                     Text (
-                        text = stringResource(R.string.save_changes),
                         fontSize = 16.sp,
-                        color = Color.Black
+                        color = Color.Black,
+                        text = stringResource(R.string.save_changes)
                     )
                 }
             }
@@ -260,8 +271,8 @@ fun SettingsContent (
     if (showDialog) {
         ShowImagePickerDialog (
             onDismiss = { showDialog = false },
-            onGalleryClick = { galleryLauncher.launch("image/*") },
-            onCameraClick = { cameraLauncher.launch(uri) }
+            onCameraClick = { cameraLauncher.launch(uri) },
+            onGalleryClick = { galleryLauncher.launch("image/*") }
         )
     }
 }
