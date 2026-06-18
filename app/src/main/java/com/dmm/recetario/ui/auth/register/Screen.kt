@@ -322,7 +322,8 @@ private fun RegisterForm (
                             enabled =
                                 name.isNotBlank() &&
                                 email.isNotBlank() &&
-                                password.isNotBlank(),
+                                password.isNotBlank() &&
+                                password.length >= 8,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(56.dp),

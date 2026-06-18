@@ -270,7 +270,12 @@ private fun LoginForm (
                                 .fillMaxWidth()
                                 .height(56.dp),
                             shape = RoundedCornerShape(16.dp),
-                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00C2FF)),
+                            colors = ButtonDefaults.buttonColors (
+                                containerColor = Color(0xFF00C2FF)
+                            ),
+                            enabled = email.isNotBlank() &&
+                                    password.isNotBlank() &&
+                                    password.length >= 8,
                             onClick = {
                                 keyboardController?.hide()
                                 onLogin(email, password)
