@@ -35,8 +35,7 @@ class MainViewModel @Inject constructor (
     @OptIn(ExperimentalCoroutinesApi::class)
     val user: StateFlow<User?> = _token
         .flatMapLatest { token ->
-            val user = userManager.getUserLocal(token).firstOrNull()
-            flowOf(user)
+            userManager.getUserLocal(token)
         }
         .stateIn (
             scope = viewModelScope,
