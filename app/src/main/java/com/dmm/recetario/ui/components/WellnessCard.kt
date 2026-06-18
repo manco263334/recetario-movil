@@ -60,8 +60,8 @@ fun WellnessCard (
             .graphicsLayer(scaleX = scale, scaleY = scale)
             .fillMaxWidth()
             .clickable (
-                onClick = onClick,
-                interactionSource = interactionSource
+                interactionSource = interactionSource,
+                onClick = onClick
             )
             .animateContentSize(),
         shape = RoundedCornerShape(24.dp),
