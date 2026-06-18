@@ -8,6 +8,22 @@ import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 
 @OptIn(ExperimentalContracts::class)
+fun User?.isNullOrAnonymous(): Boolean {
+    contract {
+        returns(true) implies (
+            this@isNullOrAnonymous == null ||
+            this@isNullOrAnonymous is AnonymousUser
+        )
+    }
+    return this == null || this is AnonymousUser
+}
+
+suspend fun Flow<User?>.isNullOrAnonymous(): Boolean {
+    val user = this.firstOrNull()
+    return user.isNullOrAnonymous()
+}
+
+@OptIn(ExperimentalContracts::class)
 fun User?.isNeitherNullNorAnonymous(): Boolean {
     contract {
         returns(true) implies (

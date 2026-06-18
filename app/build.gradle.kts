@@ -79,6 +79,7 @@ dependencies {
     implementation(libs.androidx.compose.animation)
     implementation(libs.androidx.compose.adaptive.navigation3)
     implementation(libs.androidx.navigation.runtime.ktx)
+    implementation(libs.firebase.crashlytics.buildtools)
 
     ksp(libs.androidx.room.compiler)
     annotationProcessor(libs.androidx.room.compiler)

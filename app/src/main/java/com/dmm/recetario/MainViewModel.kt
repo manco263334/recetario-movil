@@ -2,6 +2,7 @@ package com.dmm.recetario
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dmm.recetario.core.jwt.isTokenExpired
 import com.dmm.recetario.domain.manager.TokenManager
 import com.dmm.recetario.domain.manager.UserManager
 import com.dmm.recetario.domain.model.User
@@ -20,7 +21,6 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.firstOrNull
 
 @HiltViewModel
 class MainViewModel @Inject constructor (
@@ -35,7 +35,11 @@ class MainViewModel @Inject constructor (
     @OptIn(ExperimentalCoroutinesApi::class)
     val user: StateFlow<User?> = _token
         .flatMapLatest { token ->
-            userManager.getUserLocal(token)
+            if (token == null || isTokenExpired(token)) {
+                flowOf(null)
+            } else {
+                userManager.getUserLocal(token)
+            }
         }
         .stateIn (
             scope = viewModelScope,
@@ -46,7 +50,7 @@ class MainViewModel @Inject constructor (
     @OptIn(ExperimentalCoroutinesApi::class)
     val startDestination: StateFlow<Routes?> = _token
         .flatMapLatest { token ->
-            if (token == null) {
+            if (token == null || isTokenExpired(token)) {
                 flowOf(Routes.Login)
             } else {
                 flowOf(Routes.Home)

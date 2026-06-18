@@ -31,6 +31,7 @@ material3Adaptive = "1.2.0"
 animation = "1.11.1"
 adaptiveNavigation3 = "1.3.0-beta01"
 navigationRuntimeKtx = "2.9.8"
+firebaseCrashlyticsBuildtools = "3.0.7"
 
 [libraries]
 androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
@@ -79,6 +80,7 @@ firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashly
 androidx-compose-animation = { group = "androidx.compose.animation", name = "animation", version.ref = "animation" }
 androidx-compose-adaptive-navigation3 = { group = "androidx.compose.material3.adaptive", name = "adaptive-navigation3", version.ref = "adaptiveNavigation3" }
 androidx-navigation-runtime-ktx = { group = "androidx.navigation", name = "navigation-runtime-ktx", version.ref = "navigationRuntimeKtx" }
+firebase-crashlytics-buildtools = { group = "com.google.firebase", name = "firebase-crashlytics-buildtools", version.ref = "firebaseCrashlyticsBuildtools" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
