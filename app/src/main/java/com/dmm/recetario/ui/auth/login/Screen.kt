@@ -82,9 +82,9 @@ fun LoginScreen (
             .background (
                 Brush.verticalGradient (
                     colors = listOf (
-                        Color(0xFF121212),
-                        Color(0xFF1E1E1E),
-                        Color(0xFF252525)
+                        MaterialTheme.colorScheme.background,
+                        MaterialTheme.colorScheme.background.copy(alpha = 0.5f),
+                        MaterialTheme.colorScheme.background.copy(alpha = 0.75f)
                     )
                 )
             )
@@ -147,19 +147,22 @@ private fun LoginForm (
         enter = fadeIn() + slideInVertically()
     ) {
         Card (
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .verticalScroll(scrollState),
             shape = RoundedCornerShape(24.dp),
             elevation = CardDefaults.cardElevation(8.dp),
-            colors = CardDefaults.cardColors(containerColor = Color(0xFF2A2A2A))
+            colors = CardDefaults.cardColors (
+                MaterialTheme.colorScheme.surface
+            )
         ) {
             Column (
                 modifier = Modifier
                     .fillMaxSize()
-                    .verticalScroll(scrollState)
-                    .padding(24.dp)
+                    .padding(24.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Spacer(modifier = Modifier.height(8.dp))
-
                 Icon (
                     tint = Color.Cyan,
                     contentDescription = null,
@@ -173,7 +176,7 @@ private fun LoginForm (
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     text = stringResource(R.string.login_title),
-                    color = MaterialTheme.colorScheme.onBackground
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -186,145 +189,144 @@ private fun LoginForm (
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                OutlinedTextField (
-                    value = email,
-                    singleLine = true,
+                Card (
                     modifier = Modifier.fillMaxWidth(),
-                    keyboardOptions = KeyboardOptions.Default
-                        .copy(keyboardType = KeyboardType.Email),
-                    textStyle = TextStyle(color = MaterialTheme.colorScheme.onBackground),
-                    colors = TextFieldDefaults.colors (
-                        focusedContainerColor = Color.Transparent,
-                        unfocusedContainerColor = Color.Transparent,
-                        cursorColor = MaterialTheme.colorScheme.onBackground,
-                        focusedTextColor = MaterialTheme.colorScheme.onBackground,
-                        unfocusedTextColor = MaterialTheme.colorScheme.onBackground
-                    ),
-                    onValueChange = {
-                        email = it
-                    },
-                    placeholder = {
-                        Text(stringResource(R.string.email_placeholder))
-                    },
-                    label = {
-                        Text(stringResource(R.string.email))
-                    },
-                    leadingIcon = {
-                        Icon(Icons.Default.Email, null)
-                    }
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                OutlinedTextField (
-                    value = password,
-                    singleLine = true,
-                    modifier = Modifier.fillMaxWidth(),
-                    keyboardOptions = KeyboardOptions.Default
-                        .copy(keyboardType = KeyboardType.Password),
-                    visualTransformation = if (passwordVisible)
-                            VisualTransformation.None
-                        else
-                            PasswordVisualTransformation(),
-                    onValueChange = {
-                        password = it
-                    },
-                    label = {
-                        Text(stringResource(R.string.password))
-                    },
-                    leadingIcon = {
-                        Icon(Icons.Default.Lock, null)
-                    },
-                    trailingIcon = {
-                        IconButton (
-                            onClick = {
-                                passwordVisible = !passwordVisible
+                    shape = RoundedCornerShape(28.dp),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
+                    colors = CardDefaults.cardColors (
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant
+                    )
+                ) {
+                    Column (
+                        modifier = Modifier.padding(24.dp),
+                        verticalArrangement = Arrangement.spacedBy(18.dp)
+                    ) {
+                        OutlinedTextField (
+                            value = email,
+                            singleLine = true,
+                            modifier = Modifier.fillMaxWidth(),
+                            keyboardOptions = KeyboardOptions.Default
+                                .copy(keyboardType = KeyboardType.Email),
+                            colors = TextFieldDefaults.colors (
+                                focusedContainerColor = Color.Transparent,
+                                unfocusedContainerColor = Color.Transparent,
+                                cursorColor = MaterialTheme.colorScheme.onBackground,
+                                focusedTextColor = MaterialTheme.colorScheme.onBackground,
+                                unfocusedTextColor = MaterialTheme.colorScheme.onBackground
+                            ),
+                            onValueChange = {
+                                email = it
+                            },
+                            placeholder = {
+                                Text(stringResource(R.string.email_placeholder))
+                            },
+                            label = {
+                                Text(stringResource(R.string.email))
+                            },
+                            leadingIcon = {
+                                Icon(Icons.Default.Email, null)
                             }
+                        )
+
+                        OutlinedTextField (
+                            value = password,
+                            singleLine = true,
+                            modifier = Modifier.fillMaxWidth(),
+                            keyboardOptions = KeyboardOptions.Default
+                                .copy(keyboardType = KeyboardType.Password),
+                            visualTransformation = if (passwordVisible)
+                                VisualTransformation.None
+                            else
+                                PasswordVisualTransformation(),
+                            onValueChange = {
+                                password = it
+                            },
+                            label = {
+                                Text(stringResource(R.string.password))
+                            },
+                            leadingIcon = {
+                                Icon(Icons.Default.Lock, null)
+                            },
+                            trailingIcon = {
+                                IconButton (
+                                    onClick = {
+                                        passwordVisible = !passwordVisible
+                                    }
+                                ) {
+                                    Icon (
+                                        contentDescription = null,
+                                        imageVector =
+                                            if(passwordVisible)
+                                                Icons.Default.Visibility
+                                            else
+                                                Icons.Default.VisibilityOff
+                                    )
+                                }
+                            }
+                        )
+
+                        Button (
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(56.dp),
+                            shape = RoundedCornerShape(16.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00C2FF)),
+                            onClick = {
+                                keyboardController?.hide()
+                                onLogin(email, password)
+                            }
+                        ) {
+                            Text (
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold,
+                                text = stringResource(R.string.login_button),
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
+
+                        HorizontalDivider(color = MaterialTheme.colorScheme.onSurfaceVariant)
+
+                        OutlinedButton (
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = RoundedCornerShape(14.dp),
+                            onClick = onLoginAsGuest
                         ) {
                             Icon (
                                 contentDescription = null,
-                                imageVector =
-                                    if(passwordVisible)
-                                        Icons.Default.Visibility
-                                    else
-                                        Icons.Default.VisibilityOff
+                                imageVector = Icons.Default.Person
                             )
+
+                            Spacer(modifier = Modifier.width(8.dp))
+
+                            Text(stringResource(R.string.login_guest))
+                        }
+
+                        HorizontalDivider(color = MaterialTheme.colorScheme.onSurfaceVariant)
+
+                        OutlinedButton (
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = RoundedCornerShape(14.dp),
+                            onClick = {  }
+                        ) {
+                            Icon(Icons.Default.AccountCircle, null)
+
+                            Spacer(modifier = Modifier.width(8.dp))
+
+                            Text(stringResource(R.string.login_google))
+                        }
+
+                        HorizontalDivider(color = MaterialTheme.colorScheme.onSurfaceVariant)
+
+                        TextButton(onClick = onNavigateToRegister) {
+                            Text(stringResource(R.string.redirect_to_signup))
+                        }
+
+                        HorizontalDivider(color = MaterialTheme.colorScheme.onSurfaceVariant)
+
+                        TextButton(onClick = { }) {
+                            Text(stringResource(R.string.password_forgotten))
                         }
                     }
-                )
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                Button (
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00C2FF)),
-                    onClick = {
-                        keyboardController?.hide()
-                        onLogin(email, password)
-                    }
-                ) {
-                    Text (
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                        text = stringResource(R.string.login_button),
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                }
-
-                HorizontalDivider (
-                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.3f),
-                    modifier = Modifier.padding(vertical = 16.dp)
-                )
-
-                OutlinedButton (
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(14.dp),
-                    onClick = onLoginAsGuest
-                ) {
-                    Icon (
-                        contentDescription = null,
-                        imageVector = Icons.Default.Person
-                    )
-
-                    Spacer(modifier = Modifier.width(8.dp))
-
-                    Text(stringResource(R.string.login_guest))
-                }
-
-                HorizontalDivider (
-                    modifier = Modifier.padding(vertical = 16.dp),
-                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.3f)
-                )
-
-                OutlinedButton (
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(14.dp),
-                    onClick = {  }
-                ) {
-                    Icon(Icons.Default.AccountCircle, null)
-
-                    Text(stringResource(R.string.login_google))
-                }
-
-                HorizontalDivider (
-                    modifier = Modifier.padding(vertical = 16.dp),
-                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.3f)
-                )
-
-                TextButton(onClick = onNavigateToRegister) {
-                    Text(stringResource(R.string.redirect_to_signup))
-                }
-
-                HorizontalDivider (
-                    modifier = Modifier.padding(vertical = 16.dp),
-                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.3f)
-                )
-
-                TextButton(onClick = { }) {
-                    Text(stringResource(R.string.password_forgotten))
                 }
             }
         }

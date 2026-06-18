@@ -1,8 +1,11 @@
 package com.dmm.recetario.ui.settings
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.net.Uri
-import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -26,8 +29,10 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
@@ -47,6 +52,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -73,10 +79,12 @@ fun SettingsScreen (
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val snackbarHostState = remember { SnackbarHostState() }
 
     BaseLayout (
         user = user,
         drawerState = drawerState,
+        snackbarHostState = snackbarHostState,
         onHomeClick = onHomeClick,
         onLogOutSuccess = onLogOutSuccess,
         onSettingsClick = {
@@ -98,7 +106,8 @@ fun SettingsScreen (
                 SettingsContent (
                     user = user,
                     context = context,
-                    paddingValues = paddingValues
+                    paddingValues = paddingValues,
+                    snackbarHostState = snackbarHostState
                 )
             }
         }
@@ -109,7 +118,8 @@ fun SettingsScreen (
 fun SettingsContent (
     user: User?,
     context: Context,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
+    snackbarHostState: SnackbarHostState
 ) {
     val getString: (Int) -> String = context::getString
     val canEditInfo = user.isNeitherNullNorAnonymous()
@@ -122,6 +132,8 @@ fun SettingsContent (
     )
 
     var showDialog by rememberSaveable { mutableStateOf(false) }
+    val scrollState = rememberScrollState()
+
     var name by rememberSaveable {
         mutableStateOf (
         user?.name ?: getString(R.string.anonymous_text)
@@ -155,7 +167,31 @@ fun SettingsContent (
         if (success) {
             profilePictureUri = uri
         } else {
-            Toast.makeText(context, "Error al tomar la foto", Toast.LENGTH_SHORT).show()
+            snackbarHostState.showSnackbar (
+                message = getString (
+                    R.string.error_taking_photo
+                )
+            )
+        }
+    }
+
+    val cameraPermissionLauncher = rememberLauncherForActivityResult (
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            cameraLauncher.launch(uri)
+        } else {
+            // Handle permission denied logic
+        }
+    }
+
+    val galleryPermissionLauncher = rememberLauncherForActivityResult (
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            galleryLauncher.launch("image/*")
+        } else {
+            // Handle permission denied logic
         }
     }
 
@@ -163,18 +199,25 @@ fun SettingsContent (
         modifier = Modifier
             .fillMaxSize()
             .padding(paddingValues)
-            .padding(top = 20.dp)
-            .verticalScroll(rememberScrollState()),
+            .padding(20.dp)
+            .verticalScroll(scrollState),
         contentAlignment = Alignment.TopCenter
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Box (
+                contentAlignment = Alignment.Center,
                 modifier = Modifier
                     .size(140.dp)
-                    .background(Color.Gray, CircleShape)
-                    .border(3.dp, Color.Cyan, CircleShape)
-                    .clickable { showDialog = true },
-                contentAlignment = Alignment.Center
+                    .background (
+                        shape = CircleShape,
+                        color = Color.Gray,
+                    )
+                    .border (
+                        width = 3.dp,
+                        shape = CircleShape,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                    .clickable { showDialog = true }
             ) {
                 if (profilePictureUri != null) {
                     AsyncImage (
@@ -226,16 +269,19 @@ fun SettingsContent (
                 onValueChange = { phone = it }
             )
 
-            Spacer(modifier = Modifier.height(20.dp))
+            if (canEditInfo) {
+                Spacer(modifier = Modifier.height(20.dp))
 
-            Button (
-                shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Cyan),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .shadow(8.dp, RoundedCornerShape(12.dp))
-                    .padding(horizontal = 20.dp),
-                onClick = {
+                Button (
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors (
+                        containerColor = MaterialTheme.colorScheme.surface
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp)
+                        .shadow(8.dp, RoundedCornerShape(12.dp)),
+                    onClick = {
 //                    user.let {
 //                        it.name = name
 //                        it.phone = phone
@@ -250,19 +296,20 @@ fun SettingsContent (
 //                            }
 //                        }
 //                    }
-                }
-            ) {
-                if (isUploading) {
-                    CircularProgressIndicator (
-                        color = Color.Black,
-                        modifier = Modifier.size(20.dp)
-                    )
-                } else {
-                    Text (
-                        fontSize = 16.sp,
-                        color = Color.Black,
-                        text = stringResource(R.string.save_changes)
-                    )
+                    }
+                ) {
+                    if (isUploading) {
+                        CircularProgressIndicator (
+                            modifier = Modifier.size(20.dp),
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    } else {
+                        Text (
+                            fontSize = 16.sp,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            text = stringResource(R.string.save_changes)
+                        )
+                    }
                 }
             }
         }
@@ -271,8 +318,34 @@ fun SettingsContent (
     if (showDialog) {
         ShowImagePickerDialog (
             onDismiss = { showDialog = false },
-            onCameraClick = { cameraLauncher.launch(uri) },
-            onGalleryClick = { galleryLauncher.launch("image/*") }
+            onCameraClick = {
+                val permissionCheck = ContextCompat.checkSelfPermission (
+                    context,
+                    Manifest.permission.CAMERA
+                )
+
+                if (permissionCheck == PackageManager.
+                    PERMISSION_GRANTED) {
+                    cameraLauncher.launch(uri)
+                } else {
+                    cameraPermissionLauncher.
+                        launch(Manifest.permission.CAMERA)
+                }
+            },
+            onGalleryClick = {
+                val permissionCheck = ContextCompat.checkSelfPermission (
+                    context,
+                    Manifest.permission.READ_MEDIA_IMAGES
+                )
+
+                if (permissionCheck == PackageManager.
+                    PERMISSION_GRANTED) {
+                    galleryLauncher.launch("image/*")
+                } else {
+                    galleryPermissionLauncher.
+                        launch(Manifest.permission.READ_MEDIA_IMAGES)
+                }
+            }
         )
     }
 }
@@ -288,20 +361,23 @@ private fun CustomOutlinedTextField (
     OutlinedTextField (
         value = value,
         enabled = canEdit,
-        textStyle = LocalTextStyle.current.copy(color = Color.White),
         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType),
+        textStyle = LocalTextStyle.current.copy(color = MaterialTheme.colorScheme.onSurface),
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
             .shadow(6.dp, RoundedCornerShape(12.dp))
-            .background(Color(0xFF1E1E1E), RoundedCornerShape(12.dp)),
+            .background (
+                shape = RoundedCornerShape(12.dp),
+                color = MaterialTheme.colorScheme.surface
+            ),
         colors = OutlinedTextFieldDefaults.colors (
+            cursorColor = Color.Cyan,
             focusedBorderColor = Color.Cyan,
-            unfocusedBorderColor = Color.Gray,
-            cursorColor = Color.Cyan
+            unfocusedBorderColor = Color.Gray
         ),
         label = {
-            Text(label, color = Color.White)
+            Text(text = label, color = MaterialTheme.colorScheme.onSurface)
         },
         onValueChange = onValueChange
     )

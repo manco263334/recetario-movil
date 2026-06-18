@@ -7,26 +7,51 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dmm.recetario.R
+import com.dmm.recetario.core.utils.extension.isNeitherNullNorAnonymous
 import com.dmm.recetario.core.utils.helper.ResourceHelper
 import com.dmm.recetario.domain.dao.UserDao
 import com.dmm.recetario.domain.entity.RecipeEntity
 import com.dmm.recetario.domain.entity.TokenUserRef
 import com.dmm.recetario.domain.entity.UserEntity
 import com.dmm.recetario.domain.manager.TokenManager
+import com.dmm.recetario.domain.manager.UserManager
+import com.dmm.recetario.domain.model.User
 import com.dmm.recetario.domain.service.AuthService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 @HiltViewModel
 class DrawerViewModel @Inject constructor (
     private val authService: AuthService,
+    private val userManager: UserManager,
     private val tokenManager: TokenManager,
     private val resourceHelper: ResourceHelper,
     private val userDao: UserDao<UserEntity, TokenUserRef, RecipeEntity>
 ) : ViewModel() {
+    private val _token = tokenManager.token
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val user: StateFlow<User?> = _token
+        .flatMapLatest { token ->
+            val user = userManager.getUserLocal(token).firstOrNull()
+            flowOf(user)
+        }
+        .stateIn (
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly,
+            initialValue = null
+        )
+
     private val getString: (Int) -> String = resourceHelper::getString
 
     var logOutState: LogOutUiState by mutableStateOf(LogOutUiState.Idle)
@@ -39,7 +64,9 @@ class DrawerViewModel @Inject constructor (
             logOutState = LogOutUiState.Loading
 
             try {
-                authService.logout()
+                if (user.isNeitherNullNorAnonymous()) {
+                    authService.logout()
+                }
 
                 awaitAll (
                     async { tokenManager.clearToken() },

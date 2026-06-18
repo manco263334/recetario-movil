@@ -157,6 +157,7 @@
     <string name="select_image_description">Choose an option to add an image</string>
     <string name="select_image_from_gallery">Select from gallery</string>
     <string name="take_photo">Take photo</string>
+    <string name="error_taking_photo">Error taking photo</string>
 
     <string name="profile_picture_description">Profile picture</string>
     <string name="add_photo">Add photo</string>

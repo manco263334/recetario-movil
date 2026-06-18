@@ -82,9 +82,9 @@ fun RegisterScreen (
             .background (
                 Brush.verticalGradient (
                     colors = listOf (
-                        Color(0xFF121212),
-                        Color(0xFF1E1E1E),
-                        Color(0xFF252525)
+                        MaterialTheme.colorScheme.background,
+                        MaterialTheme.colorScheme.background.copy(alpha = 0.5f),
+                        MaterialTheme.colorScheme.background.copy(alpha = 0.75f)
                     )
                 )
             )
@@ -146,21 +146,24 @@ private fun RegisterForm (
         enter = fadeIn() + slideInVertically()
     ) {
         Card (
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .verticalScroll(scrollState),
             shape = RoundedCornerShape(24.dp),
             elevation = CardDefaults.cardElevation(8.dp),
-            colors = CardDefaults.cardColors(containerColor = Color(0xFF2A2A2A))
+            colors = CardDefaults.cardColors (
+                MaterialTheme.colorScheme.surface
+            )
         ) {
             Column (
                 modifier = Modifier
                     .fillMaxSize()
-                    .verticalScroll(scrollState)
                     .padding(24.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Icon (
-                    tint = Color(0xFF00C2FF),
+                    tint = Color.Cyan,
                     contentDescription = null,
                     modifier = Modifier.size(72.dp),
                     imageVector = Icons.Default.PersonAdd
@@ -169,8 +172,8 @@ private fun RegisterForm (
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text (
-                    color = Color.White,
                     fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface,
                     text = stringResource(R.string.create_account),
                     style = MaterialTheme.typography.headlineMedium
                 )
@@ -178,8 +181,8 @@ private fun RegisterForm (
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text (
-                    color = Color.LightGray,
                     style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     text = stringResource(R.string.signup_suggest)
                 )
 
@@ -188,8 +191,10 @@ private fun RegisterForm (
                 Card (
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(28.dp),
-                    elevation = CardDefaults.cardElevation( defaultElevation = 10.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color(0xFF1E1E1E))
+                    elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
+                    colors = CardDefaults.cardColors (
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant
+                    )
                 ) {
                     Column (
                         modifier = Modifier.padding(24.dp),
@@ -348,14 +353,13 @@ private fun RegisterForm (
                             )
                         }
 
-                        HorizontalDivider(color = Color.Gray.copy(alpha = 0.3f))
+                        HorizontalDivider(color = MaterialTheme.colorScheme.onSurfaceVariant)
 
                         TextButton (
                             modifier = Modifier.fillMaxWidth(),
                             onClick = onNavigateToLogin
                         ) {
                             Text (
-                                color = Color(0xFF00C2FF),
                                 text = stringResource(R.string.redirect_to_login)
                             )
                         }

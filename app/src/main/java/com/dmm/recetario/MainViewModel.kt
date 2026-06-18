@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.firstOrNull
 
 @HiltViewModel
 class MainViewModel @Inject constructor (
@@ -34,7 +35,8 @@ class MainViewModel @Inject constructor (
     @OptIn(ExperimentalCoroutinesApi::class)
     val user: StateFlow<User?> = _token
         .flatMapLatest { token ->
-            userManager.getUserLocal(token)
+            val user = userManager.getUserLocal(token).firstOrNull()
+            flowOf(user)
         }
         .stateIn (
             scope = viewModelScope,

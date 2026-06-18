@@ -15,7 +15,9 @@ import jakarta.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 
 @HiltViewModel
@@ -36,12 +38,12 @@ class SettingViewModel @Inject constructor (
     @OptIn(ExperimentalCoroutinesApi::class)
     val user: StateFlow<User?> = _token
         .flatMapLatest { token ->
-            userManager.getUserLocal(token)
+            val user = userManager.getUserLocal(token).firstOrNull()
+            flowOf(user).also { uiState = SettingsUiState.Success }
         }
         .stateIn (
             scope = viewModelScope,
             started = SharingStarted.Eagerly,
             initialValue = null
         )
-        .also { uiState = SettingsUiState.Success }
 }
