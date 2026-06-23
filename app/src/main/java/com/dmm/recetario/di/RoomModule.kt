@@ -36,7 +36,7 @@ object RoomModule {
 
     @Provides
     @Singleton
-    @Suppress("unchecked_cast")
+    @Suppress("UNCHECKED_CAST")
     fun provideUserDao(db: AppDatabase): UserDao<UserEntity, TokenUserRef,
             RecipeEntity> {
         return db.userDao() as UserDao<UserEntity, TokenUserRef,
@@ -45,7 +45,7 @@ object RoomModule {
 
     @Provides
     @Singleton
-    @Suppress("unchecked_cast")
+    @Suppress("UNCHECKED_CAST")
     fun provideCategoryDao(db: AppDatabase): CategoryDao<CategoryEntity,
             RecipeCategoryCrossRef, RecipeEntity> {
         return db.categoryDao() as CategoryDao<CategoryEntity,
@@ -54,7 +54,7 @@ object RoomModule {
 
     @Provides
     @Singleton
-    @Suppress("unchecked_cast")
+    @Suppress("UNCHECKED_CAST")
     fun provideRecipeDao(db: AppDatabase): RecipeDao<RecipeEntity, RecipeCategoryCrossRef,
             UserEntity, CategoryEntity> {
         return db.recipeDao() as RecipeDao<RecipeEntity, RecipeCategoryCrossRef,

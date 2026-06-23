@@ -36,9 +36,7 @@ fun AppNavigation (
     NavDisplay (
         modifier = modifier,
         backStack = backStack,
-        onBack = {
-            backStack.back()
-        },
+        onBack = backStack::back,
         entryDecorators = listOf (
             rememberSaveableStateHolderNavEntryDecorator(),
             rememberViewModelStoreNavEntryDecorator()
