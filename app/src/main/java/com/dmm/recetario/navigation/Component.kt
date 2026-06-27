@@ -55,7 +55,6 @@ fun AppNavigation (
     modifier: Modifier = Modifier
 ) {
     val viewModels = getViewModels()
-
     val currentKey = backStack.lastOrNull() ?: Routes.Login
 
     val layoutConfig = remember(currentKey) {
@@ -116,16 +115,16 @@ fun AppNavigation (
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()
 
-    fun closeDrawerAndDo(call: () -> Unit): () -> Unit = {
+    val closeDrawerAndDo: (call: () -> Unit) -> () -> Unit = {
         coroutineScope.launch {
             drawerState.close()
         }
 
-        call()
+        it
     }
 
     val onHomeClick: () -> Unit = closeDrawerAndDo {
-        backStack.backTo(Routes.Home)
+        backStack.navigateTo(Routes.Home)
     }
     val onSettingsClick: () -> Unit = closeDrawerAndDo {
         backStack.navigateTo(Routes.Settings)
@@ -136,6 +135,17 @@ fun AppNavigation (
     }
 
     if (layoutConfig.showBaseLayout) {
+        val onSelectKey: (NavKey) -> Unit = {
+            when(it) {
+                is Routes.Home -> onHomeClick()
+                is Routes.Settings -> onSettingsClick()
+                is Routes.Category -> onHomeClick()
+                is Routes.Recipe -> onHomeClick()
+
+                else -> {}
+            }
+        }
+
         ModalNavigationDrawer (
             drawerState = drawerState,
             drawerContent = {

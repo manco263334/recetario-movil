@@ -4,6 +4,11 @@ import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 
 fun <T : NavKey> NavBackStack<T>.navigateTo(screen: T): Boolean {
+    if (screen in this) {
+        this.backTo(screen)
+        return false
+    }
+
     return this.add(screen)
 }
 
