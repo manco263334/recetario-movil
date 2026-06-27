@@ -26,18 +26,11 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dmm.recetario.R
 import com.dmm.recetario.domain.model.Recipe
-import com.dmm.recetario.domain.model.User
-import com.dmm.recetario.ui.components.BaseLayoutWithRefresh
 
 @Composable
 fun RecipeScreen (
-    user: User?,
     recipeId: String,
     viewModel: RecipeViewModel = hiltViewModel(),
-    onHomeClick: () -> Unit,
-    onCompleteForm: () -> Unit,
-    onSettingsClick: () -> Unit,
-    onLogOutSuccess: () -> Unit
 ) {
     LaunchedEffect(recipeId) {
         viewModel.loadRecipe(recipeId)
@@ -46,23 +39,14 @@ fun RecipeScreen (
     val uiState = viewModel.uiState
     val recipe by viewModel.recipe.collectAsStateWithLifecycle()
 
-    BaseLayoutWithRefresh (
-        user = user,
-        onHomeClick = onHomeClick,
-        onRefresh = viewModel::refresh,
-        onCompleteForm = onCompleteForm,
-        onSettingsClick = onSettingsClick,
-        onLogOutSuccess = onLogOutSuccess
-    ) {
-        Crossfade (
-            targetState = uiState,
-            label = "recipe_crossfade"
-        ) { state ->
-            if (state is RecipeUiState.Loading) {
-                RecipeContentSkeleton(state.message)
-            } else {
-                RecipeContent(recipe)
-            }
+    Crossfade (
+        targetState = uiState,
+        label = "recipe_crossfade"
+    ) { state ->
+        if (state is RecipeUiState.Loading) {
+            RecipeContentSkeleton(state.message)
+        } else {
+            RecipeContent(recipe)
         }
     }
 }

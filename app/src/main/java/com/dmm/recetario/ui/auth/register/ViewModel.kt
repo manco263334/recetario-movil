@@ -50,8 +50,8 @@ class RegisterViewModel @Inject constructor (
                 val data = RegisterData (
                     name = name,
                     email = email,
-                    password = password,
                     phone = phone,
+                    password = password,
                     username = username
                 )
                 val response = service.register(data)

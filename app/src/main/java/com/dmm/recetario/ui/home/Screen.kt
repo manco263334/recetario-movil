@@ -9,12 +9,9 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -24,51 +21,28 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dmm.recetario.R
 import com.dmm.recetario.domain.model.Category
-import com.dmm.recetario.domain.model.User
-import com.dmm.recetario.ui.components.BaseLayoutWithRefresh
 import com.dmm.recetario.ui.components.WellnessCard
 import com.dmm.recetario.ui.components.WellnessCardSkeleton
-import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen (
-    user: User?,
     viewModel: HomeViewModel = hiltViewModel(),
-    onCompleteForm: () -> Unit,
-    onSettingsClick: () -> Unit,
-    onLogOutSuccess: () -> Unit,
     onCategoryClick: (Category) -> Unit
 ) {
-    val drawerState = rememberDrawerState(DrawerValue.Closed)
-    val scope = rememberCoroutineScope()
     val uiState = viewModel.uiState
     val categories by viewModel.categories.collectAsStateWithLifecycle()
 
-    BaseLayoutWithRefresh (
-        user = user,
-        drawerState = drawerState,
-        onRefresh = viewModel::refresh,
-        onCompleteForm = onCompleteForm,
-        onSettingsClick = onSettingsClick,
-        onLogOutSuccess = onLogOutSuccess,
-        onHomeClick = {
-            scope.launch {
-                drawerState.close()
-            }
-        }
-    ) {
-        Crossfade (
-            targetState = uiState,
-            label = "home_crossfade"
-        ) { state ->
-            if (state is HomeUiState.Loading) {
-                HomeContentSkeleton(state.message)
-            } else {
-                HomeContent (
-                    categories = categories,
-                    onCategoryClick = onCategoryClick
-                )
-            }
+    Crossfade (
+        targetState = uiState,
+        label = "home_crossfade"
+    ) { state ->
+        if (state is HomeUiState.Loading) {
+            HomeContentSkeleton(state.message)
+        } else {
+            HomeContent (
+                categories = categories,
+                onCategoryClick = onCategoryClick
+            )
         }
     }
 }

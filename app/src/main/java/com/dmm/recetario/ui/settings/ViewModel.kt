@@ -21,7 +21,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 
 @HiltViewModel
-class SettingViewModel @Inject constructor (
+class SettingsViewModel @Inject constructor (
     private val userManager: UserManager,
     private val tokenManager: TokenManager,
     private val resourceHelper: ResourceHelper

@@ -12,7 +12,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,19 +26,16 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -63,53 +59,28 @@ import com.dmm.recetario.core.access_hardware.openGallery
 import com.dmm.recetario.core.utils.extension.createImageFile
 import com.dmm.recetario.core.utils.extension.isNeitherNullNorAnonymous
 import com.dmm.recetario.domain.model.User
-import com.dmm.recetario.ui.components.BaseLayout
 import com.dmm.recetario.ui.components.ShowImagePickerDialog
-import kotlinx.coroutines.launch
 
 @Composable
-fun SettingsScreen (
-    viewModel: SettingViewModel = hiltViewModel(),
-    onHomeClick: () -> Unit,
-    onLogOutSuccess: () -> Unit
-) {
+fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel()) {
     val uiState = viewModel.uiState
     val user by viewModel.user.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
-    val drawerState = rememberDrawerState(DrawerValue.Closed)
     val snackbarHostState = remember { SnackbarHostState() }
 
-    BaseLayout (
-        user = user,
-        drawerState = drawerState,
-        snackbarHostState = snackbarHostState,
-        onHomeClick = onHomeClick,
-        onLogOutSuccess = onLogOutSuccess,
-        onSettingsClick = {
-            scope.launch {
-                drawerState.close()
-            }
-        },
-    ) { paddingValues ->
-        Crossfade (
-            targetState = uiState,
-            label = "settings_crossfade"
-        ) { state ->
-            if (state is SettingsUiState.Loading) {
-                SettingsContentSkeleton (
-                    paddingValues = paddingValues,
-                    loadingMessage =  state.message
-                )
-            } else {
-                SettingsContent (
-                    user = user,
-                    context = context,
-                    paddingValues = paddingValues,
-                    snackbarHostState = snackbarHostState
-                )
-            }
+    Crossfade (
+        targetState = uiState,
+        label = "settings_crossfade"
+    ) { state ->
+        if (state is SettingsUiState.Loading) {
+            SettingsContentSkeleton(loadingMessage =  state.message)
+        } else {
+            SettingsContent (
+                user = user,
+                context = context,
+                snackbarHostState = snackbarHostState
+            )
         }
     }
 }
@@ -118,7 +89,6 @@ fun SettingsScreen (
 fun SettingsContent (
     user: User?,
     context: Context,
-    paddingValues: PaddingValues,
     snackbarHostState: SnackbarHostState
 ) {
     val getString: (Int) -> String = context::getString
@@ -198,7 +168,6 @@ fun SettingsContent (
     Box (
         modifier = Modifier
             .fillMaxSize()
-            .padding(paddingValues)
             .padding(20.dp)
             .verticalScroll(scrollState),
         contentAlignment = Alignment.TopCenter
@@ -384,9 +353,6 @@ private fun CustomOutlinedTextField (
 }
 
 @Composable
-fun SettingsContentSkeleton (
-    loadingMessage: String,
-    paddingValues: PaddingValues
-) {
+fun SettingsContentSkeleton (loadingMessage: String) {
 
 }

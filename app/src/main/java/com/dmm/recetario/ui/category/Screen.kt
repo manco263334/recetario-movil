@@ -22,20 +22,13 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dmm.recetario.R
 import com.dmm.recetario.domain.model.Recipe
-import com.dmm.recetario.domain.model.User
-import com.dmm.recetario.ui.components.BaseLayoutWithRefresh
 import com.dmm.recetario.ui.components.WellnessCard
 import com.dmm.recetario.ui.components.WellnessCardSkeleton
 
 @Composable
 fun CategoryScreen (
-    user: User?,
     categoryId: String,
     viewModel: CategoryViewModel = hiltViewModel(),
-    onHomeClick: () -> Unit,
-    onCompleteForm: () -> Unit,
-    onLogOutSuccess: () -> Unit,
-    onSettingsClick: () -> Unit,
     onRecipeClick: (Recipe) -> Unit
 ) {
     LaunchedEffect(categoryId) {
@@ -45,26 +38,17 @@ fun CategoryScreen (
     val uiState = viewModel.uiState
     val recipes by viewModel.recipes.collectAsStateWithLifecycle()
 
-    BaseLayoutWithRefresh (
-        user = user,
-        onHomeClick = onHomeClick,
-        onRefresh = viewModel::refresh,
-        onCompleteForm = onCompleteForm,
-        onSettingsClick = onSettingsClick,
-        onLogOutSuccess = onLogOutSuccess
-    ) {
-        Crossfade (
-            targetState = uiState,
-            label = "category_crossfade"
-        ) { state ->
-            if (state is CategoryUiState.Loading) {
-                CategoryContentSkeleton(state.message)
-            } else {
-                CategoryContent (
-                    recipes = recipes,
-                    onRecipeClick = onRecipeClick
-                )
-            }
+    Crossfade (
+        targetState = uiState,
+        label = "category_crossfade"
+    ) { state ->
+        if (state is CategoryUiState.Loading) {
+            CategoryContentSkeleton(state.message)
+        } else {
+            CategoryContent (
+                recipes = recipes,
+                onRecipeClick = onRecipeClick
+            )
         }
     }
 }

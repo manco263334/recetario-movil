@@ -21,9 +21,8 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Toolbar (
+fun TopBar (
     drawerState: DrawerState,
-    modifier: Modifier = Modifier,
     title: @Composable () -> Unit
 ) {
     val scope = rememberCoroutineScope()
@@ -36,7 +35,7 @@ fun Toolbar (
 
     TopAppBar (
         title = title,
-        modifier = modifier
+        modifier = Modifier
             .background(MaterialTheme.colorScheme.secondary)
             .padding(16.dp),
         navigationIcon = {
