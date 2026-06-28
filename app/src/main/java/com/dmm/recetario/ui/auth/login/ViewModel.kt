@@ -1,6 +1,7 @@
 package com.dmm.recetario.ui.auth.login
 
 import android.util.Log
+import android.util.Patterns.EMAIL_ADDRESS
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -34,20 +35,41 @@ class LoginViewModel @Inject constructor (
     var uiState: LoginUiState by mutableStateOf(LoginUiState.Idle)
         private set
 
-    fun login(email: String, password: String) {
+    var data by mutableStateOf(LoginData("", ""))
+        private set
+
+    fun isDataValid(): Boolean {
+        val validations = arrayOf (
+            data.email.isNotBlank(),
+            EMAIL_ADDRESS.matcher(data.email).matches(),
+            data.password.isNotBlank(),
+            data.password.length >= 8
+        )
+
+        return validations.all { it }
+    }
+
+    fun login() {
         if (uiState is LoginUiState.Loading) return
 
         viewModelScope.launch {
             uiState = LoginUiState.Loading
 
             try {
-                val data = LoginData(email, password)
+                if (!isDataValid()) {
+                    uiState = LoginUiState.Error (
+                        resourceHelper.getString(R.string.something_went_wrong)
+                    )
+                    return@launch
+                }
+
+                val data = LoginData(data.email, data.password)
                 val response = service.login(data)
                 val token = response.token
 
                 awaitAll (
                     async { saveTokenToPreferences(token) },
-                    async { insertTokenReference(token, email) },
+                    async { insertTokenReference(token, data.email) },
                 )
 
                 syncUserLocally()
@@ -71,6 +93,14 @@ class LoginViewModel @Inject constructor (
                 )
             }
         }
+    }
+
+    fun updateEmail(email: String) {
+        data = data.copy(email = email)
+    }
+
+    fun updatePassword(password: String) {
+        data = data.copy(password = password)
     }
 
     private suspend fun syncUserLocally() {

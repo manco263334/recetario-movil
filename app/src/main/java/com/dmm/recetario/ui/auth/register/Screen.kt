@@ -60,6 +60,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.dmm.recetario.R
+import com.dmm.recetario.domain.model.RegisterData
 import com.dmm.recetario.ui.components.ErrorScreen
 
 @Composable
@@ -75,6 +76,8 @@ fun RegisterScreen (
             onNavigateToHome()
         }
     }
+
+    val data = viewModel.data
 
     Column (
         modifier = Modifier
@@ -106,8 +109,15 @@ fun RegisterScreen (
                 }
                 else -> {
                     RegisterContent (
+                        data = data,
+                        isEnabled = viewModel.isDataValid(),
                         onRegister = viewModel::register,
-                        onNavigateToLogin = onNavigateToLogin
+                        onNameChange = viewModel::updateName,
+                        onNavigateToLogin = onNavigateToLogin,
+                        onEmailChange = viewModel::updateEmail,
+                        onPhoneChange = viewModel::updatePhone,
+                        onUsernameChange = viewModel::updateUsername,
+                        onPasswordChange = viewModel::updatePassword
                     )
                 }
             }
@@ -117,25 +127,41 @@ fun RegisterScreen (
 
 @Composable
 fun RegisterContent (
+    data: RegisterData,
+    isEnabled: Boolean,
+    onRegister: () -> Unit,
     onNavigateToLogin: () -> Unit,
-    onRegister: (String, String, String, String?, String?) -> Unit
+    onNameChange: (String) -> Unit,
+    onEmailChange: (String) -> Unit,
+    onPhoneChange: (String) -> Unit,
+    onUsernameChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit
 ) {
     RegisterForm (
+        data = data,
+        isEnabled = isEnabled,
         onRegister = onRegister,
+        onNameChange = onNameChange,
+        onEmailChange = onEmailChange,
+        onPhoneChange = onPhoneChange,
+        onUsernameChange = onUsernameChange,
+        onPasswordChange = onPasswordChange,
         onNavigateToLogin = onNavigateToLogin
     )
 }
 
 @Composable
 private fun RegisterForm (
+    data: RegisterData,
+    isEnabled: Boolean,
+    onRegister: () -> Unit,
     onNavigateToLogin: () -> Unit,
-    onRegister: (String, String, String, String?, String?) -> Unit
+    onNameChange: (String) -> Unit,
+    onEmailChange: (String) -> Unit,
+    onPhoneChange: (String) -> Unit,
+    onUsernameChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit
 ) {
-    var name by rememberSaveable { mutableStateOf("") }
-    var email by rememberSaveable { mutableStateOf("") }
-    var password by rememberSaveable { mutableStateOf("") }
-    var phone by rememberSaveable { mutableStateOf("") }
-    var username by rememberSaveable { mutableStateOf("") }
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
 
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -201,12 +227,10 @@ private fun RegisterForm (
                         verticalArrangement = Arrangement.spacedBy(18.dp)
                     ) {
                         OutlinedTextField (
-                            value = name,
+                            value = data.name,
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth(),
-                            onValueChange = {
-                                name = it
-                            },
+                            onValueChange = onNameChange,
                             label = {
                                 Text(stringResource(R.string.name))
                             },
@@ -219,14 +243,12 @@ private fun RegisterForm (
                         )
 
                         OutlinedTextField (
-                            value = email,
+                            value = data.email,
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth(),
                             keyboardOptions = KeyboardOptions.Default
                                 .copy(keyboardType = KeyboardType.Email),
-                            onValueChange = {
-                                email = it
-                            },
+                            onValueChange = onEmailChange,
                             label = {
                                 Text(stringResource(R.string.email))
                             },
@@ -239,7 +261,7 @@ private fun RegisterForm (
                         )
 
                         OutlinedTextField (
-                            value = password,
+                            value = data.password,
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth(),
                             visualTransformation =
@@ -247,9 +269,7 @@ private fun RegisterForm (
                                     VisualTransformation.None
                                 else
                                     PasswordVisualTransformation(),
-                            onValueChange = {
-                                password = it
-                            },
+                            onValueChange = onPasswordChange,
                             label = {
                                 Text(stringResource(R.string.password))
                             },
@@ -281,14 +301,12 @@ private fun RegisterForm (
                         )
 
                         OutlinedTextField (
-                            value = phone,
+                            value = data.phone ?: "",
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth(),
                             keyboardOptions = KeyboardOptions.Default
                                 .copy(keyboardType = KeyboardType.Phone),
-                            onValueChange = {
-                                phone = it
-                            },
+                            onValueChange = onPhoneChange,
                             label = {
                                 Text(stringResource(R.string.number_phone))
                             },
@@ -298,12 +316,10 @@ private fun RegisterForm (
                         )
 
                         OutlinedTextField (
-                            value = username,
+                            value = data.username ?: "",
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth(),
-                            onValueChange = {
-                                username = it
-                            },
+                            onValueChange = onUsernameChange,
                             label = {
                                 Text(stringResource(R.string.username))
                             },
@@ -319,24 +335,13 @@ private fun RegisterForm (
                             colors = ButtonDefaults.buttonColors (
                                 containerColor = Color(0xFF00C2FF)
                             ),
-                            enabled =
-                                name.isNotBlank() &&
-                                email.isNotBlank() &&
-                                password.isNotBlank() &&
-                                password.length >= 8,
+                            enabled = isEnabled,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(56.dp),
                             onClick = {
                                 keyboardController?.hide()
-
-                                onRegister (
-                                    name,
-                                    email,
-                                    password,
-                                    phone.ifBlank { null },
-                                    username.ifBlank { null }
-                                )
+                                onRegister()
                             }
                         ) {
                             Icon (

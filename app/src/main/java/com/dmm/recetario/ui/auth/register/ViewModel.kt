@@ -1,6 +1,7 @@
 package com.dmm.recetario.ui.auth.register
 
 import android.util.Log
+import android.util.Patterns.EMAIL_ADDRESS
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -34,32 +35,49 @@ class RegisterViewModel @Inject constructor (
     var uiState: RegisterUiState by mutableStateOf(RegisterUiState.Idle)
         private set
 
-    fun register (
-        name: String,
-        email: String,
-        password: String,
-        phone: String?,
-        username: String?
-    ) {
+    var data by mutableStateOf (
+        RegisterData("", "", null, "", null)
+    )
+
+    fun isDataValid(): Boolean {
+        val validations = arrayOf (
+            data.name.isNotBlank(),
+            data.email.isNotBlank(),
+            EMAIL_ADDRESS.matcher(data.email).matches(),
+            data.password.isNotBlank(),
+            data.password.length >= 8
+        )
+
+        return validations.all { it }
+    }
+
+    fun register() {
         if (uiState is RegisterUiState.Loading) return
 
         viewModelScope.launch {
             uiState = RegisterUiState.Loading
 
             try {
+                if (!isDataValid()) {
+                    uiState = RegisterUiState.Error (
+                        resourceHelper.getString(R.string.something_went_wrong)
+                    )
+                    return@launch
+                }
+
                 val data = RegisterData (
-                    name = name,
-                    email = email,
-                    phone = phone,
-                    password = password,
-                    username = username
+                    name = data.name,
+                    email = data.email,
+                    phone = data.phone,
+                    password = data.password,
+                    username = data.username
                 )
                 val response = service.register(data)
                 val token = response.token
 
                 awaitAll (
                     async { saveTokenToPreferences(token) },
-                    async { insertTokenReference(token, email) },
+                    async { insertTokenReference(token, data.email) },
                 )
 
                 syncUserLocally()
@@ -72,6 +90,26 @@ class RegisterViewModel @Inject constructor (
                 )
             }
         }
+    }
+
+    fun updateEmail(email: String) {
+        data = data.copy(email = email)
+    }
+
+    fun updatePassword(password: String) {
+        data = data.copy(password = password)
+    }
+
+    fun updateName(name: String) {
+        data = data.copy(name = name)
+    }
+
+    fun updatePhone(phone: String) {
+        data = data.copy(phone = phone)
+    }
+
+    fun updateUsername(username: String) {
+        data = data.copy(username = username)
     }
 
     private suspend fun syncUserLocally() {

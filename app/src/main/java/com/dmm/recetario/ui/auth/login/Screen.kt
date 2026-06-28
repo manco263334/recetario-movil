@@ -51,7 +51,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -60,6 +59,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.dmm.recetario.R
+import com.dmm.recetario.domain.model.LoginData
 import com.dmm.recetario.ui.components.ErrorScreen
 
 @Composable
@@ -69,6 +69,7 @@ fun LoginScreen (
     onNavigateToRegister: () -> Unit
 ) {
     val uiState = viewModel.uiState
+    val data = viewModel.data
 
     LaunchedEffect(uiState) {
         if (uiState is LoginUiState.Success) {
@@ -106,9 +107,13 @@ fun LoginScreen (
                 }
                 else -> {
                     LoginContent (
+                        data = data,
+                        isEnabled = viewModel.isDataValid(),
                         onLogin = viewModel::login,
+                        onEmailChange = viewModel::updateEmail,
                         onLoginAsGuest = viewModel::loginAsGuest,
-                        onNavigateToRegister = onNavigateToRegister
+                        onNavigateToRegister = onNavigateToRegister,
+                        onPasswordChange = viewModel::updatePassword
                     )
                 }
             }
@@ -118,25 +123,35 @@ fun LoginScreen (
 
 @Composable
 private fun LoginContent (
+    data: LoginData,
+    isEnabled: Boolean,
+    onLogin: () -> Unit,
     onLoginAsGuest: () -> Unit,
+    onEmailChange: (String) -> Unit,
     onNavigateToRegister: () -> Unit,
-    onLogin: (String, String) -> Unit
+    onPasswordChange: (String) -> Unit
 ) {
     LoginForm (
+        data = data,
+        isEnabled = isEnabled,
         onLogin = onLogin,
+        onEmailChange = onEmailChange,
         onLoginAsGuest = onLoginAsGuest,
+        onPasswordChange = onPasswordChange,
         onNavigateToRegister = onNavigateToRegister
     )
 }
 
 @Composable
 private fun LoginForm (
+    data: LoginData,
+    isEnabled: Boolean,
+    onLogin: () -> Unit,
     onLoginAsGuest: () -> Unit,
+    onEmailChange: (String) -> Unit,
     onNavigateToRegister: () -> Unit,
-    onLogin: (String, String) -> Unit
+    onPasswordChange: (String) -> Unit
 ) {
-    var email by rememberSaveable { mutableStateOf("") }
-    var password by rememberSaveable { mutableStateOf("") }
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
 
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -202,7 +217,7 @@ private fun LoginForm (
                         verticalArrangement = Arrangement.spacedBy(18.dp)
                     ) {
                         OutlinedTextField (
-                            value = email,
+                            value = data.email,
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth(),
                             keyboardOptions = KeyboardOptions.Default
@@ -214,9 +229,7 @@ private fun LoginForm (
                                 focusedTextColor = MaterialTheme.colorScheme.onBackground,
                                 unfocusedTextColor = MaterialTheme.colorScheme.onBackground
                             ),
-                            onValueChange = {
-                                email = it
-                            },
+                            onValueChange = onEmailChange,
                             placeholder = {
                                 Text(stringResource(R.string.email_placeholder))
                             },
@@ -229,7 +242,7 @@ private fun LoginForm (
                         )
 
                         OutlinedTextField (
-                            value = password,
+                            value = data.password,
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth(),
                             keyboardOptions = KeyboardOptions.Default
@@ -238,9 +251,7 @@ private fun LoginForm (
                                 VisualTransformation.None
                             else
                                 PasswordVisualTransformation(),
-                            onValueChange = {
-                                password = it
-                            },
+                            onValueChange = onPasswordChange,
                             label = {
                                 Text(stringResource(R.string.password))
                             },
@@ -273,12 +284,10 @@ private fun LoginForm (
                             colors = ButtonDefaults.buttonColors (
                                 containerColor = Color(0xFF00C2FF)
                             ),
-                            enabled = email.isNotBlank() &&
-                                    password.isNotBlank() &&
-                                    password.length >= 8,
+                            enabled = isEnabled,
                             onClick = {
                                 keyboardController?.hide()
-                                onLogin(email, password)
+                                onLogin()
                             }
                         ) {
                             Text (
