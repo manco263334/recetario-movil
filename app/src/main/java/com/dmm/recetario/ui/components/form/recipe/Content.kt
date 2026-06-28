@@ -29,13 +29,7 @@ fun RecipeForm (
     val categories by viewModel.categories.collectAsStateWithLifecycle()
     var stepIndex by rememberSaveable { mutableIntStateOf(0) }
 
-    var name by rememberSaveable { mutableStateOf("") }
-    var persons by rememberSaveable { mutableIntStateOf(1) }
-    var totalTimeInMinutes by rememberSaveable { mutableIntStateOf(0) }
-    var cookTimeInMinutes by rememberSaveable { mutableIntStateOf(0) }
-    var prepareTimeInMinutes by rememberSaveable { mutableIntStateOf(0) }
-    val ingredients = rememberSaveable { mutableListOf<Map<String, String>>() }
-    val steps = rememberSaveable { mutableListOf<String>() }
+    val data = viewModel.data
 
     var ingredientName by rememberSaveable { mutableStateOf("") }
     var ingredientQuantity by rememberSaveable { mutableStateOf("") }
@@ -62,20 +56,16 @@ fun RecipeForm (
             text = {
                 Column {
                     OutlinedTextField (
-                        value = name, 
-                        onValueChange = {
-                            name = it
-                        },
+                        value = data.name,
+                        onValueChange = viewModel::updateName,
                         label = { 
                             Text(stringResource(R.string.recipe_name_label))
                         }
                     )
-                    
+
                     OutlinedTextField (
-                        value = persons.toString(), 
-                        onValueChange = {
-                            persons = it.toIntOrNull() ?: 0
-                        },
+                        value = data.persons.toString(),
+                        onValueChange = viewModel::updatePersons,
                         label = { 
                             Text(stringResource(R.string.persons_label))
                         }
@@ -102,30 +92,24 @@ fun RecipeForm (
             text = {
                 Column {
                     OutlinedTextField (
-                        value = totalTimeInMinutes.toString(), 
-                        onValueChange = {
-                            totalTimeInMinutes = it.toIntOrNull() ?: 0
-                        },
+                        value = data.totalTimeInMinutes.toString(),
+                        onValueChange = viewModel::updateTotalTimeInMinutes,
                         label = { 
                             Text(stringResource(R.string.total_time_label))
                         }
                     )
-                    
+
                     OutlinedTextField (
-                        value = cookTimeInMinutes.toString(), 
-                        onValueChange = {
-                            cookTimeInMinutes = it.toIntOrNull() ?: 0
-                        },
+                        value = data.cookingTimeInMinutes.toString(),
+                        onValueChange = viewModel::updateCookingTimeInMinutes,
                         label = { 
                             Text(stringResource(R.string.cooking_time_label))
                         }
                     )
-                    
+
                     OutlinedTextField (
-                        value = prepareTimeInMinutes.toString(), 
-                        onValueChange = {
-                            prepareTimeInMinutes = it.toIntOrNull() ?: 0
-                        },
+                        value = data.preparationTimeInMinutes.toString(),
+                        onValueChange = viewModel::updatePreparationTimeInMinutes,
                         label = { 
                             Text(stringResource(R.string.preparation_time_label)) 
                         }
@@ -139,7 +123,7 @@ fun RecipeForm (
             confirmButton = {
                 Button (
                     onClick = {
-                        ingredients.add (
+                        viewModel.addIngredient (
                             mapOf (
                                 "name" to ingredientName, 
                                 "quantity" to ingredientQuantity
@@ -190,7 +174,7 @@ fun RecipeForm (
             confirmButton = {
                 Button (
                     onClick = {
-                        steps.add(stepDescription)
+                        viewModel.addStep(stepDescription)
                         stepDescription = ""
                     }
                 ) {
@@ -200,15 +184,7 @@ fun RecipeForm (
             dismissButton = {
                 Button (
                     onClick = {
-                        viewModel.addRecipeData (
-                            name = name,
-                            steps = steps,
-                            persons = persons,
-                            ingredients = ingredients,
-                            totalTimeInMinutes = totalTimeInMinutes,
-                            cookingTimeInMinutes = cookTimeInMinutes,
-                            preparationTimeInMinutes = prepareTimeInMinutes
-                        )
+                        viewModel.addRecipeData()
                         stepIndex = 4
                     }
                 ) {

@@ -6,10 +6,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.dmm.recetario.R
@@ -20,15 +16,14 @@ fun CategoryForm (
     onDismiss: () -> Unit,
     onCompleteForm: () -> Unit
 ) {
-    var name by rememberSaveable { mutableStateOf("") }
-    var icon by rememberSaveable { mutableStateOf("") }
+    val data = viewModel.data
 
     AlertDialog (
         onDismissRequest = onDismiss,
         confirmButton = {
             Button (
                 onClick = {
-                    viewModel.createCategory(name = name, icon = icon.ifBlank { null })
+                    viewModel.createCategory()
                     onCompleteForm()
                 }
             ) {
@@ -46,19 +41,15 @@ fun CategoryForm (
         text = {
             Column {
                 OutlinedTextField (
-                    value = name,
-                    onValueChange = {
-                        name = it
-                    },
+                    value = data.name,
+                    onValueChange = viewModel::updateName,
                     label = {
                         Text(stringResource(R.string.name_label))
                     }
                 )
                 OutlinedTextField (
-                    value = icon,
-                    onValueChange = {
-                        icon = it
-                    },
+                    value = data.icon ?: "",
+                    onValueChange = viewModel::updateIcon,
                     label = {
                         Text(stringResource(R.string.icon_label))
                     }
