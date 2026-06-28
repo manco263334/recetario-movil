@@ -54,17 +54,20 @@ class LoginViewModel @Inject constructor (
 
                 uiState = LoginUiState.Success(token)
             } catch (e: Exception) {
+                val errorMessage = e.message
+                    ?: resourceHelper.getString(R.string.something_went_wrong)
+
                 Log.d (
                     "LoginViewModel",
                     resourceHelper.getString (
                         R.string.error_fetching_data,
-                        e.message ?: ""
+                        errorMessage
                     ),
                     e
                 )
 
                 uiState = LoginUiState.Error (
-                    resourceHelper.getString (R.string.something_went_wrong)
+                    resourceHelper.getString(R.string.something_went_wrong)
                 )
             }
         }

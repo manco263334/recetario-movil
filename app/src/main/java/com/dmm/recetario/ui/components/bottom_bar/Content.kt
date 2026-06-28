@@ -19,7 +19,7 @@ fun BottomBar (
         items.forEach { item ->
             BottomBarItem (
                 item = item,
-                isSelected = selectedKey == item.route,
+                isSelected = selectedKey::class == item.route::class,
                 onClick = onSelectKey
             )
         }
@@ -34,12 +34,12 @@ private fun RowScope.BottomBarItem (
 ) {
     NavigationBarItem (
         selected = isSelected,
-        onClick = { onClick(item.route) },
         icon = {
             Icon(imageVector = item.icon, contentDescription = item.name)
         },
         label = {
             Text(item.name)
-        }
+        },
+        onClick = { onClick(item.route) }
     )
 }

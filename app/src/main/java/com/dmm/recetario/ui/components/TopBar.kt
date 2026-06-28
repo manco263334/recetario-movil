@@ -27,12 +27,6 @@ fun TopBar (
 ) {
     val scope = rememberCoroutineScope()
 
-    LaunchedEffect(Unit) {
-        if (drawerState.isOpen) {
-            drawerState.close()
-        }
-    }
-
     TopAppBar (
         title = title,
         modifier = Modifier

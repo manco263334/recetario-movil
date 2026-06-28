@@ -10,5 +10,6 @@ sealed class APIException(message: String) : RuntimeException(message) {
 
     class ServerException(message: String) : APIException(message)
 
+    class NetworkException(message: String) : APIException(message)
     class UnknownException(message: String) : APIException(message)
 }

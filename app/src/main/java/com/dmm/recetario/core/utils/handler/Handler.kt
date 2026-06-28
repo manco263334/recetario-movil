@@ -4,6 +4,7 @@ import com.dmm.recetario.R
 import com.dmm.recetario.core.utils.helper.ResourceHelper
 import com.dmm.recetario.domain.exception.APIException
 import retrofit2.Response
+import java.io.IOException
 
 suspend fun <T> handleApiCall (
     resourceHelper: ResourceHelper,
@@ -46,6 +47,10 @@ suspend fun <T> handleApiCall (
                 )
             }
         }
+    } catch (e: IOException) {
+        throw APIException.NetworkException (
+            e.message ?: getString(R.string.network_error)
+        )
     } catch (e: Exception) {
         throw APIException.UnknownException (
             e.message ?: getString(R.string.unknown_error)
