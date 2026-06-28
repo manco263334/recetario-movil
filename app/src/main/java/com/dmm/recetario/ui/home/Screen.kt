@@ -2,6 +2,8 @@ package com.dmm.recetario.ui.home
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.BoxWithConstraintsScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,34 +34,45 @@ fun HomeScreen (
     val uiState = viewModel.uiState
     val categories by viewModel.categories.collectAsStateWithLifecycle()
 
-    Crossfade (
-        targetState = uiState,
-        label = "home_crossfade"
-    ) { state ->
-        if (state is HomeUiState.Loading) {
-            HomeContentSkeleton(state.message)
-        } else {
-            HomeContent (
-                categories = categories,
-                onCategoryClick = onCategoryClick
-            )
+    BoxWithConstraints (
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Crossfade (
+            targetState = uiState,
+            label = "home_crossfade"
+        ) { state ->
+            if (state is HomeUiState.Loading) {
+                HomeContentSkeleton(state.message)
+            } else {
+                HomeContent (
+                    categories = categories,
+                    onCategoryClick = onCategoryClick
+                )
+            }
         }
     }
 }
 
 @Composable
-private fun HomeContent (
+private fun BoxWithConstraintsScope.HomeContent (
     categories: List<Category>,
     onCategoryClick: (Category) -> Unit
 ) {
+    val paneWidth = maxWidth
+    var columns = (paneWidth.value / 200).toInt()
+
+    if (columns == 0) {
+        columns = 1
+    }
+
     LazyVerticalGrid (
         modifier = Modifier.fillMaxSize(),
-        columns = GridCells.Fixed(2),
+        columns = GridCells.Fixed(columns),
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        item(span = { GridItemSpan(2) }) {
+        item(span = { GridItemSpan(columns) }) {
             Text (
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
@@ -84,15 +97,22 @@ private fun HomeContent (
 }
 
 @Composable
-private fun HomeContentSkeleton(loadingMessage: String) {
+private fun BoxWithConstraintsScope.HomeContentSkeleton(loadingMessage: String) {
+    val paneWidth = maxWidth
+    var columns = (paneWidth.value / 200).toInt()
+
+    if (columns == 0) {
+        columns = 1
+    }
+
     LazyVerticalGrid (
         modifier = Modifier.fillMaxSize(),
-        columns = GridCells.Fixed(2),
+        columns = GridCells.Fixed(columns),
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        item(span = { GridItemSpan(2) }) {
+        item(span = { GridItemSpan(columns) }) {
             Text (
                 text = loadingMessage,
                 fontWeight = FontWeight.Bold,
@@ -101,7 +121,7 @@ private fun HomeContentSkeleton(loadingMessage: String) {
             )
         }
 
-        items(10) {
+        items(5 * columns) {
             WellnessCardSkeleton()
         }
     }

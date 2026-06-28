@@ -1,6 +1,8 @@
 package com.dmm.recetario.ui.components.bottom_bar
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Category
+import androidx.compose.material.icons.filled.Fastfood
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
@@ -28,12 +30,12 @@ fun bottomNavItems() = listOf (
     BottomNavItem (
         name = stringResource(R.string.categories_model),
         route = Routes.Category(""),
-        icon = Icons.Default.Home
+        icon = Icons.Default.Category
     ),
     BottomNavItem (
         name = stringResource(R.string.recipes_model),
         route = Routes.Recipe(""),
-        icon = Icons.Default.Home
+        icon = Icons.Default.Fastfood
     ),
     BottomNavItem (
         name = stringResource(R.string.settings),
