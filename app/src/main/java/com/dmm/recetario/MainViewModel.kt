@@ -70,9 +70,10 @@ class MainViewModel @Inject constructor (
         viewModelScope.launch {
             awaitAll (
                 async { userManager.syncUser() },
-                async { userService.syncUsers(0, 10, false) },
-                async { recipeService.syncRecipes(0, 10, false, true) },
-                async { categoryService.syncCategories(0, 10, true) }
+                async { userService.syncUsers(page = 0, size = 10, withRecipes = false) },
+                async { recipeService.syncRecipes(page = 0, size = 10,
+                    withCreator = false, withCategories = true) },
+                async { categoryService.syncCategories(page = 0, size = 10, withRecipes = true) }
             )
         }
     }
