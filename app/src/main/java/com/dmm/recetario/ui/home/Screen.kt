@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dmm.recetario.R
+import com.dmm.recetario.core.utils.extension.calculateColumns
 import com.dmm.recetario.domain.model.Category
 import com.dmm.recetario.ui.components.WellnessCard
 import com.dmm.recetario.ui.components.WellnessCardSkeleton
@@ -58,12 +59,7 @@ private fun BoxWithConstraintsScope.HomeContent (
     categories: List<Category>,
     onCategoryClick: (Category) -> Unit
 ) {
-    val paneWidth = maxWidth
-    var columns = (paneWidth.value / 200).toInt()
-
-    if (columns == 0) {
-        columns = 1
-    }
+    val columns = calculateColumns()
 
     LazyVerticalGrid (
         modifier = Modifier.fillMaxSize(),
@@ -98,12 +94,7 @@ private fun BoxWithConstraintsScope.HomeContent (
 
 @Composable
 private fun BoxWithConstraintsScope.HomeContentSkeleton(loadingMessage: String) {
-    val paneWidth = maxWidth
-    var columns = (paneWidth.value / 200).toInt()
-
-    if (columns == 0) {
-        columns = 1
-    }
+    val columns = calculateColumns()
 
     LazyVerticalGrid (
         modifier = Modifier.fillMaxSize(),
