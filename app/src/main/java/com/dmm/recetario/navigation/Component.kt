@@ -30,6 +30,8 @@ import androidx.navigation3.ui.NavDisplay
 import com.dmm.recetario.core.utils.extension.back
 import com.dmm.recetario.core.utils.extension.backTo
 import com.dmm.recetario.core.utils.extension.navigateTo
+import com.dmm.recetario.domain.model.Category
+import com.dmm.recetario.domain.model.Recipe
 import com.dmm.recetario.domain.model.User
 import com.dmm.recetario.ui.auth.login.LoginScreen
 import com.dmm.recetario.ui.auth.register.RegisterScreen
@@ -71,7 +73,9 @@ fun AppNavigation (
                     hasRefresh = true,
                     hasBottomBar = true,
                     onRefresh = homeViewModel::refresh,
-                    onCompleteForm = { backStack.backTo(Routes.Home) }
+                    onCompleteForm = {
+                        backStack.backTo(Routes.Home)
+                    }
                 )
             }
 
@@ -117,7 +121,9 @@ fun AppNavigation (
 
     val closeDrawerAndDo: (call: () -> Unit) -> () -> Unit = {
         coroutineScope.launch {
-            drawerState.close()
+            if (drawerState.isOpen) {
+                drawerState.close()
+            }
         }
 
         it
@@ -133,14 +139,20 @@ fun AppNavigation (
         backStack.clear()
         backStack.navigateTo(Routes.Login)
     }
+    val onCategoryClick: (String) -> Unit = {
+        backStack.navigateTo(Routes.Category(it))
+    }
+    val onRecipeClick: (String) -> Unit = {
+        backStack.navigateTo(Routes.Recipe(it))
+    }
 
     if (layoutConfig.showBaseLayout) {
         val onSelectKey: (NavKey) -> Unit = {
             when(it) {
                 is Routes.Home -> onHomeClick()
                 is Routes.Settings -> onSettingsClick()
-                is Routes.Category -> onHomeClick()
-                is Routes.Recipe -> onHomeClick()
+                is Routes.Category -> onCategoryClick(it.id)
+                is Routes.Recipe -> onRecipeClick(it.id)
 
                 else -> {}
             }
@@ -169,7 +181,7 @@ fun AppNavigation (
                     if (layoutConfig.hasBottomBar) {
                         BottomBar (
                             selectedKey = currentKey,
-                            onSelectKey = { backStack.navigateTo(it) }
+                            onSelectKey = onSelectKey
                         )
                     }
                 },

@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
@@ -31,16 +32,21 @@ class MainActivity : ComponentActivity() {
             val user by viewModel.user.collectAsStateWithLifecycle()
 
             RecetarioTheme {
-                if (startDestination != null) {
-                    val backStack = rememberNavBackStack(startDestination!!)
+                Crossfade (
+                    targetState = startDestination,
+                    label = "user"
+                ) { startDestination ->
+                    if (startDestination != null) {
+                        val backStack = rememberNavBackStack(startDestination)
 
-                    AppNavigation (
-                        user = user,
-                        backStack = backStack
-                    )
-                } else {
-                    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        CircularProgressIndicator()
+                        AppNavigation (
+                            user = user,
+                            backStack = backStack
+                        )
+                    } else {
+                        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                            CircularProgressIndicator()
+                        }
                     }
                 }
             }
