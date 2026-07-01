@@ -30,8 +30,6 @@ import androidx.navigation3.ui.NavDisplay
 import com.dmm.recetario.core.utils.extension.back
 import com.dmm.recetario.core.utils.extension.backTo
 import com.dmm.recetario.core.utils.extension.navigateTo
-import com.dmm.recetario.domain.model.Category
-import com.dmm.recetario.domain.model.Recipe
 import com.dmm.recetario.domain.model.User
 import com.dmm.recetario.ui.auth.login.LoginScreen
 import com.dmm.recetario.ui.auth.register.RegisterScreen
@@ -282,12 +280,12 @@ private fun AppNavDisplay (
                 )
             }
 
-            entry<Routes.Category>(metadata = ListDetailSceneStrategy.detailPane()) {
+            entry<Routes.Category>(metadata = ListDetailSceneStrategy.detailPane()) { category ->
                 CategoryScreen (
-                    categoryId = it.id,
+                    categoryId = category.id,
                     viewModel = categoryViewModel,
-                    onRecipeClick = {
-                        backStack.navigateTo(Routes.Recipe(it.id))
+                    onRecipeClick = { recipe ->
+                        backStack.navigateTo(Routes.Recipe(recipe.id))
                     }
                 )
             }

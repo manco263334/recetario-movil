@@ -41,9 +41,7 @@ fun CategoryScreen (
     val uiState = viewModel.uiState
     val recipes by viewModel.recipes.collectAsStateWithLifecycle()
 
-    BoxWithConstraints (
-        modifier = Modifier.fillMaxSize()
-    ) {
+    BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
         Crossfade (
             targetState = uiState,
             label = "category_crossfade"

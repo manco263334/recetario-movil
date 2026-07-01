@@ -35,9 +35,7 @@ fun HomeScreen (
     val uiState = viewModel.uiState
     val categories by viewModel.categories.collectAsStateWithLifecycle()
 
-    BoxWithConstraints (
-        modifier = Modifier.fillMaxSize()
-    ) {
+    BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
         Crossfade (
             targetState = uiState,
             label = "home_crossfade"
