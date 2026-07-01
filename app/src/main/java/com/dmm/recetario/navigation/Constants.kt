@@ -10,12 +10,15 @@ import com.dmm.recetario.ui.recipe.RecipeViewModel
 import com.dmm.recetario.ui.settings.SettingsViewModel
 
 data class LayoutConfig (
-    val hasFab: Boolean = false,
-    val hasRefresh: Boolean = false,
     val hasBottomBar: Boolean = false,
-    val showBaseLayout: Boolean = true,
+
     val onCompleteForm: (() -> Unit)? = null,
-    val onRefresh: (suspend () -> Unit)? = null
+    val hasFab: Boolean = onCompleteForm != null,
+
+    val onRefresh: (suspend () -> Unit)? = null,
+    val hasRefresh: Boolean = onCompleteForm != null,
+
+    val showBaseLayout: Boolean = hasRefresh || hasFab || hasBottomBar,
 )
 
 @Composable

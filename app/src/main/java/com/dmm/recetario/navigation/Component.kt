@@ -60,15 +60,13 @@ fun AppNavigation (
     val layoutConfig = remember(currentKey) {
         when (currentKey) {
             is Routes.Login, is Routes.Register -> {
-                LayoutConfig(showBaseLayout = false)
+                LayoutConfig()
             }
 
             is Routes.Home -> {
                 val homeViewModel = viewModels["home"] as HomeViewModel
 
                 LayoutConfig (
-                    hasFab = true,
-                    hasRefresh = true,
                     hasBottomBar = true,
                     onRefresh = homeViewModel::refresh,
                     onCompleteForm = {
@@ -81,8 +79,6 @@ fun AppNavigation (
                 val categoryViewModel = viewModels["category"] as CategoryViewModel
 
                 LayoutConfig (
-                    hasFab = true,
-                    hasRefresh = true,
                     hasBottomBar = true,
                     onRefresh = categoryViewModel::refresh,
                     onCompleteForm = {
@@ -95,8 +91,6 @@ fun AppNavigation (
                 val recipeViewModel = viewModels["recipe"] as RecipeViewModel
 
                 LayoutConfig (
-                    hasFab = true,
-                    hasRefresh = true,
                     hasBottomBar = true,
                     onRefresh = recipeViewModel::refresh,
                     onCompleteForm = {
@@ -109,7 +103,7 @@ fun AppNavigation (
                 LayoutConfig(hasFab = false, hasRefresh = false, hasBottomBar = true)
             }
 
-            else -> LayoutConfig(showBaseLayout = false)
+            else -> LayoutConfig()
         }
     }
 
