@@ -7,3 +7,6 @@ fun BoxWithConstraintsScope.calculateColumns(): Int {
 
     return if (paneWidth < 400) 1 else paneWidth / 200
 }
+
+val BoxWithConstraintsScope.columns: Int
+    get() = calculateColumns()

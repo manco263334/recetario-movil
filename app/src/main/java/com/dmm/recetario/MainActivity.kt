@@ -33,8 +33,8 @@ class MainActivity : ComponentActivity() {
 
             RecetarioTheme {
                 Crossfade (
-                    targetState = startDestination,
-                    label = "user"
+                    label = "user",
+                    targetState = startDestination
                 ) { startDestination ->
                     if (startDestination != null) {
                         val backStack = rememberNavBackStack(startDestination)

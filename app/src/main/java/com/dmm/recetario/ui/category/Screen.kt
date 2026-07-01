@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dmm.recetario.R
-import com.dmm.recetario.core.utils.extension.calculateColumns
+import com.dmm.recetario.core.utils.extension.columns
 import com.dmm.recetario.domain.model.Recipe
 import com.dmm.recetario.ui.components.WellnessCard
 import com.dmm.recetario.ui.components.WellnessCardSkeleton
@@ -65,8 +65,6 @@ private fun BoxWithConstraintsScope.CategoryContent (
     recipes: List<Recipe>,
     onRecipeClick: (Recipe) -> Unit
 ) {
-    val columns = calculateColumns()
-
     LazyVerticalGrid (
         modifier = Modifier.fillMaxSize(),
         columns = GridCells.Fixed(columns),
@@ -100,8 +98,6 @@ private fun BoxWithConstraintsScope.CategoryContent (
 
 @Composable
 private fun BoxWithConstraintsScope.CategoryContentSkeleton(loadingMessage: String) {
-    val columns = calculateColumns()
-
     LazyVerticalGrid (
         modifier = Modifier.fillMaxSize(),
         columns = GridCells.Fixed(columns),
