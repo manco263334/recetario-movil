@@ -15,6 +15,7 @@ fun User?.isNullOrAnonymous(): Boolean {
             this@isNullOrAnonymous is AnonymousUser
         )
     }
+
     return this == null || this is AnonymousUser
 }
 

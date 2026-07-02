@@ -59,9 +59,7 @@ fun AppNavigation (
 
     val layoutConfig = remember(currentKey) {
         when (currentKey) {
-            is Routes.Login, is Routes.Register -> {
-                LayoutConfig()
-            }
+            is Routes.Login, is Routes.Register -> LayoutConfig()
 
             is Routes.Home -> {
                 val homeViewModel = viewModels["home"] as HomeViewModel
@@ -99,9 +97,7 @@ fun AppNavigation (
                 )
             }
 
-            is Routes.Settings -> {
-                LayoutConfig(hasFab = false, hasRefresh = false, hasBottomBar = true)
-            }
+            is Routes.Settings -> LayoutConfig(hasBottomBar = true)
 
             else -> LayoutConfig()
         }
