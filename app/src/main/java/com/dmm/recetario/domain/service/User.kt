@@ -12,6 +12,8 @@ interface UserService {
         withRecipes: Boolean?
     ): Boolean
 
+    suspend fun syncUser(id: String): Boolean
+
     fun getUserById(id: String): Flow<User?>
 
     fun getUserByEmail(email: String): Flow<User?>

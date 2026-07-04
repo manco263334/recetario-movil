@@ -61,6 +61,18 @@ class UserServiceImpl (
         }
     }
 
+    override suspend fun syncUser(id: String): Boolean {
+        return try {
+            val user = userRepository.getUser(id, withRecipes = false)
+
+            dao.saveUser(user.toEntity())
+
+            true
+        } catch (_: Exception) {
+            false
+        }
+    }
+
     override fun getUserById(id: String): Flow<User?> {
         return dao.getUser(id = id).map { user ->
             user?.toDomain()

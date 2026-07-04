@@ -46,6 +46,7 @@ import com.dmm.recetario.ui.home.HomeViewModel
 import com.dmm.recetario.ui.recipe.RecipeScreen
 import com.dmm.recetario.ui.recipe.RecipeViewModel
 import com.dmm.recetario.ui.settings.SettingsScreen
+import com.dmm.recetario.ui.settings.SettingsViewModel
 import kotlinx.coroutines.launch
 
 @Composable
@@ -97,7 +98,11 @@ fun AppNavigation (
                 )
             }
 
-            is Routes.Settings -> LayoutConfig(hasBottomBar = true)
+            is Routes.Settings -> {
+                val settingsViewModel = viewModels["settings"] as SettingsViewModel
+
+                LayoutConfig(hasBottomBar = true, onRefresh = settingsViewModel::refresh)
+            }
 
             else -> LayoutConfig()
         }
@@ -224,6 +229,7 @@ private fun AppNavDisplay (
     val homeViewModel = viewModels["home"] as HomeViewModel
     val categoryViewModel = viewModels["category"] as CategoryViewModel
     val recipeViewModel = viewModels["recipe"] as RecipeViewModel
+    val settingsViewModel = viewModels["settings"] as SettingsViewModel
 
     NavDisplay (
         modifier = modifier,
@@ -284,7 +290,7 @@ private fun AppNavDisplay (
                 RecipeScreen(recipeId = it.id, viewModel = recipeViewModel)
             }
 
-            entry<Routes.Settings> { SettingsScreen() }
+            entry<Routes.Settings> { SettingsScreen(viewModel = settingsViewModel) }
         },
         transitionSpec = {
             slideInHorizontally (
