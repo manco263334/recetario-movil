@@ -34,7 +34,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.dmm.recetario.core.utils.extension.shimmerLoading
 
 @Composable
 fun WellnessCard (

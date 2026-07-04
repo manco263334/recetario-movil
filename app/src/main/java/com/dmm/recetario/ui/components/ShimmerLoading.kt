@@ -1,4 +1,4 @@
-package com.dmm.recetario.core.utils.extension
+package com.dmm.recetario.ui.components
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.RepeatMode
@@ -14,10 +14,13 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Shape
 
 @Composable
 fun Modifier.shimmerLoading (
     isLoading: Boolean,
+    shape: Shape = RectangleShape,
     shimmerColors: List<Color> = listOf (
         MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
         MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
@@ -43,5 +46,5 @@ fun Modifier.shimmerLoading (
         end = Offset(x = translateAnim.value, y = translateAnim.value)
     )
 
-    return@composed this.background(brush)
+    return@composed this.background(brush, shape)
 }

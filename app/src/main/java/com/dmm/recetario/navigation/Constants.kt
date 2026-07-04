@@ -16,7 +16,7 @@ data class LayoutConfig (
     val hasFab: Boolean = onCompleteForm != null,
 
     val onRefresh: (suspend () -> Unit)? = null,
-    val hasRefresh: Boolean = onCompleteForm != null,
+    val hasRefresh: Boolean = onRefresh != null,
 
     val showBaseLayout: Boolean = hasRefresh || hasFab || hasBottomBar,
 )

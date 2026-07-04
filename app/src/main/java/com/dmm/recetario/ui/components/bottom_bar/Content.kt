@@ -40,6 +40,8 @@ private fun RowScope.BottomBarItem (
         label = {
             Text(item.name)
         },
-        onClick = { onClick(item.route) }
+        onClick = {
+            onClick(item.route)
+        }
     )
 }

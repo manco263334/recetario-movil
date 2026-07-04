@@ -58,6 +58,7 @@ import com.dmm.recetario.core.access_hardware.openCamera
 import com.dmm.recetario.core.access_hardware.openGallery
 import com.dmm.recetario.core.utils.extension.createImageFile
 import com.dmm.recetario.core.utils.extension.isNeitherNullNorAnonymous
+import com.dmm.recetario.ui.components.shimmerLoading
 import com.dmm.recetario.domain.model.User
 import com.dmm.recetario.ui.components.ShowImagePickerDialog
 
@@ -320,6 +321,65 @@ fun SettingsContent (
 }
 
 @Composable
+fun SettingsContentSkeleton (loadingMessage: String, isLoading: Boolean = true) {
+    val scrollState = rememberScrollState()
+
+    Box (
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(20.dp)
+            .verticalScroll(scrollState),
+        contentAlignment = Alignment.TopCenter
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Box (
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .size(140.dp)
+                    .border (
+                        width = 3.dp,
+                        shape = CircleShape,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                    .shimmerLoading(isLoading, CircleShape)
+            ) {}
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            repeat(4) {
+                OutlinedTextField (
+                    value = "",
+                    enabled = false,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp)
+                        .shadow(6.dp, RoundedCornerShape(12.dp))
+                        .background (
+                            color = MaterialTheme.colorScheme.surface
+                        )
+                        .shimmerLoading(isLoading, RoundedCornerShape(12.dp)),
+                    onValueChange = {}
+                )
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Button (
+                colors = ButtonDefaults.buttonColors (
+                    containerColor = MaterialTheme.colorScheme.surface
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp)
+                    .shadow(8.dp, RoundedCornerShape(12.dp))
+                    .shimmerLoading(isLoading, RoundedCornerShape(12.dp)),
+                onClick = {}
+            ) {}
+        }
+    }
+}
+
+@Composable
 private fun CustomOutlinedTextField (
     label: String,
     value: String,
@@ -350,9 +410,4 @@ private fun CustomOutlinedTextField (
         },
         onValueChange = onValueChange
     )
-}
-
-@Composable
-fun SettingsContentSkeleton (loadingMessage: String) {
-
 }

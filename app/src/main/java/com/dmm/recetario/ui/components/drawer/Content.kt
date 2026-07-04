@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.visible
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -56,12 +57,6 @@ fun DrawerContent (
 ) {
     val scope = rememberCoroutineScope()
     val logOutState = viewModel.logOutState
-
-    LaunchedEffect(Unit) {
-        if (drawerState.isOpen) {
-            drawerState.close()
-        }
-    }
 
     LaunchedEffect (logOutState) {
         if (logOutState is LogOutUiState.Success) {
@@ -188,8 +183,8 @@ fun DrawerContent (
             }
         )
 
-        if (logOutState is LogOutUiState.Loading) {
-            CircularProgressIndicator()
-        }
+        CircularProgressIndicator (
+            modifier = Modifier.visible(logOutState is LogOutUiState.Loading)
+        )
     }
 }
