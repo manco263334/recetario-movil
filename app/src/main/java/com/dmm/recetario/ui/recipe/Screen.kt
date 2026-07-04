@@ -1,6 +1,9 @@
 package com.dmm.recetario.ui.recipe
 
 import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,6 +29,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dmm.recetario.R
 import com.dmm.recetario.domain.model.Recipe
+import com.dmm.recetario.ui.components.shimmerLoading
 
 @Composable
 fun RecipeScreen (
@@ -80,6 +84,7 @@ private fun RecipeContent(recipe: Recipe?) {
                     Text(text = recipe.name, style = MaterialTheme.typography.headlineMedium)
 
                     Spacer(modifier = Modifier.height(8.dp))
+
                     Text (
                         pluralStringResource (
                             R.plurals.total_time_description,
@@ -175,8 +180,14 @@ private fun RecipeContent(recipe: Recipe?) {
 }
 
 @Composable
-private fun RecipeContentSkeleton(loadingMessage: String) {
-    Column(modifier = Modifier.fillMaxSize()) {
+private fun RecipeContentSkeleton(loadingMessage: String, isLoading: Boolean = true) {
+    val scrollState = rememberScrollState()
+
+    Column (
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(scrollState)
+    ) {
         Text (
             text = loadingMessage,
             style = MaterialTheme.typography.bodyLarge,
@@ -184,5 +195,39 @@ private fun RecipeContentSkeleton(loadingMessage: String) {
                 .fillMaxWidth()
                 .padding(16.dp)
         )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        repeat(3) {
+            Box (
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+                    .shimmerLoading(isLoading)
+            ) {
+                Column (
+                    modifier = Modifier.padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    Text (
+                        text = "",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .shimmerLoading(isLoading),
+                        style = MaterialTheme.typography.titleLarge
+                    )
+
+                    repeat(3) {
+                        Text (
+                            text = "",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .shimmerLoading(isLoading),
+                            style = MaterialTheme.typography.headlineMedium
+                        )
+                    }
+                }
+            }
+        }
     }
 }
