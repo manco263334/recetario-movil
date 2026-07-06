@@ -18,14 +18,19 @@ fun <T : NavKey> NavBackStack<T>.back(): T? {
     return this.removeLastOrNull()
 }
 
-fun <T : NavKey> NavBackStack<T>.backTo(targetScreen: T) {
-    if (this.isEmpty()) return
+fun <T : NavKey> NavBackStack<T>.backTo(targetScreen: T): NavBackStack<T>? {
+    if (this.isEmpty()) return null
 
-    if (targetScreen !in this) return
+    if (targetScreen !in this) return null
+
+    val droppedScreens = NavBackStack<T>()
 
     while (this.isNotEmpty() && this.last() != targetScreen) {
-        this.removeLastOrNull()
+        val screen = this.removeLastOrNull() ?: break
+        droppedScreens.add(screen)
     }
+
+    return droppedScreens.also{ it.reverse() }
 }
 
 fun <T : NavKey, K : T> NavBackStack<T>.dropScreensByKey(targetKey: K): NavBackStack<K>? {
@@ -50,12 +55,11 @@ fun <T : NavKey, K : T> NavBackStack<T>.dropScreensByKey(targetKey: K): NavBackS
     return droppedScreens.also { it.reverse() }
 }
 
-@Suppress("UNCHECKED_CAST")
 fun <T : NavKey, K : T> NavBackStack<T>.dropScreensByKeys(vararg targetKeys: K): NavBackStack<K>? {
     if (!targetKeys.any { it in this }) return null
 
-    val remainingScreens = NavBackStack<T>()
     val droppedScreens = NavBackStack<K>()
+    val remainingScreens = NavBackStack<T>()
 
     while (this.isNotEmpty()) {
         val screen = this.removeLastOrNull() ?: break
@@ -63,6 +67,7 @@ fun <T : NavKey, K : T> NavBackStack<T>.dropScreensByKeys(vararg targetKeys: K):
         if (screen !in targetKeys) {
             remainingScreens.add(screen)
         } else {
+            @Suppress("UNCHECKED_CAST")
             droppedScreens.add(screen as K)
         }
     }
