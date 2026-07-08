@@ -2,8 +2,8 @@ package com.dmm.recetario.di
 
 import android.content.Context
 import com.dmm.recetario.core.utils.helper.ResourceHelper
-import com.dmm.recetario.data.local.TokenManagerImpl
-import com.dmm.recetario.data.local.UserManagerImpl
+import com.dmm.recetario.data.local.manager.TokenManagerImpl
+import com.dmm.recetario.data.local.manager.UserManagerImpl
 import com.dmm.recetario.domain.dao.UserDao
 import com.dmm.recetario.domain.entity.RecipeEntity
 import com.dmm.recetario.domain.entity.TokenUserRef

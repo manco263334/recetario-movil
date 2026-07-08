@@ -3,7 +3,6 @@ package com.dmm.recetario.ui.settings
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dmm.recetario.R
 import com.dmm.recetario.core.utils.helper.ResourceHelper
@@ -11,6 +10,7 @@ import com.dmm.recetario.domain.manager.TokenManager
 import com.dmm.recetario.domain.manager.UserManager
 import com.dmm.recetario.domain.model.User
 import com.dmm.recetario.domain.service.UserService
+import com.dmm.recetario.ui.core.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -27,7 +27,7 @@ class SettingsViewModel @Inject constructor (
     private val userService: UserService,
     private val tokenManager: TokenManager,
     private val resourceHelper: ResourceHelper
-) : ViewModel() {
+) : BaseViewModel() {
     var uiState: SettingsUiState by mutableStateOf (
         SettingsUiState.Loading (
             resourceHelper.getString(R.string.loading_user)

@@ -1,8 +1,9 @@
-package com.dmm.recetario.data.local
+package com.dmm.recetario.data.local.manager
 
 import android.content.Context
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.dmm.recetario.data.local.dataStore
 import com.dmm.recetario.domain.manager.TokenManager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

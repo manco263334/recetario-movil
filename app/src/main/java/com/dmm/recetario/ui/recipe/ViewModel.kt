@@ -3,12 +3,12 @@ package com.dmm.recetario.ui.recipe
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dmm.recetario.R
 import com.dmm.recetario.core.utils.helper.ResourceHelper
 import com.dmm.recetario.domain.model.Recipe
 import com.dmm.recetario.domain.service.RecipeService
+import com.dmm.recetario.ui.core.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -23,7 +23,7 @@ import kotlinx.coroutines.flow.stateIn
 class RecipeViewModel @Inject constructor (
     private val recipeService: RecipeService,
     private val resourceHelper: ResourceHelper
-) : ViewModel() {
+) : BaseViewModel() {
     private val getString: (Int) -> String = resourceHelper::getString
 
     var uiState: RecipeUiState by mutableStateOf (

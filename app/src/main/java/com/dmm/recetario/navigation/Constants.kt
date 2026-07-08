@@ -2,6 +2,7 @@ package com.dmm.recetario.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.ViewModel
 import com.dmm.recetario.ui.auth.login.LoginViewModel
 import com.dmm.recetario.ui.auth.register.RegisterViewModel
 import com.dmm.recetario.ui.category.CategoryViewModel
@@ -22,7 +23,7 @@ data class LayoutConfig (
 )
 
 @Composable
-fun getViewModels() = mapOf (
+fun getViewModels(): Map<String, ViewModel> = mapOf (
     "home" to hiltViewModel<HomeViewModel>(),
     "login" to hiltViewModel<LoginViewModel>(),
     "recipe" to hiltViewModel<RecipeViewModel>(),

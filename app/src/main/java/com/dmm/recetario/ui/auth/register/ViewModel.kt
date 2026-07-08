@@ -5,7 +5,6 @@ import android.util.Patterns.EMAIL_ADDRESS
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dmm.recetario.R
 import com.dmm.recetario.core.utils.helper.ResourceHelper
@@ -18,6 +17,7 @@ import com.dmm.recetario.domain.manager.TokenManager
 import com.dmm.recetario.domain.manager.UserManager
 import com.dmm.recetario.domain.model.RegisterData
 import com.dmm.recetario.domain.service.AuthService
+import com.dmm.recetario.ui.core.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.async
@@ -31,7 +31,7 @@ class RegisterViewModel @Inject constructor (
     private val tokenManager: TokenManager,
     private val resourceHelper: ResourceHelper,
     private val dao: UserDao<UserEntity, TokenUserRef, RecipeEntity>
-) : ViewModel() {
+) : BaseViewModel() {
     var uiState: RegisterUiState by mutableStateOf(RegisterUiState.Idle)
         private set
 

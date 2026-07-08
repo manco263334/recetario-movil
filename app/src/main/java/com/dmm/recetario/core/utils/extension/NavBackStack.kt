@@ -80,6 +80,13 @@ fun <T : NavKey, K : T> NavBackStack<T>.dropScreensByKey(targetKey: K): NavBackS
     return droppedScreens.also { it.reverse() }
 }
 
+/**
+ * Removes all the screens where its type is the same as one that the specified on [targetKeys].
+ *
+ * @param [targetKeys] The keys to eliminate
+ * @return [NavBackStack] - A [NavBackStack] with screens that were eliminated or null if no
+ *  screens were deleted
+ */
 fun <T : NavKey, K : T> NavBackStack<T>.dropScreensByKeys(vararg targetKeys: K): NavBackStack<K>? {
     if (!targetKeys.any { it in this }) return null
 

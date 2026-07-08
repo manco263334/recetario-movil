@@ -1,4 +1,4 @@
-package com.dmm.recetario.data.local
+package com.dmm.recetario.data.local.manager
 
 import android.util.Log
 import com.dmm.recetario.R
