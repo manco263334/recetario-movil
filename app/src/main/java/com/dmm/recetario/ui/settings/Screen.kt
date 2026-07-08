@@ -54,8 +54,8 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.dmm.recetario.R
-import com.dmm.recetario.core.access_hardware.openCamera
-import com.dmm.recetario.core.access_hardware.openGallery
+import com.dmm.recetario.ui.components.access_hardware.openCamera
+import com.dmm.recetario.ui.components.access_hardware.openGallery
 import com.dmm.recetario.core.utils.extension.createImageFile
 import com.dmm.recetario.core.utils.extension.isNeitherNullNorAnonymous
 import com.dmm.recetario.ui.components.shimmerLoading

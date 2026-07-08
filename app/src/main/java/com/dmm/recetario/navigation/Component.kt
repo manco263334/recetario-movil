@@ -112,7 +112,7 @@ fun AppNavigation (
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()
 
-    val closeDrawerAndDo: (call: () -> Unit) -> () -> Unit = {
+    val closeDrawerAndDo: (() -> Unit) -> () -> Unit = {
         coroutineScope.launch {
             if (drawerState.isOpen) {
                 drawerState.close()

@@ -1,4 +1,4 @@
-package com.dmm.recetario.core.access_hardware
+package com.dmm.recetario.ui.components.access_hardware
 
 import android.net.Uri
 import androidx.activity.compose.ManagedActivityResultLauncher
