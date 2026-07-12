@@ -1,14 +1,13 @@
 package com.dmm.recetario.ui.home
 
-import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.BoxWithConstraintsScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Text
@@ -36,78 +35,68 @@ fun HomeScreen (
     val categories by viewModel.categories.collectAsStateWithLifecycle()
 
     BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
-        Crossfade (
-            targetState = uiState,
-            label = "home_crossfade"
-        ) { state ->
-            if (state is HomeUiState.Loading) {
-                HomeContentSkeleton(state.message)
-            } else {
-                HomeContent (
+        val message = when (uiState) {
+            is HomeUiState.Loading -> uiState.message
+            else -> if (categories.isNotEmpty())
+                stringResource(R.string.available_categories)
+            else
+                stringResource(R.string.no_available_categories)
+        }
+        val columns = this.columns
+
+        LazyVerticalGrid (
+            modifier = Modifier.fillMaxSize(),
+            columns = GridCells.Fixed(columns),
+            contentPadding = PaddingValues(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            item {
+                this@LazyVerticalGrid.HomeContent (
+                    columns = columns,
+                    message = message,
                     categories = categories,
                     onCategoryClick = onCategoryClick
                 )
+
+                if (uiState is HomeUiState.Loading) {
+                    this@LazyVerticalGrid.HomeContentSkeleton(columns = columns)
+                }
             }
         }
     }
 }
 
 @Composable
-private fun BoxWithConstraintsScope.HomeContent (
+private fun LazyGridScope.HomeContent (
+    columns: Int,
+    message: String,
     categories: List<Category>,
     onCategoryClick: (Category) -> Unit
 ) {
-    LazyVerticalGrid (
-        modifier = Modifier.fillMaxSize(),
-        columns = GridCells.Fixed(columns),
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        item(span = { GridItemSpan(columns) }) {
-            Text (
-                textAlign = TextAlign.Center,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.fillMaxWidth(),
-                text = if (categories.isNotEmpty())
-                        stringResource(R.string.available_categories)
-                    else
-                        stringResource(R.string.no_available_categories)
-            )
-        }
+    item(span = { GridItemSpan(columns) }) {
+        Text (
+            textAlign = TextAlign.Center,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.fillMaxWidth(),
+            text = message
+        )
+    }
 
-        items(categories) { category ->
-            WellnessCard (
-                title = category.name,
-                image = category.icon,
-                onClick = {
-                    onCategoryClick(category)
-                }
-            )
-        }
+    items(categories) { category ->
+        WellnessCard (
+            title = category.name,
+            image = category.icon,
+            onClick = {
+                onCategoryClick(category)
+            }
+        )
     }
 }
 
 @Composable
-private fun BoxWithConstraintsScope.HomeContentSkeleton(loadingMessage: String) {
-    LazyVerticalGrid (
-        modifier = Modifier.fillMaxSize(),
-        columns = GridCells.Fixed(columns),
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        item(span = { GridItemSpan(columns) }) {
-            Text (
-                text = loadingMessage,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
-
-        items(5 * columns) {
-            WellnessCardSkeleton()
-        }
+private fun LazyGridScope.HomeContentSkeleton(columns: Int) {
+    items(5 * columns) {
+        WellnessCardSkeleton(showDescription = false)
     }
 }

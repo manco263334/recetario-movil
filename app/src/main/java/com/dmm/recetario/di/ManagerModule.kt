@@ -2,12 +2,14 @@ package com.dmm.recetario.di
 
 import android.content.Context
 import com.dmm.recetario.core.utils.helper.ResourceHelper
+import com.dmm.recetario.data.local.manager.PreferenceManagerImpl
 import com.dmm.recetario.data.local.manager.TokenManagerImpl
 import com.dmm.recetario.data.local.manager.UserManagerImpl
 import com.dmm.recetario.domain.dao.UserDao
 import com.dmm.recetario.domain.entity.RecipeEntity
 import com.dmm.recetario.domain.entity.TokenUserRef
 import com.dmm.recetario.domain.entity.UserEntity
+import com.dmm.recetario.domain.manager.PreferenceManager
 import com.dmm.recetario.domain.manager.TokenManager
 import com.dmm.recetario.domain.manager.UserManager
 import com.dmm.recetario.domain.repository.UserRepository
@@ -47,5 +49,11 @@ object ManagerModule {
             resourceHelper = resourceHelper,
             userRepository = userRepository
         )
+    }
+
+    @Provides
+    @Singleton
+    fun providePreferenceManager(): PreferenceManager {
+        return PreferenceManagerImpl()
     }
 }

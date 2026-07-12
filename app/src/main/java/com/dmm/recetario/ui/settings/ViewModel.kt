@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.dmm.recetario.R
 import com.dmm.recetario.core.utils.helper.ResourceHelper
+import com.dmm.recetario.domain.manager.PreferenceManager
 import com.dmm.recetario.domain.manager.TokenManager
 import com.dmm.recetario.domain.manager.UserManager
 import com.dmm.recetario.domain.model.User
@@ -26,7 +27,8 @@ class SettingsViewModel @Inject constructor (
     private val userManager: UserManager,
     private val userService: UserService,
     private val tokenManager: TokenManager,
-    private val resourceHelper: ResourceHelper
+    private val resourceHelper: ResourceHelper,
+    private val preferenceManager: PreferenceManager
 ) : BaseViewModel() {
     var uiState: SettingsUiState by mutableStateOf (
         SettingsUiState.Loading (
